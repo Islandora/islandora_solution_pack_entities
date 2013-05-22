@@ -1,0 +1,18 @@
+<?php
+/**
+ * @file
+ * Handles the install and uninstall of islandora_entities.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function islandora_entities_uninstall() {
+  $drupal_variables = array(
+    'islandora_entities_query_field',
+    'islandora_entities_ingest_collection',
+  );
+  foreach ($drupal_variables as $drupal_variable) {
+    variable_del($drupal_variable);
+  }
+}

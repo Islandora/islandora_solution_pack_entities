@@ -1,0 +1,6 @@
+name = Islandora Entities
+description = Entity support for Islandora.
+dependencies[] = islandora
+dependencies[] = islandora_solr
+package = Islandora
+core = 7.x
