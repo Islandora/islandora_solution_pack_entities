@@ -1,11 +1,11 @@
 <?php
 /**
  * @file
- *   Holds the administration form for Islandora Entities.
+ * Holds the administration form for Islandora Entities.
  */
 
 /**
- * This is the administration form for islandora_entities
+ * This is the administration form for islandora_entities.
  *
  * @param array $form
  *   The Drupal form definition.
