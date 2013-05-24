@@ -13,5 +13,5 @@ organization) to Islandora.
 CUSTOMIZATION
 -------------
 
-The Solr field for searching entities and the entitiy collection are
-confgiurable at admin/islandora/entities.
+The Solr field for searching entities and the entity collection are
+configurable at admin/islandora/entities.
