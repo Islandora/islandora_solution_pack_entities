@@ -10,7 +10,7 @@ SUMMARY
 This module is for adding support for entities (person, place, event,
 organization) to Islandora.
 
-CUSTOMIZATION
+CONFIGURATION
 -------------
 
 The Solr field for searching entities and the entity collection are
