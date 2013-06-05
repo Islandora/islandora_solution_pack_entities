@@ -47,7 +47,107 @@ function islandora_entities_menu() {
       'file' => 'includes/admin.form.inc',
       'access arguments' => array(ISLANDORA_ENTITIES_ADMINISTER_PERMISSION),
     ),
+    'islandora/object/%islandora_object/EAC_CPF' => array(
+      'title' => 'EAC-CPF',
+      'page callback' => 'islandora_entities_eac_cpf_view',
+      'page arguments' => array(2),
+      'type' => MENU_LOCAL_TASK,
+      'access callback' => 'islandora_entities_access',
+      'access arguments' => array(2),
+    ),
   );
+}
+/**
+ * Determine visibility of the EAC-CPF data.
+ *
+ * @param unknown $fedora_object
+ *   The fedora object
+ *
+ * @return bool
+ *   TRUE if access is granted, FALSE otherwise.
+ */
+function islandora_entities_access($fedora_object) {
+  // Return true if the object has a relationship to
+  // entities (person, place, event...).
+  $rel = $fedora_object->relationships->get();
+  $test = get_entity_cmodel($rel);
+  if (isset($fedora_object) && $test != '') {
+    return TRUE;
+  }
+  else {
+    return FALSE;
+  }
+}
+
+/**
+ * Generate markup to display the entity form.
+ *
+ * @param unknown $object
+ *   Fedora object to render the form for.
+ */
+function islandora_entities_eac_cpf_view($object) {
+  $block = array();
+  $block['subject'] = t('');
+  $block['content'] = array(
+    '#markup' => islandora_entities_eac_cpf_markup($object),
+  );
+  return $block;
+}
+
+/**
+ * Implements islandora_entities_eac_cpf_markup().
+ */
+function islandora_entities_eac_cpf_markup($object) {
+  $form = array(
+    'collection_metadata' => array(),
+  );
+  if (isset($object['EAC-CPF'])) {
+    $content = $object['EAC-CPF']->content;
+    $rels = $object->relationships->get();
+    // We need to determine of entity relationship exists
+    // in the content model relationships, and display
+    // the correct form. See get_entity_cmodel($rels).
+    $metadata = drupal_get_form(get_entity_cmodel($rels), $content);
+    $form['collection_metadata']['metadata'] = $metadata;
+  }
+  $output = drupal_render($form);
+  return $output;
+}
+
+/**
+ * Get the correct form name based on the content model.
+ *
+ * @param unknown $relations
+ *   The current relations for the given fedora object.
+ *
+ * @return string
+ *   The form name to display.
+ */
+function get_entity_cmodel($relations) {
+  $rel_cmodel = '';
+  if (gettype($relations) == 'array') {
+    for ($i = 0; $i < count($relations); $i++) {
+      if (isset($relations[$i])) {
+        for ($j = 0; $j < count($relations[$i]); $j++) {
+          if (isset($relations[$j])) {
+            if ($relations[$j]['object']['value'] == 'islandora:personCModel') {
+              $rel_cmodel = 'Person EAC-CPF Read Only';
+            }
+            elseif ($relations[$j]['object']['value'] == 'islandora:eventCModel') {
+              $rel_cmodel = 'Event EAC-CPF Read Only';
+            }
+            elseif ($relations[$j]['object']['value'] == 'islandora:placeCModel') {
+              $rel_cmodel = 'Place EAC-CPF Read Only';
+            }
+            elseif ($relations[$j]['object']['value'] == 'islandora:organizationCModel') {
+              $rel_cmodel = 'Organization EAC-CPF Read Only';
+            }
+          }
+        }
+      }
+    }
+  }
+  return $rel_cmodel;
 }
 
 /**
@@ -123,7 +223,20 @@ function islandora_entities_islandora_xml_form_builder_form_associations() {
  */
 function islandora_entities_islandora_xml_form_builder_forms() {
   $module_path = drupal_get_path('module', 'islandora_entities');
+  // Also load read only version's of the form.
   return array(
+    'Person EAC-CPF Read Only' => array(
+      'form_file' => "$module_path/xml/person_eac_cpf_read_only.xml",
+    ),
+    'Event EAC-CPF Read Only' => array(
+      'form_file' => "$module_path/xml/event_eac_cpf_read_only.xml",
+    ),
+    'Place EAC-CPF Read Only' => array(
+      'form_file' => "$module_path/xml/place_eac-cpf_read_only.xml",
+    ),
+    'Organization EAC-CPF Read Only' => array(
+      'form_file' => "$module_path/xml/organization_eac_cpf_read_only.xml",
+    ),
     'Event EAC-CPF form' => array(
       'form_file' => "$module_path/xml/event_eaccpf_form.xml",
     ),
