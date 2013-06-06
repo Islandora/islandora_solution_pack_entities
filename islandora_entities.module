@@ -60,13 +60,13 @@ function islandora_entities_menu() {
 /**
  * Determine visibility of the EAC-CPF data.
  *
- * @param unknown $fedora_object
+ * @param AbstractObject $fedora_object
  *   The fedora object
  *
  * @return bool
  *   TRUE if access is granted, FALSE otherwise.
  */
-function islandora_entities_access($fedora_object) {
+function islandora_entities_access(AbstractObject $fedora_object) {
   // Return true if the object has a relationship to
   // entities (person, place, event, organization).
   $test = get_entity_cmodel_form_name($fedora_object);
@@ -81,10 +81,10 @@ function islandora_entities_access($fedora_object) {
 /**
  * Generate markup to display the entity form.
  *
- * @param unknown $object
+ * @param AbstractObject $object
  *   Fedora object to render the form for.
  */
-function islandora_entities_eac_cpf_view($object) {
+function islandora_entities_eac_cpf_view(AbstractObject $object) {
   $block = array();
   $block['content'] = array(
     '#markup' => islandora_entities_eac_cpf_markup($object),
@@ -101,7 +101,7 @@ function islandora_entities_eac_cpf_view($object) {
  * @return unknown
  *   The rendered HTML for the given content form.
  */
-function islandora_entities_eac_cpf_markup($object) {
+function islandora_entities_eac_cpf_markup(AbstractObject $object) {
   $form = array(
     'collection_metadata' => array(),
   );
@@ -127,7 +127,7 @@ function islandora_entities_eac_cpf_markup($object) {
  * @return string
  *   The form name to display.
  */
-function get_entity_cmodel_form_name($fedora_object) {
+function get_entity_cmodel_form_name(AbstractObject $fedora_object) {
   if (in_array(ISLANDORA_ENTITIES_PERSON_CONTENT_MODEL, $fedora_object->models)) {
     return 'Person EAC-CPF Read Only';
   }
