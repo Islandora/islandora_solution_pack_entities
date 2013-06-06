@@ -68,9 +68,8 @@ function islandora_entities_menu() {
  */
 function islandora_entities_access($fedora_object) {
   // Return true if the object has a relationship to
-  // entities (person, place, event...).
-  $rel = $fedora_object->relationships->get();
-  $test = get_entity_cmodel($rel);
+  // entities (person, place, event, organization).
+  $test = get_entity_cmodel_form_name($fedora_object);
   if (isset($fedora_object) && $test != '') {
     return TRUE;
   }
@@ -87,7 +86,6 @@ function islandora_entities_access($fedora_object) {
  */
 function islandora_entities_eac_cpf_view($object) {
   $block = array();
-  $block['subject'] = t('');
   $block['content'] = array(
     '#markup' => islandora_entities_eac_cpf_markup($object),
   );
@@ -95,7 +93,13 @@ function islandora_entities_eac_cpf_view($object) {
 }
 
 /**
- * Implements islandora_entities_eac_cpf_markup().
+ * Return a rendured drupal from as html.
+ *
+ * @param AbstractObject $object
+ *   The fedora object to generate the rendered html.
+ *
+ * @return unknown
+ *   The rendered HTML for the given content form.
  */
 function islandora_entities_eac_cpf_markup($object) {
   $form = array(
@@ -106,8 +110,8 @@ function islandora_entities_eac_cpf_markup($object) {
     $rels = $object->relationships->get();
     // We need to determine of entity relationship exists
     // in the content model relationships, and display
-    // the correct form. See get_entity_cmodel($rels).
-    $metadata = drupal_get_form(get_entity_cmodel($rels), $content);
+    // the correct form. See get_entity_cmodel_form_name($object).
+    $metadata = drupal_get_form(get_entity_cmodel_form_name($object), $content);
     $form['collection_metadata']['metadata'] = $metadata;
   }
   $output = drupal_render($form);
@@ -117,37 +121,26 @@ function islandora_entities_eac_cpf_markup($object) {
 /**
  * Get the correct form name based on the content model.
  *
- * @param unknown $relations
+ * @param AbstractObject $fedora_object
  *   The current relations for the given fedora object.
  *
  * @return string
  *   The form name to display.
  */
-function get_entity_cmodel($relations) {
-  $rel_cmodel = '';
-  if (gettype($relations) == 'array') {
-    for ($i = 0; $i < count($relations); $i++) {
-      if (isset($relations[$i])) {
-        for ($j = 0; $j < count($relations[$i]); $j++) {
-          if (isset($relations[$j])) {
-            if ($relations[$j]['object']['value'] == 'islandora:personCModel') {
-              $rel_cmodel = 'Person EAC-CPF Read Only';
-            }
-            elseif ($relations[$j]['object']['value'] == 'islandora:eventCModel') {
-              $rel_cmodel = 'Event EAC-CPF Read Only';
-            }
-            elseif ($relations[$j]['object']['value'] == 'islandora:placeCModel') {
-              $rel_cmodel = 'Place EAC-CPF Read Only';
-            }
-            elseif ($relations[$j]['object']['value'] == 'islandora:organizationCModel') {
-              $rel_cmodel = 'Organization EAC-CPF Read Only';
-            }
-          }
-        }
-      }
-    }
+function get_entity_cmodel_form_name($fedora_object) {
+  if (in_array(ISLANDORA_ENTITIES_PERSON_CONTENT_MODEL, $fedora_object->models)) {
+    return 'Person EAC-CPF Read Only';
   }
-  return $rel_cmodel;
+  if (in_array(ISLANDORA_ENTITIES_EVENT_CONTENT_MODEL, $fedora_object->models)) {
+    return 'Event EAC-CPF Read Only';
+  }
+  if (in_array(ISLANDORA_ENTITIES_PLACE_CONTENT_MODEL, $fedora_object->models)) {
+    return 'Place EAC-CPF Read Only';
+  }
+  if (in_array(ISLANDORA_ENTITIES_ORGANIZATION_CONTENT_MODEL, $fedora_object->models)) {
+    return 'Organization EAC-CPF Read Only';
+  }
+  return '';
 }
 
 /**
