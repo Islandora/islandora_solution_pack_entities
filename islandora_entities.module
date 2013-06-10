@@ -36,7 +36,7 @@ function islandora_entities_menu() {
       'page arguments' => array(3),
       'type' => MENU_CALLBACK,
       'file' => 'includes/callbacks.inc',
-      'access arguments' => TRUE,
+      'access arguments' => array('search islandora solr'),
     ),
     'admin/islandora/entities' => array(
       'title' => 'Islandora Entities',

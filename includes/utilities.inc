@@ -57,7 +57,7 @@ function islandora_entities_solr_search_entities($content_model, $entities_query
     '!entities_query_field:(!entities_query)',
     array(
       '!entities_query_field' => $entities_query_field,
-      '!entities_query' => lesser_escape($entities_query),
+      '!entities_query' => islandora_solr_lesser_escape($entities_query),
     )
   );
   $query_processor->solrStart = 0;

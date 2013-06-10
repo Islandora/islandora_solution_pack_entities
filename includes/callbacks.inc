@@ -34,15 +34,17 @@ function islandora_entities_query_entities_callback($type) {
   }
 
   // Format the results for the CWRCwriter.
-  foreach ($solr_results['response']['objects'] as $object_response) {
-    $pid = $object_response['PID'];
-    $results[] = array(
-      'identifier' => $object_response['object_label'],
-        // @XXX What's the target attribute? Ask Alan.
-      'Object' => l($pid, "islandora/object/$pid", array(
-        'attributes' => array('target' => '_blank'),
-      )),
-    );
+  if (isset($solr_results['response']['objects'])) {
+    foreach ($solr_results['response']['objects'] as $object_response) {
+      $pid = $object_response['PID'];
+      $results[] = array(
+        'identifier' => $object_response['object_label'],
+          // @XXX What's the target attribute? Ask Alan.
+        'Object' => l($pid, "islandora/object/$pid", array(
+          'attributes' => array('target' => '_blank'),
+        )),
+      );
+    }
   }
 
   drupal_json_output($results);
