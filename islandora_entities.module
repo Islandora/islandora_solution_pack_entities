@@ -60,22 +60,17 @@ function islandora_entities_menu() {
 /**
  * Determine visibility of the EAC-CPF data.
  *
- * @param AbstractObject $fedora_object
- *   The fedora object
+ * We have read-access to the EAC-CPF stream and a read-only form mapping.
+ *
+ * @param AbstractObject $object
+ *   The Tuque object.
  *
  * @return bool
  *   TRUE if access is granted, FALSE otherwise.
  */
-function islandora_entities_access(AbstractObject $fedora_object) {
-  // Return true if the object has a relationship to
-  // entities (person, place, event, organization).
-  $test = get_entity_cmodel_form_name($fedora_object);
-  if (isset($fedora_object) && $test != '') {
-    return TRUE;
-  }
-  else {
-    return FALSE;
-  }
+function islandora_entities_access(AbstractObject $object) {
+  return isset($object['EAC-CPF']) && islandora_datastream_access(FEDORA_VIEW_OBJECTS, $object['EAC-CPF']) &&
+    islandora_entities_get_cmodel_form_name($object);
 }
 
 /**
@@ -107,11 +102,9 @@ function islandora_entities_eac_cpf_markup(AbstractObject $object) {
   );
   if (isset($object['EAC-CPF'])) {
     $content = $object['EAC-CPF']->content;
-    $rels = $object->relationships->get();
-    // We need to determine of entity relationship exists
-    // in the content model relationships, and display
-    // the correct form. See get_entity_cmodel_form_name($object).
-    $metadata = drupal_get_form(get_entity_cmodel_form_name($object), $content);
+    // We need to determine of entity relationship exists in the content model
+    // relationships, and display the correct form.
+    $metadata = drupal_get_form(islandora_entities_get_cmodel_form_name($object), $content);
     $form['collection_metadata']['metadata'] = $metadata;
   }
   $output = drupal_render($form);
@@ -121,26 +114,30 @@ function islandora_entities_eac_cpf_markup(AbstractObject $object) {
 /**
  * Get the correct form name based on the content model.
  *
- * @param AbstractObject $fedora_object
+ * @param AbstractObject $object
  *   The current relations for the given fedora object.
  *
- * @return string
- *   The form name to display.
+ * @return string|bool
+ *   A string containing the form name to display, or boolean FALSE if the
+ *   we do not have a mapping.
  */
-function get_entity_cmodel_form_name(AbstractObject $fedora_object) {
-  if (in_array(ISLANDORA_ENTITIES_PERSON_CONTENT_MODEL, $fedora_object->models)) {
-    return 'Person EAC-CPF Read Only';
+function islandora_entities_get_cmodel_form_name(AbstractObject $object) {
+  $mapping = array(
+    ISLANDORA_ENTITIES_PERSON_CONTENT_MODEL => 'Person EAC-CPF Read Only',
+    ISLANDORA_ENTITIES_EVENT_CONTENT_MODEL => 'Event EAC-CPF Read Only',
+    ISLANDORA_ENTITIES_PLACE_CONTENT_MODEL => 'Place EAC-CPF Read Only',
+    ISLANDORA_ENTITIES_ORGANIZATION_CONTENT_MODEL => 'Organization EAC-CPF Read Only',
+  );
+
+  $matches = array_intersect($object->models, array_keys($mapping));
+  $match = reset($matches);
+
+  if ($match) {
+    return $mapping[$match];
   }
-  if (in_array(ISLANDORA_ENTITIES_EVENT_CONTENT_MODEL, $fedora_object->models)) {
-    return 'Event EAC-CPF Read Only';
+  else {
+    return FALSE;
   }
-  if (in_array(ISLANDORA_ENTITIES_PLACE_CONTENT_MODEL, $fedora_object->models)) {
-    return 'Place EAC-CPF Read Only';
-  }
-  if (in_array(ISLANDORA_ENTITIES_ORGANIZATION_CONTENT_MODEL, $fedora_object->models)) {
-    return 'Organization EAC-CPF Read Only';
-  }
-  return '';
 }
 
 /**
