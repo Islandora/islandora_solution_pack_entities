@@ -246,6 +246,7 @@ function islandora_entities_islandora_xml_form_builder_forms() {
  * Implements hook_islandora_required_objects().
  */
 function islandora_entities_islandora_required_objects(IslandoraTuque $connection) {
+  module_load_include('inc', 'islandora_entities', 'includes/utilities');
   $module_path = drupal_get_path('module', 'islandora_entities');
 
   // Entity Content Model.
@@ -254,11 +255,7 @@ function islandora_entities_islandora_required_objects(IslandoraTuque $connectio
   $entity_content_model->label = 'Islandora Entity Content Model';
   $entity_content_model->models = 'fedora-system:ContentModel-3.0';
   // DS-COMPOSITE-MODEL Datastream.
-  $ds_composite_datastream = $entity_content_model->constructDatastream('DS-COMPOSITE-MODEL', 'X');
-  $ds_composite_datastream->label = 'DS-COMPOSITE-MODEL';
-  $ds_composite_datastream->mimetype = 'text/xml';
-  $ds_composite_datastream->setContentFromFile("$module_path/xml/islandora_entity_ds_composite_model.xml", FALSE);
-  $entity_content_model->ingestDatastream($ds_composite_datastream);
+  islandora_entities_ingest__entity_ds_composite_datastream($entity_content_model);
 
   // Person Content Model.
   $person_content_model = $connection->repository->constructObject('islandora:personCModel');
@@ -266,7 +263,7 @@ function islandora_entities_islandora_required_objects(IslandoraTuque $connectio
   $person_content_model->label = 'Islandora Person Content Model';
   $person_content_model->models = 'fedora-system:ContentModel-3.0';
   // DS-COMPOSITE-MODEL Datastream.
-  $person_content_model->ingestDatastream($ds_composite_datastream);
+  islandora_entities_ingest__entity_ds_composite_datastream($person_content_model);
 
   // Place Content Model.
   $place_content_model = $connection->repository->constructObject('islandora:placeCModel');
@@ -274,7 +271,7 @@ function islandora_entities_islandora_required_objects(IslandoraTuque $connectio
   $place_content_model->label = 'Islandora Place Content Model';
   $place_content_model->models = 'fedora-system:ContentModel-3.0';
   // DS-COMPOSITE-MODEL Datastream.
-  $place_content_model->ingestDatastream($ds_composite_datastream);
+  islandora_entities_ingest__entity_ds_composite_datastream($place_content_model);
 
   // Event Content Model.
   $event_content_model = $connection->repository->constructObject('islandora:eventCModel');
@@ -282,7 +279,7 @@ function islandora_entities_islandora_required_objects(IslandoraTuque $connectio
   $event_content_model->label = 'Islandora Event Content Model';
   $event_content_model->models = 'fedora-system:ContentModel-3.0';
   // DS-COMPOSITE-MODEL Datastream.
-  $event_content_model->ingestDatastream($ds_composite_datastream);
+  islandora_entities_ingest__entity_ds_composite_datastream($event_content_model);
 
   // Organization Content Model.
   $organization_content_model = $connection->repository->constructObject('islandora:organizationCModel');
@@ -290,7 +287,7 @@ function islandora_entities_islandora_required_objects(IslandoraTuque $connectio
   $organization_content_model->label = 'Islandora Organization Content Model';
   $organization_content_model->models = 'fedora-system:ContentModel-3.0';
   // DS-COMPOSITE-MODEL Datastream.
-  $organization_content_model->ingestDatastream($ds_composite_datastream);
+  islandora_entities_ingest__entity_ds_composite_datastream($organization_content_model);
 
   // Entity Collection.
   $entity_collection = $connection->repository->constructObject('islandora:entity_collection');
