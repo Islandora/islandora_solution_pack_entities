@@ -10,7 +10,10 @@
 function islandora_entities_uninstall() {
   $drupal_variables = array(
     'islandora_entities_query_field',
-    'islandora_entities_ingest_collection',
+    'islandora_entities_people_collection',
+    'islandora_entities_events_collection',
+    'islandora_entities_organizations_collection',
+    'islandora_entities_places_collection',
   );
   foreach ($drupal_variables as $drupal_variable) {
     variable_del($drupal_variable);
