@@ -28,14 +28,47 @@ function islandora_entities_settings($form, &$form_state) {
     '#required' => TRUE,
   );
 
-  $form['islandora_entities_ingest_collection'] = array(
+  $form['islandora_entities_people_collection'] = array(
     '#type' => 'textfield',
-    '#title' => t('Collection to ingest entities to.'),
+    '#title' => t('Collection to ingest person entities in.'),
     '#default_value' => variable_get(
-      'islandora_entities_ingest_collection',
+      'islandora_entities_people_collection',
       'islandora:entity_collection'
     ),
-    '#description' => t('Used by dependent modules to link to provide links to the collection.'),
+    '#description' => t('Used by dependent modules provide links to the collection.'),
+    '#required' => TRUE,
+  );
+
+  $form['islandora_entities_events_collection'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Collection to ingest event entities in.'),
+    '#default_value' => variable_get(
+      'islandora_entities_events_collection',
+      'islandora:entity_collection'
+    ),
+    '#description' => t('Used by dependent modules provide links to the collection.'),
+    '#required' => TRUE,
+  );
+
+  $form['islandora_entities_organizations_collection'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Collection to ingest organization entities in.'),
+    '#default_value' => variable_get(
+      'islandora_entities_organizations_collection',
+      'islandora:entity_collection'
+    ),
+    '#description' => t('Used by dependent modules provide links to the collection.'),
+    '#required' => TRUE,
+  );
+
+  $form['islandora_entities_places_collection'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Collection to ingest place entities in.'),
+    '#default_value' => variable_get(
+      'islandora_entities_places_collection',
+      'islandora:entity_collection'
+    ),
+    '#description' => t('Used by dependent modules provide links to the collection.'),
     '#required' => TRUE,
   );
 
