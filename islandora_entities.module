@@ -309,7 +309,7 @@ function islandora_entities_islandora_required_objects(IslandoraTuque $connectio
   $entity_collection->ingestDatastream($collection_policy_datastream);
 
   return array(
-    'islandora_entity' => array(
+    'islandora_entities' => array(
       'title' => 'Islandora entity',
       'objects' => array(
         $entity_content_model,
