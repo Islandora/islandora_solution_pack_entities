@@ -5,6 +5,15 @@
  */
 
 /**
+ * Implements hook_install().
+ *
+ * @see islandora_book_islandora_required_objects()
+ */
+function islandora_entities_install() {
+  module_load_include('inc', 'islandora', 'includes/solution_packs');
+  islandora_install_solution_pack('islandora_entities');
+}
+/**
  * Implements hook_uninstall().
  */
 function islandora_entities_uninstall() {

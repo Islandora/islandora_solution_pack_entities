@@ -17,4 +17,7 @@
   <dsTypeModel ID="EAC-CPF" ORDERED="false" optional="true">
     <form FORMAT_URI="urn:isbn:1-931666-33-4"  MIME="text/xml"></form>
   </dsTypeModel>
+    <dsTypeModel ID="MADS" optional="true">
+    <form FORMAT_URI="http://www.loc.gov/mads/v2" MIME="text/xml"></form>
+  </dsTypeModel>
 </dsCompositeModel>
