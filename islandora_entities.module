@@ -389,7 +389,7 @@ function islandora_entities_islandora_organizationCModel_islandora_object_ingest
 function islandora_entities_islandora_xml_form_builder_get_transforms() {
   $module_path = drupal_get_path('module', 'islandora_entities');
   return array(
-    'eaccpf_to_dc.xslt' => "$module_path/xml/eaccpf_to_dc.xslt",
-    'mads_to_dc.xslt' => "$module_path/xml/mads_to_dc.xslt",
+    'eaccpf_to_dc.xsl' => "$module_path/xml/eaccpf_to_dc.xsl",
+    'mads_to_dc.xsl' => "$module_path/xml/mads_to_dc.xsl",
   );
 }
