@@ -16,7 +16,7 @@ before_install:
   - export ISLANDORA_DIR=$HOME/islandora
   - $HOME/islandora/tests/scripts/travis_setup.sh
   - cd $HOME/drupal-*
-  - ln -s $TRAVIS_BUILD_DIR sites/all/modules/
+  - ln -s $TRAVIS_BUILD_DIR sites/all/modules/islandora_solution_pack_entities
   - ln -s $HOME/islandora_solr_search sites/all/modules/islandora_solr_search
   - drush -u 1 en islandora_entities
 script:
