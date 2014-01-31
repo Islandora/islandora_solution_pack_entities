@@ -173,6 +173,9 @@
                 <properties>
                   <type>textfield</type>
                   <access>TRUE</access>
+                  <attributes>
+                    <type>date</type>
+                  </attributes>
                   <collapsed>FALSE</collapsed>
                   <collapsible>FALSE</collapsible>
                   <description>If known, list birth and death dates in the format YYYY-YYYY</description>
