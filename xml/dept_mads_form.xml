@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<definition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2">
+<definition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3">
   <properties>
     <root_name>mads</root_name>
     <schema_uri>http://www.loc.gov/standards/mads/mads.xsd</schema_uri>
@@ -116,8 +116,17 @@
                 <properties>
                   <type>textfield</type>
                   <access>TRUE</access>
+                  <attributes>
+                    <type>date</type>
+                  </attributes>
+                  <collapsed>FALSE</collapsed>
+                  <collapsible>FALSE</collapsible>
                   <description>The start date that the department name became official in the format YYYY-</description>
+                  <disabled>FALSE</disabled>
+                  <executes_submit_callback>FALSE</executes_submit_callback>
+                  <multiple>FALSE</multiple>
                   <required>FALSE</required>
+                  <resizable>FALSE</resizable>
                   <title>Date</title>
                   <tree>TRUE</tree>
                   <actions>
@@ -354,8 +363,17 @@
                     <properties>
                       <type>textfield</type>
                       <access>TRUE</access>
+                      <attributes>
+                        <type>date</type>
+                      </attributes>
+                      <collapsed>FALSE</collapsed>
+                      <collapsible>FALSE</collapsible>
                       <description>The start date and end date of the previous departmental name in the format YYYY-YYYY</description>
+                      <disabled>FALSE</disabled>
+                      <executes_submit_callback>FALSE</executes_submit_callback>
+                      <multiple>FALSE</multiple>
                       <required>FALSE</required>
+                      <resizable>FALSE</resizable>
                       <title>Date</title>
                       <tree>TRUE</tree>
                       <actions>
