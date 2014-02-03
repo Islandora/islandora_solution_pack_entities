@@ -10,7 +10,7 @@
         <xsl:param name="suffix">_ms</xsl:param>
 
 
-        <xsl:for-each select="$content/foxml:xmlContent//mads:authority/mads:name[@type='personal']">
+        <xsl:for-each select="$content//mads:authority/mads:name[@type='personal']">
             <xsl:variable name="GIVEN" select="./mads:namePart[@type = 'given']"/>
             <xsl:variable name="FAMILY" select="./mads:namePart[@type = 'family']"/>
             <xsl:variable name="DATE" select="./mads:namePart[@type = 'date']"/>
@@ -49,7 +49,7 @@
             </xsl:if>
         </xsl:for-each>
 
-        <xsl:for-each select="$content/foxml:xmlContent//mads:variant">
+        <xsl:for-each select="$content//mads:variant">
             <xsl:variable name="GIVEN" select="./mads:name/mads:namePart[@type = 'given']"/>
             <xsl:variable name="FAMILY" select="./mads:name/mads:namePart[@type = 'family']"/>
             <xsl:variable name="FULLNAME" select="concat($GIVEN, ' ', $FAMILY)"/>
@@ -79,7 +79,7 @@
             </xsl:if>
 
             <xsl:for-each
-                select="$content/foxml:xmlContent//mads:authority/mads:name[@type = 'corporate']/mads:namePart">
+                select="$content//mads:authority/mads:name[@type = 'corporate']/mads:namePart">
                 <field>
                     <xsl:attribute name="name">
                         <xsl:value-of select="concat($prefix, 'department', $suffix)"/>
@@ -89,7 +89,7 @@
             </xsl:for-each>
 
             <xsl:for-each
-                select="$content/foxml:xmlContent//mads:related[@type = 'parentOrg']/mads:name[@type = 'corporate']/mads:namePart">
+                select="$content//mads:related[@type = 'parentOrg']/mads:name[@type = 'corporate']/mads:namePart">
                 <field>
                     <xsl:attribute name="name">
                         <xsl:value-of select="concat($prefix, 'parent_institution', $suffix)"/>
@@ -99,7 +99,7 @@
             </xsl:for-each>
 
             <xsl:for-each
-                select="$content/foxml:xmlContent//mads:related[@type = 'earlier']/mads:name[@type = 'corporate']">
+                select="$content//mads:related[@type = 'earlier']/mads:name[@type = 'corporate']">
                 <xsl:variable name="DATE" select="./mads:namePart[@type = 'date']"/>
                 <xsl:variable name="PREV_NAME" select="./mads:namePart"/>
                 <field>
@@ -110,7 +110,7 @@
                 </field>
             </xsl:for-each>
 
-            <xsl:for-each select="$content/foxml:xmlContent//*">
+            <xsl:for-each select="$content//*">
                 <xsl:if test="text() [normalize-space(.) ] and name(.) != 'namePart'">
                     <field>
                         <xsl:choose>
