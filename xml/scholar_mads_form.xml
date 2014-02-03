@@ -684,6 +684,9 @@
             <properties>
               <type>textfield</type>
               <access>TRUE</access>
+              <attributes>
+                <type>date</type>
+              </attributes>
               <collapsed>FALSE</collapsed>
               <collapsible>FALSE</collapsible>
               <disabled>FALSE</disabled>
@@ -722,6 +725,9 @@
             <properties>
               <type>textfield</type>
               <access>TRUE</access>
+              <attributes>
+                <type>date</type>
+              </attributes>
               <collapsed>FALSE</collapsed>
               <collapsible>FALSE</collapsible>
               <disabled>FALSE</disabled>
