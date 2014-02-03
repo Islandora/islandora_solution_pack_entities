@@ -23,3 +23,6 @@ Installation
 The MADS_to_solr.xslt from the data directory should be put in the
 islandora_transforms directory, usually found in
 $CATALINA_HOME/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/FgsIndex$ cd islandora_transforms
+
+and it should be referenced in foxmlToSolr.xslt, if using a standard Islandora setup.
+<xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/FgsIndex/islandora_transforms/MADS_to_solr.xslt"/>
