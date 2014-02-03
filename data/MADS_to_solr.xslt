@@ -116,7 +116,7 @@
                         <xsl:choose>
                             <xsl:when test="@*">
                                 <xsl:attribute name="name">
-                                    <xsl:value-of select="concat('$prefix', ./@*, $suffix)"/>
+                                    <xsl:value-of select="concat($prefix, ./@*, $suffix)"/>
                                 </xsl:attribute>
                                 <xsl:value-of select="normalize-space(text())"/>
                             </xsl:when>
