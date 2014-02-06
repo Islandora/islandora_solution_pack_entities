@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Holds the ajax callbacks for the islandora_entities.
@@ -28,8 +29,7 @@ function islandora_entities_query_entities_callback($type) {
   $solr_results = array();
   if (isset($query_parameters['entities_query'])) {
     $solr_results = islandora_entities_solr_search_entities(
-      $type_mappings[$type],
-      $query_parameters['entities_query']
+        $type_mappings[$type], $query_parameters['entities_query']
     );
   }
 
@@ -39,7 +39,7 @@ function islandora_entities_query_entities_callback($type) {
       $pid = $object_response['PID'];
       $results[] = array(
         'identifier' => $object_response['object_label'],
-          // @XXX What's the target attribute? Ask Alan.
+        // @XXX What's the target attribute? Ask Alan.
         'Object' => l($pid, "islandora/object/$pid", array(
           'attributes' => array('target' => '_blank'),
         )),
@@ -48,4 +48,54 @@ function islandora_entities_query_entities_callback($type) {
   }
 
   drupal_json_output($results);
+}
+
+/**
+ * Returns array of items to autocomplete forms.
+ *
+ * @param string $type
+ *   Selects eithe Scholar or Department
+ *
+ * @return array
+ *   array of all candidates
+ */
+function islandora_entities_autocomplete($type) {
+
+  $mappings = array(
+    'scholar' => array(
+      'cmodel' => 'islandora:personCModel',
+      'title' => 'MADS_title_mt',
+    ),
+    'department' => array(
+      'cmodel' => 'islandora:organizationCModel',
+      'title' => 'MADS_department_ms',
+    ),
+  );
+  $qualifier = $mappings[$type]['title'] . ':*';
+  if (isset($_GET['q'])) {
+    $stub = end(explode('/', $_GET['q']));
+    $qualifier = $mappings[$type]['title'] . ':' . $stub . '*';
+  }
+  $params = array(
+    'fl' => array($mappings[$type]['title'], 'PID'),
+  );
+  $query = "$qualifier AND " . 'RELS_EXT_hasModel_uri_mt:"' . $mappings[$type]['cmodel'] . '"';
+  $url = parse_url(variable_get('islandora_solr_url', 'localhost:8080/solr'));
+  $solr = new Apache_Solr_Service($url['host'], $url['port'], $url['path'] . '/');
+  $solr->setCreateDocuments(FALSE);
+  try {
+    $results = $solr->search($query, 0, 1000, $params);
+    $json = json_decode($results->getRawResponse(), TRUE);
+  }
+  catch (Exception $e) {
+    watchdog_exception('Islandora Entities', $e, 'Got an exception while searching entities for callback.', array(), WATCHDOG_ERROR);
+  }
+  $list = array();
+  foreach ($json['response']['docs'] as $choice) {
+    if (isset($choice[$mappings[$type]['title']])) {
+      $list[$choice[$mappings[$type]['title']][0]] = $choice[$mappings[$type]['title']][0];
+    }
+  }
+
+  drupal_json_output($list);
 }
