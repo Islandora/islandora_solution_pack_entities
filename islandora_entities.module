@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Handles entity support for Islandora.
@@ -38,6 +39,14 @@ function islandora_entities_menu() {
       'file' => 'includes/callbacks.inc',
       'access arguments' => array('search islandora solr'),
     ),
+    'islandora/entities/autocomplete/%' => array(
+      'title' => 'Form Callbacks',
+      'page callback' => 'islandora_entities_autocomplete',
+      'page arguments' => array(3),
+      'type' => MENU_CALLBACK,
+      'file' => 'includes/callbacks.inc',
+      'access arguments' => array('search islandora solr'),
+    ),
     'admin/islandora/entities' => array(
       'title' => 'Islandora Entities',
       'description' => 'Configure the Entities solution pack.',
@@ -57,6 +66,7 @@ function islandora_entities_menu() {
     ),
   );
 }
+
 /**
  * Determine visibility of the EAC-CPF data.
  *
@@ -70,7 +80,7 @@ function islandora_entities_menu() {
  */
 function islandora_entities_access(AbstractObject $object) {
   return isset($object['EAC-CPF']) && islandora_datastream_access(FEDORA_VIEW_OBJECTS, $object['EAC-CPF']) &&
-    islandora_entities_get_cmodel_form_name($object);
+      islandora_entities_get_cmodel_form_name($object);
 }
 
 /**
@@ -367,6 +377,7 @@ function islandora_entities_islandora_placeCModel_islandora_object_ingested(Abst
   module_load_include('inc', 'islandora_entities', 'includes/utilities');
   islandora_entities_add_entity_content_model($fedora_object);
 }
+
 /**
  * Implements hook_CMODEL_PID_islandora_object_ingested().
  */

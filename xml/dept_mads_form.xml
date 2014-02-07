@@ -85,7 +85,7 @@
                   <type>textfield</type>
                   <access>TRUE</access>
                   <required>FALSE</required>
-                  <title>Official Department/Faculty/School Name</title>
+                  <title>Department Name</title>
                   <tree>TRUE</tree>
                   <actions>
                     <create>

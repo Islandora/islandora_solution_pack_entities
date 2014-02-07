@@ -475,7 +475,7 @@
             <properties>
               <type>tabs</type>
               <access>TRUE</access>
-              <autocomplete_path>islandora_autocomplete/departmentCModel/mads.namePart/</autocomplete_path>
+
               <collapsed>FALSE</collapsed>
               <collapsible>FALSE</collapsible>
               <disabled>FALSE</disabled>
@@ -491,7 +491,7 @@
                 <properties>
                   <type>tabpanel</type>
                   <access>TRUE</access>
-                  <autocomplete_path>islandora_autocomplete/departmentCModel/mads.namePart/</autocomplete_path>
+
                   <collapsed>FALSE</collapsed>
                   <collapsible>FALSE</collapsible>
                   <disabled>FALSE</disabled>
@@ -507,7 +507,7 @@
                     <properties>
                       <type>textfield</type>
                       <access>TRUE</access>
-                      <autocomplete_path>islandora_autocomplete/departmentCModel/mads.namePart/</autocomplete_path>
+                      <autocomplete_path>islandora/entities/autocomplete/department</autocomplete_path>
                       <collapsed>FALSE</collapsed>
                       <collapsible>FALSE</collapsible>
                       <disabled>FALSE</disabled>
