@@ -68,7 +68,7 @@ function islandora_entities_autocomplete($type) {
     ),
     'department' => array(
       'cmodel' => 'islandora:organizationCModel',
-      'title' => 'MADS_department_ms',
+      'title' => 'MADS_department_mt',
     ),
   );
   $qualifier = $mappings[$type]['title'] . ':*';
