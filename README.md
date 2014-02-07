@@ -20,9 +20,12 @@ configurable at admin/islandora/entities.
 Installation
 ------------
 
-The MADS_to_solr.xslt from the data directory should be put in the
-islandora_transforms directory, usually found in
-$CATALINA_HOME/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/FgsIndex$ cd islandora_transforms
-
-and it should be referenced in foxmlToSolr.xslt, if using a standard Islandora setup.
-<xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/FgsIndex/islandora_transforms/MADS_to_solr.xslt"/>
+The autocomplete for the MADS forms requires solr values.
+A standrad installation should include the transformations in
+basic-solr-config - git@github.com:discoverygarden/basic-solr-config.git
+The link to the MADS transformation in foxmlToSolr.xslt must be uncommented.
+This will be either
+  <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/fgsconfigFinal/index/FgsIndex/islandora_transforms/MADS_to_solr.xslt"/>
+or
+  <xsl:include href="/usr/local/fedora/tomcat/webapps/fedoragsearch/WEB-INF/classes/config/index/FgsIndex/islandora_transforms/MADS_to_solr.xslt"/>
+depending on your installation.
