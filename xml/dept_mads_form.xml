@@ -121,7 +121,7 @@
                   </attributes>
                   <collapsed>FALSE</collapsed>
                   <collapsible>FALSE</collapsible>
-                  <description>The start date that the department name became official in the format YYYY-</description>
+                  <description>The start date that the department name became official in the format YYYY</description>
                   <disabled>FALSE</disabled>
                   <executes_submit_callback>FALSE</executes_submit_callback>
                   <multiple>FALSE</multiple>

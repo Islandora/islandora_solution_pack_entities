@@ -17,8 +17,23 @@
         <schemaLocation/>
         <enctype>multipart/form-data</enctype>
       </attributes>
+      <collapsed>FALSE</collapsed>
+      <collapsible>FALSE</collapsible>
+      <disabled>FALSE</disabled>
+      <executes_submit_callback>FALSE</executes_submit_callback>
+      <multiple>FALSE</multiple>
       <required>FALSE</required>
+      <resizable>FALSE</resizable>
       <tree>TRUE</tree>
+      <actions>
+        <create>NULL</create>
+        <read>
+          <path>/mads:mads</path>
+          <context>document</context>
+        </read>
+        <update>NULL</update>
+        <delete>NULL</delete>
+      </actions>
     </properties>
     <children>
       <element name="authority">
@@ -281,11 +296,33 @@
               <required>FALSE</required>
               <resizable>FALSE</resizable>
               <tree>TRUE</tree>
+              <actions>
+                <create>
+                  <path>self::node()</path>
+                  <context>parent</context>
+                  <schema/>
+                  <type>element</type>
+                  <prefix>NULL</prefix>
+                  <value>variant</value>
+                </create>
+                <read>
+                  <path>mads:variant</path>
+                  <context>parent</context>
+                </read>
+                <update>
+                  <path>self::node()</path>
+                  <context>self</context>
+                </update>
+                <delete>
+                  <path>self::node()</path>
+                  <context>self</context>
+                </delete>
+              </actions>
             </properties>
             <children>
-              <element name="variant">
+              <element name="name_variant">
                 <properties>
-                  <type>markup</type>
+                  <type>fieldset</type>
                   <access>TRUE</access>
                   <collapsed>FALSE</collapsed>
                   <collapsible>FALSE</collapsible>
@@ -294,32 +331,34 @@
                   <multiple>FALSE</multiple>
                   <required>FALSE</required>
                   <resizable>FALSE</resizable>
-                  <title>Variant</title>
                   <tree>TRUE</tree>
                   <actions>
                     <create>
-                      <path>/mads:mads</path>
-                      <context>document</context>
+                      <path>self::node()</path>
+                      <context>parent</context>
                       <schema/>
                       <type>element</type>
                       <prefix>NULL</prefix>
-                      <value>variant</value>
+                      <value>name</value>
                     </create>
                     <read>
-                      <path>/mads:mads/mads:variant</path>
-                      <context>document</context>
+                      <path>mads:name</path>
+                      <context>parent</context>
                     </read>
                     <update>
                       <path>self::node()</path>
                       <context>self</context>
                     </update>
-                    <delete>NULL</delete>
+                    <delete>
+                      <path>self::node()</path>
+                      <context>self</context>
+                    </delete>
                   </actions>
                 </properties>
                 <children>
-                  <element name="name_variant">
+                  <element name="variant_given">
                     <properties>
-                      <type>fieldset</type>
+                      <type>textfield</type>
                       <access>TRUE</access>
                       <collapsed>FALSE</collapsed>
                       <collapsible>FALSE</collapsible>
@@ -328,19 +367,20 @@
                       <multiple>FALSE</multiple>
                       <required>FALSE</required>
                       <resizable>FALSE</resizable>
+                      <title>Given Name</title>
                       <tree>TRUE</tree>
                       <actions>
                         <create>
-                          <path>/mads:mads/mads:variant</path>
-                          <context>document</context>
+                          <path>self::node()</path>
+                          <context>parent</context>
                           <schema/>
-                          <type>element</type>
+                          <type>xml</type>
                           <prefix>NULL</prefix>
-                          <value>name</value>
+                          <value>&lt;namePart type='given'&gt;%value%&lt;/namePart&gt;</value>
                         </create>
                         <read>
-                          <path>/mads:mads/mads:variant/mads:name</path>
-                          <context>document</context>
+                          <path>mads:namePart[@type='given']</path>
+                          <context>parent</context>
                         </read>
                         <update>
                           <path>self::node()</path>
@@ -352,84 +392,45 @@
                         </delete>
                       </actions>
                     </properties>
-                    <children>
-                      <element name="variant_given">
-                        <properties>
-                          <type>textfield</type>
-                          <access>TRUE</access>
-                          <collapsed>FALSE</collapsed>
-                          <collapsible>FALSE</collapsible>
-                          <disabled>FALSE</disabled>
-                          <executes_submit_callback>FALSE</executes_submit_callback>
-                          <multiple>FALSE</multiple>
-                          <required>FALSE</required>
-                          <resizable>FALSE</resizable>
-                          <title>Given Name</title>
-                          <tree>TRUE</tree>
-                          <actions>
-                            <create>
-                              <path>/mads:mads/mads:variant/mads:name</path>
-                              <context>document</context>
-                              <schema/>
-                              <type>xml</type>
-                              <prefix>NULL</prefix>
-                              <value>&lt;namePart type='given'&gt;%value%&lt;/namePart&gt;</value>
-                            </create>
-                            <read>
-                              <path>/mads:mads/mads:variant/mads:name/mads:namePart[@type='given']</path>
-                              <context>document</context>
-                            </read>
-                            <update>
-                              <path>self::node()</path>
-                              <context>self</context>
-                            </update>
-                            <delete>
-                              <path>self::node()</path>
-                              <context>self</context>
-                            </delete>
-                          </actions>
-                        </properties>
-                        <children/>
-                      </element>
-                      <element name="variant_family">
-                        <properties>
-                          <type>textfield</type>
-                          <access>TRUE</access>
-                          <collapsed>FALSE</collapsed>
-                          <collapsible>FALSE</collapsible>
-                          <disabled>FALSE</disabled>
-                          <executes_submit_callback>FALSE</executes_submit_callback>
-                          <multiple>FALSE</multiple>
-                          <required>FALSE</required>
-                          <resizable>FALSE</resizable>
-                          <title>Family Name</title>
-                          <tree>TRUE</tree>
-                          <actions>
-                            <create>
-                              <path>/mads:mads/mads:variant/mads:name</path>
-                              <context>document</context>
-                              <schema/>
-                              <type>xml</type>
-                              <prefix>NULL</prefix>
-                              <value>&lt;namePart type='family'&gt;%value%&lt;/namePart&gt;</value>
-                            </create>
-                            <read>
-                              <path>/mads:mads/mads:variant/mads:name/mads:namePart[@type='family']</path>
-                              <context>document</context>
-                            </read>
-                            <update>
-                              <path>self::node()</path>
-                              <context>self</context>
-                            </update>
-                            <delete>
-                              <path>self::node()</path>
-                              <context>self</context>
-                            </delete>
-                          </actions>
-                        </properties>
-                        <children/>
-                      </element>
-                    </children>
+                    <children/>
+                  </element>
+                  <element name="variant_family">
+                    <properties>
+                      <type>textfield</type>
+                      <access>TRUE</access>
+                      <collapsed>FALSE</collapsed>
+                      <collapsible>FALSE</collapsible>
+                      <disabled>FALSE</disabled>
+                      <executes_submit_callback>FALSE</executes_submit_callback>
+                      <multiple>FALSE</multiple>
+                      <required>FALSE</required>
+                      <resizable>FALSE</resizable>
+                      <title>Family Name</title>
+                      <tree>TRUE</tree>
+                      <actions>
+                        <create>
+                          <path>self::node()</path>
+                          <context>parent</context>
+                          <schema/>
+                          <type>xml</type>
+                          <prefix>NULL</prefix>
+                          <value>&lt;namePart type='family'&gt;%value%&lt;/namePart&gt;</value>
+                        </create>
+                        <read>
+                          <path>mads:namePart[@type='family']</path>
+                          <context>parent</context>
+                        </read>
+                        <update>
+                          <path>self::node()</path>
+                          <context>self</context>
+                        </update>
+                        <delete>
+                          <path>self::node()</path>
+                          <context>self</context>
+                        </delete>
+                      </actions>
+                    </properties>
+                    <children/>
                   </element>
                 </children>
               </element>
@@ -475,7 +476,6 @@
             <properties>
               <type>tabs</type>
               <access>TRUE</access>
-
               <collapsed>FALSE</collapsed>
               <collapsible>FALSE</collapsible>
               <disabled>FALSE</disabled>
@@ -491,7 +491,6 @@
                 <properties>
                   <type>tabpanel</type>
                   <access>TRUE</access>
-
                   <collapsed>FALSE</collapsed>
                   <collapsible>FALSE</collapsible>
                   <disabled>FALSE</disabled>
