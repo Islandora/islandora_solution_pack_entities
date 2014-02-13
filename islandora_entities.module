@@ -88,6 +88,7 @@ function islandora_entities_menu() {
  */
 function islandora_entity_update_tn_access(AbstractObject $object) {
   module_load_include('inc', 'islandora_basic_collection', 'includes/utilities');
+
   $collection_models = islandora_basic_collection_get_collection_content_models();
   $is_a_collection = (
     (count(array_intersect($collection_models, $object->models)) > 0) &&
