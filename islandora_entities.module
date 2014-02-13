@@ -87,6 +87,7 @@ function islandora_entities_menu() {
  *   TRUE if $object represents a person entity, otherwise, FALSE.
  */
 function islandora_entity_update_tn_access(AbstractObject $object) {
+  module_load_include('inc', 'islandora_basic_collection', 'includes/utilities');
   $collection_models = islandora_basic_collection_get_collection_content_models();
   $is_a_collection = (
     (count(array_intersect($collection_models, $object->models)) > 0) &&
@@ -95,7 +96,14 @@ function islandora_entity_update_tn_access(AbstractObject $object) {
   if ($is_a_collection) {
     return FALSE;
   }
-  if (!in_array("islandora:personCModel", $object->models)) {
+  $policy_stack = array(
+    'islandora:organizationCModel',
+    'islandora:eventCModel',
+    'islandora:placeCModel',
+    'islandora:personCModel',
+    'islandora:entityCModel'
+  );
+  if(count(array_intersect($policy_stack, $object->models)) == 0){
     return FALSE;
   }
   return islandora_object_access(ISLANDORA_MANAGE_PROPERTIES, $object);
