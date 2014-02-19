@@ -10,6 +10,7 @@ define('ISLANDORA_ENTITIES_PERSON_CONTENT_MODEL', 'islandora:personCModel');
 define('ISLANDORA_ENTITIES_EVENT_CONTENT_MODEL', 'islandora:eventCModel');
 define('ISLANDORA_ENTITIES_PLACE_CONTENT_MODEL', 'islandora:placeCModel');
 define('ISLANDORA_ENTITIES_ORGANIZATION_CONTENT_MODEL', 'islandora:organizationCModel');
+define('ISLANDORA_ENTITIES_ENTITY_CONTENT_MODEL', 'islandora:entityCModel');
 
 // Permissions.
 define('ISLANDORA_ENTITIES_ADMINISTER_PERMISSION', 'administer islandora entities');
@@ -64,9 +65,66 @@ function islandora_entities_menu() {
       'access callback' => 'islandora_entities_access',
       'access arguments' => array(2),
     ),
+    'islandora/object/%islandora_object/manage/object/udpatetn' => array(
+      'title' => 'Update Thumbnail',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('islandora_entities_update_tn', 2),
+      'type' => MENU_LOCAL_ACTION,
+      'file' => 'includes/tn_upload.form.inc',
+      'access callback' => 'islandora_entity_update_tn_access',
+      'access arguments' => array(2),
+    ),
   );
 }
 
+/**
+ * Access callback for updating entity thumbnail.
+ *
+ * @param AbstractObject $object
+ *   The object in which to update said thumbnail. Confirm
+ *   content model.
+ *
+ * @return bool
+ *   TRUE if $object represents a person entity, otherwise, FALSE.
+ */
+function islandora_entity_update_tn_access(AbstractObject $object) {
+  module_load_include('inc', 'islandora_basic_collection', 'includes/utilities');
+
+  $collection_models = islandora_basic_collection_get_collection_content_models();
+  $is_a_collection = (
+    (count(array_intersect($collection_models, $object->models)) > 0) &&
+    isset($object['COLLECTION_POLICY'])
+  );
+  if ($is_a_collection) {
+    return FALSE;
+  }
+  $policy_stack = array(
+    ISLANDORA_ENTITIES_ORGANIZATION_CONTENT_MODEL,
+    ISLANDORA_ENTITIES_EVENT_CONTENT_MODEL,
+    ISLANDORA_ENTITIES_PLACE_CONTENT_MODEL,
+    ISLANDORA_ENTITIES_PERSON_CONTENT_MODEL,
+    ISLANDORA_ENTITIES_ENTITY_CONTENT_MODEL,
+  );
+  if (count(array_intersect($policy_stack, $object->models)) == 0) {
+    return FALSE;
+  }
+  return islandora_object_access(ISLANDORA_MANAGE_PROPERTIES, $object);
+}
+
+/**
+ * Implements hook_CMODEL_PID_islandora_ingest_steps().
+ */
+function islandora_entities_islandora_personCModel_islandora_ingest_steps(array $form_state) {
+  return array(
+    'islandora_entities_tn_file_upload' => array(
+      'weight' => 10,
+      'type' => 'form',
+      'form_id' => 'islandora_entities_tn_upload_form',
+      'module' => 'islandora_entities',
+      'file' => 'includes/tn_upload.form.inc',
+    ),
+  );
+}
 /**
  * Determine visibility of the EAC-CPF data.
  *
