@@ -32,7 +32,7 @@ function islandora_entities_tn_upload_form(array $form, array &$form_state) {
  */
 function islandora_entities_get_tn_upload_form($form_state = NULL) {
   $upload_size = min((int) ini_get('post_max_size'), (int) ini_get('upload_max_filesize'));
-  $extensions = array('jpg, jpeg, png');
+  $extensions = array('jpg jpeg png');
   $form = array();
   $form['file'] = array(
     '#title' => t('Add Optional Thumbnail'),
