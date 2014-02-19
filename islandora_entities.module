@@ -386,28 +386,6 @@ function islandora_entities_islandora_required_objects(IslandoraTuque $connectio
   // DS-COMPOSITE-MODEL Datastream.
   islandora_entities_ingest__entity_ds_composite_datastream($organization_content_model);
 
-  
-  
-  ////////////////////
-  // Theses Content Model.
-//   $theses_content_model = $connection->repository->constructObject('islandora:thesesCModel');
-//   $theses_content_model->owner = 'fedoraAdmin';
-//   $theses_content_model->label = 'Islandora Theses Content Model';
-//   $theses_content_model->models = 'fedora-system:ContentModel-3.0';
-//   // DS-COMPOSITE-MODEL Datastream.
-//   islandora_entities_ingest__entity_ds_composite_datastream($theses_content_model);
-  
-//   // Citation Content Model.
-//   $citation_content_model = $connection->repository->constructObject('islandora:citationCModel');
-//   $citation_content_model->owner = 'fedoraAdmin';
-//   $citation_content_model->label = 'Islandora Citation Content Model';
-//   $citation_content_model->models = 'fedora-system:ContentModel-3.0';
-//   // DS-COMPOSITE-MODEL Datastream.
-//   islandora_entities_ingest__entity_ds_composite_datastream($citation_content_model);
-  /////////////////////
-  
-  
-  
   // Entity Collection.
   $entity_collection = $connection->repository->constructObject('islandora:entity_collection');
   $entity_collection->owner = 'fedoraAdmin';
@@ -436,8 +414,6 @@ function islandora_entities_islandora_required_objects(IslandoraTuque $connectio
         $person_content_model,
         $event_content_model,
         $organization_content_model,
-        //$theses_content_model,
-        //$citation_content_model,
         $entity_collection,
       ),
     ),
