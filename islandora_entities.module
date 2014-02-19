@@ -462,3 +462,15 @@ function islandora_entities_islandora_xml_form_builder_get_transforms() {
     'mads_to_dc.xsl' => "$module_path/xml/mads_to_dc.xsl",
   );
 }
+
+/**
+ * Implements hook_CMODEL_PID_islandora_datastream_access().
+ */
+function islandora_entities_islandora_personCModel_islandora_datastream_access($op, $object, $user) {
+  if ($op == 'edit fedora metadata') {
+    if ($object->id == 'MADS') {
+      $owner = $object->parent->owner;
+      return $user->name == $owner;
+    }
+  }
+}
