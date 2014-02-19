@@ -13,8 +13,6 @@
   </dsTypeModel>
   <dsTypeModel ID="TN" ORDERED="false" optional="true">
     <form MIME="image/jpg"></form>
-    <form MIME="image/jpeg"></form>
-    <form MIME="image/png"></form>
   </dsTypeModel>
   <dsTypeModel ID="EAC-CPF" ORDERED="false" optional="true">
     <form FORMAT_URI="urn:isbn:1-931666-33-4"  MIME="text/xml"></form>
