@@ -35,7 +35,7 @@ function islandora_entities_get_tn_upload_form($form_state = NULL) {
   $extensions = array('jpg, jpeg, png');
   $form = array();
   $form['file'] = array(
-    '#title' => t('Add Thumbnail'),
+    '#title' => t('Add Optional Thumbnail'),
     '#type' => 'managed_file',
     '#required' => FALSE,
     '#description' => t('Select file to upload.<br/>Files must be less than <b>@size MB.</b><br/>Allowed file types: <b>@ext.</b>', array('@size' => $upload_size, '@ext' => $extensions[0])),
