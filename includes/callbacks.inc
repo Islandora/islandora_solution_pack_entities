@@ -74,7 +74,7 @@ function islandora_entities_autocomplete($type) {
       'cmodel' => 'islandora:personCModel',
       'title' => 'MADS_disambiguated_fullname_mt',
     ),
-     'last_name' => array(
+    'last_name' => array(
       'cmodel' => 'islandora:personCModel',
       'title' => 'MADS_family_mt',
     ),
