@@ -70,6 +70,14 @@ function islandora_entities_autocomplete($type) {
       'cmodel' => 'islandora:organizationCModel',
       'title' => 'MADS_department_mt',
     ),
+    'disambiguated' => array(
+      'cmodel' => 'islandora:personCModel',
+      'title' => 'MADS_disambiguated_fullname_mt',
+    ),
+     'last_name' => array(
+      'cmodel' => 'islandora:personCModel',
+      'title' => 'MADS_family_mt',
+    ),
   );
   $qualifier = $mappings[$type]['title'] . ':*';
   if (isset($_GET['q'])) {
