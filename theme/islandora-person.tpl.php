@@ -25,15 +25,16 @@
   <?php if (isset($variables['biography'])): ?>
     <p><?php print $variables['biography']; ?></p>
   <?php endif; ?>
-    <?php if (isset($variables['metadata'])): ?>
-      <?php print $variables['metadata']; ?>
-    <?php endif; ?>
+  <?php if (isset($variables['metadata'])): ?>
+    <?php print $variables['metadata']; ?>
+  <?php endif; ?>
   <?php if (isset($variables['fellow_scholars'])): ?>
     <?php foreach ($variables['fellow_scholars'] as $dept): ?>
       <?php print $dept; ?>
     <?php endforeach; ?>
-
   <?php endif; ?>
-
+  <?php if (isset($variables['recent_citations'])): ?>
+    <?php print $variables['recent_citations']; ?>
+  <?php endif; ?>
 
 </div>
