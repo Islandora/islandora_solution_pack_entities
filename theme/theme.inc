@@ -44,7 +44,7 @@ function islandora_entities_preprocess_islandora_person(array &$variables) {
     $colleages = array();
     foreach ($depts as $dept) {
       if ((string) $dept) {
-        $colleages[(string) $dept] = get_dept_members((string) $dept, $object->id);
+        $colleages[(string) $dept] = islandora_entities_get_dept_members((string) $dept, $object->id);
       }
     }
     if (isset($colleages)) {
@@ -76,7 +76,7 @@ function islandora_entities_preprocess_islandora_person(array &$variables) {
  * @return array
  *   Department members
  */
-function get_dept_members($dept, $pid) {
+function islandora_entities_get_dept_members($dept, $pid) {
   $params = array(
     'fl' => array('MADS_title_ms', 'PID'),
   );
