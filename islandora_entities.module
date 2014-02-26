@@ -485,7 +485,7 @@ function islandora_entities_islandora_personCModel_islandora_datastream_access($
   if ($op == 'edit fedora metadata') {
     if ($object->id == 'MADS') {
       $owner = $object->parent->owner;
-      return ($user->name == $owner || user_acess(ISLANDORA_ENTITIES_EDIT_SCHOLAR_METADATA));
+      return ($user->name == $owner || user_access(ISLANDORA_ENTITIES_EDIT_SCHOLAR_METADATA));
     }
   }
 }
