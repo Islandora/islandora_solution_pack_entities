@@ -79,6 +79,15 @@ function islandora_entities_menu() {
       'access callback' => 'islandora_entity_update_tn_access',
       'access arguments' => array(2),
     ),
+    'islandora/object/%islandora_object/citations' => array(
+      'title' => 'Citations',
+      'type' => MENU_LOCAL_TASK,
+      'page callback' => 'islandora_entities_create_citation_tab',
+      'page arguments' => array(2),
+      'access callback' => 'islandora_entities_citation_access',
+      'access arguments' => array(2),
+      'file' => 'includes/scholar_citation.tab.inc',
+    ),
   );
 }
 
@@ -97,9 +106,9 @@ function islandora_entity_update_tn_access(AbstractObject $object) {
 
   $collection_models = islandora_basic_collection_get_collection_content_models();
   $is_a_collection = (
-    (count(array_intersect($collection_models, $object->models)) > 0) &&
-    isset($object['COLLECTION_POLICY'])
-  );
+      (count(array_intersect($collection_models, $object->models)) > 0) &&
+      isset($object['COLLECTION_POLICY'])
+      );
   if ($is_a_collection) {
     return FALSE;
   }
@@ -130,6 +139,7 @@ function islandora_entities_islandora_personCModel_islandora_ingest_steps(array 
     ),
   );
 }
+
 /**
  * Determine visibility of the EAC-CPF data.
  *
@@ -514,4 +524,25 @@ function islandora_entities_islandora_personCModel_islandora_view_object($object
 function islandora_entities_islandora_organizationCModel_islandora_view_object($object, $page_number, $page_size) {
   $output = theme('islandora_dept', array('object' => $object));
   return array('' => $output);
+}
+
+/**
+ * Access callback for citations tab.
+ */
+function islandora_entities_citation_access($object) {
+  module_load_include('inc', 'islandora_entities', 'includes/utilities');
+  $citations = NULL;
+  if (in_array('islandora:personCModel', $object->models)) {
+    if ($object['MADS']) {
+      $mads = $object['MADS']->content;
+      $simplexml = simplexml_load_string($mads);
+      $identifiers = $simplexml->identifier;
+      foreach ($identifiers as $identifier) {
+        if ($identifier['type'] == 'u1') {
+          $citations = islandora_entities_get_related_citations((string) $identifier, (string) $simplexml->authority->titleInfo->title);;
+        }
+      }
+    }
+  }
+  return is_object($object) && $citations;
 }

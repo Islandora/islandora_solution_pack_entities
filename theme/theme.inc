@@ -9,6 +9,7 @@
  * Implements hook_preprocess().
  */
 function islandora_entities_preprocess_islandora_person(array &$variables) {
+  module_load_include('inc', 'islandora_entities', 'includes/utilities');
   module_load_include('inc', 'islandora', 'includes/metadata');
   $biography = "";
   $object = $variables['object'];
@@ -57,6 +58,15 @@ function islandora_entities_preprocess_islandora_person(array &$variables) {
         );
         $variables['fellow_scholars'][] = theme_item_list($list_variables);
       }
+    }
+    $identifiers = $simplexml->identifier;
+    foreach ($identifiers as $identifier) {
+      if ($identifier['type'] == 'u1') {
+        $themed_links = islandora_entities_get_related_citations((string) $identifier, $variables['title']);
+      }
+    }
+    if (count($themed_links)) {
+      $variables['recent_citations'] = $themed_links;
     }
   }
   if ($object["TN"]) {
