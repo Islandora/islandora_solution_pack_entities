@@ -9,6 +9,7 @@
  * Implements hook_preprocess().
  */
 function islandora_entities_preprocess_islandora_person(array &$variables) {
+  module_load_include('inc', 'islandora_entities', 'includes/utilities');
   module_load_include('inc', 'islandora', 'includes/metadata');
   $biography = "";
   $object = $variables['object'];
@@ -61,17 +62,11 @@ function islandora_entities_preprocess_islandora_person(array &$variables) {
     $identifiers = $simplexml->identifier;
     foreach ($identifiers as $identifier) {
       if ($identifier['type'] == 'u1') {
-        $citation_links = islandora_entities_get_related_citations((string) $identifier);
+        $themed_links = islandora_entities_get_related_citations((string) $identifier, $variables['title']);
       }
     }
-    if (count($citation_links) > 0) {
-      $list_variables = array(
-        'items' => $citation_links,
-        'title' => t('Recent citiations for @scholar', array('@scholar' => $variables['title'])),
-        'type' => 'ul',
-        'attributes' => array('class' => 'recent_citations'),
-      );
-      $variables['recent_citations'] = theme_item_list($list_variables);
+    if (count($themed_links)) {
+      $variables['recent_citations'] = $themed_links;
     }
   }
   if ($object["TN"]) {
@@ -124,37 +119,4 @@ function islandora_entities_preprocess_islandora_dept(array &$variables) {
   module_load_include('inc', 'islandora', 'includes/metadata');
   $object = $variables['object'];
   $variables['metadata'] = islandora_retrieve_metadata_markup($object, TRUE);
-}
-
-/**
- * Gets all citations related to shcolar's uniqu identifier.
- *
- * @param String $identifier
- *   Scholar's unique ID
- *
- * @return array
- *   Array of links pointing to citations
- */
-function islandora_entities_get_related_citations($identifier) {
-  $params = array(
-    'fl' => 'dc.title, PID',
-  );
-  $query = "mods_name_personal_displayForm_ms:*\($identifier\)";
-  $url = parse_url(variable_get('islandora_solr_url', 'localhost:8080/solr'));
-  $solr = new Apache_Solr_Service($url['host'], $url['port'], $url['path'] . '/');
-  $solr->setCreateDocuments(FALSE);
-  try {
-    $results = $solr->search($query, 0, 20, $params);
-    $json = json_decode($results->getRawResponse(), TRUE);
-  }
-  catch (Exception $e) {
-    watchdog_exception('Islandora Entities', $e, 'Got an exception while searching entities for callback.', array(), WATCHDOG_ERROR);
-  }
-  $links = array();
-  foreach ($json['response']['docs'] as $choice) {
-    if (isset($choice['dc.title'])) {
-      $links[] = l($choice['dc.title'][0], 'islandora/object/' . $choice['PID']);
-    }
-  }
-  return $links;
 }
