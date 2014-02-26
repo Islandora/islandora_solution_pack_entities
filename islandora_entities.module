@@ -531,6 +531,7 @@ function islandora_entities_islandora_organizationCModel_islandora_view_object($
  */
 function islandora_entities_citation_access($object) {
   module_load_include('inc', 'islandora_entities', 'includes/utilities');
+  $citations = NULL;
   if (in_array('islandora:personCModel', $object->models)) {
     if ($object['MADS']) {
       $mads = $object['MADS']->content;
