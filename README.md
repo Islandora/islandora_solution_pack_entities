@@ -15,7 +15,7 @@ CONFIGURATION
 
 The Solr field for searching entities and the entity collection are
 configurable at admin/islandora/entities.
-Islandora Solr Metadata must be chosen as the default meetad display.
+Islandora Solr Metadata must be chosen as the default metadata display.
 This can be set at admin/islandora/metadata.
 
 
