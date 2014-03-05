@@ -12,9 +12,9 @@
  */
 function islandora_entities_install() {
   module_load_include('inc', 'islandora', 'includes/solution_packs');
-  islandora_install_solution_pack('islandora_entities');
   islandora_entities_install_solr_metadata_config('Scholar', 'scholar', islandora_entities_get_scholar_config_fields());
   islandora_entities_install_solr_metadata_config('Department', 'department', islandora_entities_get_dept_config_fields());
+  islandora_install_solution_pack('islandora_entities');
 }
 
 /**
