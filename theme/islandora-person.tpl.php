@@ -20,7 +20,7 @@
     <div class="islandora-object-activities">
       <?php if (isset($variables['activities'])): ?>
         <?php print $variables['activities']; ?>
-      <?php endif; ?>      
+      <?php endif; ?>
     </div>
   </div>
 
@@ -34,8 +34,10 @@
     </div>
   </div>
 
-  <div class="islandora-object-content"> 
-    <h1><?php print $variables['title']; ?></h1>
+  <div class="islandora-object-content">
+    <?php if (isset($variables['title'])): ?>
+      <?php print "<h1>" . $variables['title'] ."</h1>"; ?>
+    <?php endif; ?>  
     <p>Biography</p>
     <?php if (isset($variables['biography'])): ?>
       <p><?php print $variables['biography']; ?></p>

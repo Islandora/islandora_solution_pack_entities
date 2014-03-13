@@ -85,8 +85,17 @@ function islandora_entities_menu() {
       'page callback' => 'islandora_entities_create_citation_tab',
       'page arguments' => array(2),
       'access callback' => 'islandora_entities_citation_access',
-      'access arguments' => array(2),
-      'file' => 'includes/scholar_citation.tab.inc',
+      'access arguments' => array(2, "citations"),
+      'file' => 'includes/utilities.inc',
+    ),
+    'islandora/object/%islandora_object/theses' => array(
+      'title' => 'Theses',
+      'type' => MENU_LOCAL_TASK,
+      'page callback' => 'islandora_entities_create_theses_tab',
+      'page arguments' => array(2),
+      'access callback' => 'islandora_entities_citation_access',
+      'access arguments' => array(2, 'theses'),
+      'file' => 'includes/utilities.inc',
     ),
   );
 }
@@ -529,9 +538,8 @@ function islandora_entities_islandora_organizationCModel_islandora_view_object($
 /**
  * Access callback for citations tab.
  */
-function islandora_entities_citation_access($object) {
+function islandora_entities_citation_access($object, $type) {
   module_load_include('inc', 'islandora_entities', 'includes/utilities');
-  $citations = NULL;
   if (in_array('islandora:personCModel', $object->models)) {
     if ($object['MADS']) {
       $mads = $object['MADS']->content;
@@ -539,10 +547,10 @@ function islandora_entities_citation_access($object) {
       $identifiers = $simplexml->identifier;
       foreach ($identifiers as $identifier) {
         if ($identifier['type'] == 'u1') {
-          $citations = islandora_entities_get_related_citations((string) $identifier, (string) $simplexml->authority->titleInfo->title);;
+          $results = islandora_entities_get_related((string) $identifier, (string) $simplexml->authority->titleInfo->title, $type);
         }
       }
     }
   }
-  return is_object($object) && $citations;
+  return is_object($object) && isset($results);
 }
