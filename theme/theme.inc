@@ -62,7 +62,7 @@ function islandora_entities_preprocess_islandora_person(array &$variables) {
     $identifiers = $simplexml->identifier;
     foreach ($identifiers as $identifier) {
       if ($identifier['type'] == 'u1') {
-        $themed_links = islandora_entities_get_related_citations((string) $identifier, $variables['title']);
+        $themed_links = islandora_entities_get_related((string) $identifier, $variables['title'], 'citations');
       }
     }
     if (count($themed_links)) {
