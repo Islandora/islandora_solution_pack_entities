@@ -1,0 +1,6 @@
+name = Islandora Entities CSV Import
+description = Create Entities from supplied CSV.
+dependencies[] = islandora
+dependencies[] = islandora_entities
+package = Islandora
+core = 7.x
