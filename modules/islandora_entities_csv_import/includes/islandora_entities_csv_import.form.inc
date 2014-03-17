@@ -13,7 +13,7 @@
  * @param array $form_state
  *   The Drupal form state.
  */
-function islandora_paged_content_upload_page_form(array $form, array &$form_state) {
+function islandora_entities_import_form(array $form, array &$form_state) {
   module_load_include('inc', 'islandora_entities_csv_import', 'includes/utilities');
   $extensions = array('txt csv');
   $upload_size = min((int) ini_get('post_max_size'), (int) ini_get('upload_max_filesize'));
@@ -50,7 +50,7 @@ function islandora_paged_content_upload_page_form(array $form, array &$form_stat
  * @param array $form_state
  *   The Drupal form state.
  */
-function islandora_paged_content_upload_page_form_submit(array $form, array &$form_state) {
+function islandora_entities_import_form_submit(array $form, array &$form_state) {
   module_load_include('inc', 'islandora_entities_csv_import', 'includes/utilities');
   $file = file_load($form_state['values']['file']);
   $collection_pid = $form_state['values']['collection'];
