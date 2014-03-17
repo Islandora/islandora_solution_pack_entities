@@ -17,7 +17,7 @@ function islandora_entities_csv_import_menu() {
       'title' => 'Import Entities from CSV',
       'type' => MENU_NORMAL_ITEM,
       'page callback' => 'drupal_get_form',
-      'page arguments' => array('islandora_paged_content_upload_page_form'),
+      'page arguments' => array('islandora_entities_import_form'),
       'file' => 'includes/islandora_entities_csv_import.form.inc',
       'access arguments' => array(ISLANDORA_ENTITIES_CSV_IMPORT_ISLANDORA_ENTITIES_IMPORT_CSV),
     ),
