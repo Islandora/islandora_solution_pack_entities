@@ -6,7 +6,7 @@
  */
 
 // Permissions.
-define('ISLANDORA_ENTITIES_IMPORT_CSV', 'import entities from csv');
+define('ISLANDORA_ENTITIES_CSV_IMPORT_ISLANDORA_ENTITIES_IMPORT_CSV', 'import entities from csv');
 
 /**
  * Implements hook_menu().
@@ -19,7 +19,7 @@ function islandora_entities_csv_import_menu() {
       'page callback' => 'drupal_get_form',
       'page arguments' => array('islandora_paged_content_upload_page_form'),
       'file' => 'includes/islandora_entities_csv_import.form.inc',
-      'access arguments' => array(ISLANDORA_ENTITIES_IMPORT_CSV),
+      'access arguments' => array(ISLANDORA_ENTITIES_CSV_IMPORT_ISLANDORA_ENTITIES_IMPORT_CSV),
     ),
     'import_entity_csv/autocomplete' => array(
       'page callback' => 'islandora_entities_get_collection_autocomplete',
