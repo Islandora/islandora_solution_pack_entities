@@ -89,6 +89,7 @@ function islandora_entities_build_scholar_object($scholar, $collection_pid) {
  *
  * @param array $scholar
  *   Associative array of header => value pairs
+ *
  * @return xml
  *   MADS xml representing individual scholar
  */
