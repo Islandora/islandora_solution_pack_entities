@@ -4,37 +4,48 @@
  * This is the template file for the object page for person objects.
  */
 ?>
-<div class="islandora-object islandora"></div>
-<div>
-  <dl class="islandora-object-tn">
+<div class="islandora-object islandora">
 
-    <?php if (isset($variables['tn'])): ?>
-      <dt>
-      <img src="<?php print $variables['tn']; ?>"/>
-      </dt>
+  <div class="col-left">
+    <div class="islandora-object-image">
+      <?php if (isset($variables['tn'])): ?>
+        <img src="<?php print $variables['tn']; ?>"/>
+      <?php endif; ?>
+    </div>
+    <div class="islandora-object-metadata">
+      <?php if (isset($variables['metadata'])): ?>
+        <?php print $variables['metadata']; ?>
+      <?php endif; ?>
+    </div>
+    <div class="islandora-object-activities">
+      <?php if (isset($variables['activities'])): ?>
+        <?php print $variables['activities']; ?>
+      <?php endif; ?>
+    </div>
+  </div>
+
+  <div class="col-right">
+    <div class="islandora-object-scholars">
+      <?php if (isset($variables['fellow_scholars'])): ?>
+        <?php foreach ($variables['fellow_scholars'] as $dept): ?>
+          <?php print $dept; ?>
+        <?php endforeach; ?>
+      <?php endif; ?>
+    </div>
+  </div>
+
+  <div class="islandora-object-content">
+    <?php if (isset($variables['title'])): ?>
+      <?php print "<h1>" . $variables['title'] ."</h1>"; ?>
+    <?php endif; ?>  
+    <p>Biography</p>
+    <?php if (isset($variables['biography'])): ?>
+      <p><?php print $variables['biography']; ?></p>
     <?php endif; ?>
 
-    <?php if (isset($variables['activities'])): ?>
-      <?php print $variables['activities']; ?>
+    <?php if (isset($variables['recent_citations'])): ?>
+      <?php print $variables['recent_citations']; ?>
     <?php endif; ?>
-
-
-  </dl>
-  <h1><?php print $variables['title']; ?></h1>
-  <p>Biography</p>
-  <?php if (isset($variables['biography'])): ?>
-    <p><?php print $variables['biography']; ?></p>
-  <?php endif; ?>
-  <?php if (isset($variables['metadata'])): ?>
-    <?php print $variables['metadata']; ?>
-  <?php endif; ?>
-  <?php if (isset($variables['fellow_scholars'])): ?>
-    <?php foreach ($variables['fellow_scholars'] as $dept): ?>
-      <?php print $dept; ?>
-    <?php endforeach; ?>
-  <?php endif; ?>
-  <?php if (isset($variables['recent_citations'])): ?>
-    <?php print $variables['recent_citations']; ?>
-  <?php endif; ?>
+  </div>
 
 </div>

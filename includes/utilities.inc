@@ -89,9 +89,30 @@ function islandora_entities_ingest__entity_ds_composite_datastream(AbstractObjec
   $ds_composite_datastream->setContentFromFile("$module_path/xml/islandora_entity_ds_composite_model.xml", FALSE);
   $islandora_object->ingestDatastream($ds_composite_datastream);
 }
-
 /**
- * Gets all citations related to scholars's uniqu identifier.
+ * Creates themed list of scholar's citations.
+ *
+ * @param AbstractObject $object
+ *   Object representing scholar
+ *
+ * @return html
+ *   themed list of citations
+ */
+function islandora_entities_create_citation_tab(AbstractObject $object) {
+  module_load_include('inc', 'islandora_entities', 'includes/utilities');
+  if ($object['MADS']) {
+    $mads = $object['MADS']->content;
+    $simplexml = simplexml_load_string($mads);
+    $identifiers = $simplexml->identifier;
+    foreach ($identifiers as $identifier) {
+      if ($identifier['type'] == 'u1') {
+        return islandora_entities_get_related((string) $identifier, (string) $simplexml->authority->titleInfo->title, 'citations');
+      }
+    }
+  }
+}
+/**
+ * Gets all citations related to scholars's unique identifier.
  *
  * @param string $identifier
  *   Scholar's unique ID
@@ -99,11 +120,17 @@ function islandora_entities_ingest__entity_ds_composite_datastream(AbstractObjec
  * @return array
  *   Array of links pointing to citations
  */
-function islandora_entities_get_related_citations($identifier, $title) {
+function islandora_entities_get_related($identifier, $title, $type) {
+  $mappings = array(
+    'citations' => 'ir:citationCModel',
+    'theses' => 'ir:thesisCModel',
+  );
+  $content_model = $mappings[$type];
   $params = array(
     'fl' => 'dc.title, PID',
   );
-  $query = "mods_name_personal_displayForm_ms:*\($identifier\)";
+  $query = "+RELS_EXT_hasModel_uri_mt:\"$content_model\" +mods_name_personal_displayForm_mt:\"($identifier)\"";
+
   $url = parse_url(variable_get('islandora_solr_url', 'localhost:8080/solr'));
   $solr = new Apache_Solr_Service($url['host'], $url['port'], $url['path'] . '/');
   $solr->setCreateDocuments(FALSE);
@@ -123,11 +150,34 @@ function islandora_entities_get_related_citations($identifier, $title) {
   if (count($links) > 0) {
     $list_variables = array(
       'items' => $links,
-      'title' => t('Recent citiations for @scholar', array('@scholar' => $title)),
+      'title' => t('Recent @type for @scholar', array('@type' => drupal_ucfirst($type), '@scholar' => $title)),
       'type' => 'ul',
       'attributes' => array('class' => 'recent_citations'),
     );
     return theme_item_list($list_variables);
   }
   return NULL;
+}
+
+/**
+ * Creates themed list of scholar's citations.
+ *
+ * @param AbstractObject $object
+ *   Object representing scholar
+ *
+ * @return html
+ *   themed list of citations
+ */
+function islandora_entities_create_theses_tab(AbstractObject $object) {
+  module_load_include('inc', 'islandora_entities', 'includes/utilities');
+  if ($object['MADS']) {
+    $mads = $object['MADS']->content;
+    $simplexml = simplexml_load_string($mads);
+    $identifiers = $simplexml->identifier;
+    foreach ($identifiers as $identifier) {
+      if ($identifier['type'] == 'u1') {
+        return islandora_entities_get_related((string) $identifier, (string) $simplexml->authority->titleInfo->title, 'theses');
+      }
+    }
+  }
 }
