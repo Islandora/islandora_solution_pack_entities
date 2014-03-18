@@ -6,7 +6,7 @@
  */
 
 // Permissions.
-define('ISLANDORA_ENTITIES_CSV_IMPORT_ISLANDORA_ENTITIES_IMPORT_CSV', 'import entities from csv');
+define('ISLANDORA_ENTITIES_CSV_IMPORT_ISLANDORA_ENTITIES_IMPORT_CSV', 'Import entities from csv');
 
 /**
  * Implements hook_menu().
@@ -35,9 +35,9 @@ function islandora_entities_csv_import_menu() {
  */
 function islandora_entities_csv_import_permission() {
   return array(
-    ISLANDORA_ENTITIES_IMPORT_CSV => array(
+    ISLANDORA_ENTITIES_CSV_IMPORT_ISLANDORA_ENTITIES_IMPORT_CSV => array(
       'title' => t('Import Islandora Entities from CSV'),
-      'description' => t('IMport entities from user-supplied CSV.'),
+      'description' => t('Import entities from user-supplied CSV.'),
     ),
   );
 }
