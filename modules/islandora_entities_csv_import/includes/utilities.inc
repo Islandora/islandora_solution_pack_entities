@@ -67,6 +67,32 @@ function islandora_entities_read_csv($path) {
  *   PID of collection to hold new objects.
  */
 function islandora_entities_build_scholar_object($scholar, $collection_pid) {
+
+  $mads = islandora_entities_build_mads($scholar);
+  $tuque = new IslandoraTuque();
+  $repository = $tuque->repository;
+  $fedora_object = $repository->constructObject('islandora');
+  $fedora_object->label = isset($scholar['DISPLAY_NAME']) ? $scholar['DISPLAY_NAME'] : 'Member';
+  $fedora_object->owner = 'admin';
+  $datastream = $fedora_object->constructDatastream('MADS', 'M');
+  $datastream->label = 'MADS';
+  $datastream->mimetype = 'text/xml';
+  $datastream->content = $mads;
+  $fedora_object->ingestDatastream($datastream);
+  $fedora_object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:personCModel');
+  $fedora_object->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOfCollection', $collection_pid);
+  $new_fedora_object = islandora_add_object($fedora_object);
+}
+
+/**
+ * Builds MADS stream from Scholar data.
+ *
+ * @param array $scholar
+ *   Associative array of header => value pairs
+ * @return xml
+ *   MADS xml representing individual scholar
+ */
+function islandora_entities_build_mads($scholar) {
   $dom = new DomDocument('1.0', 'UTF-8');
   $dom->preserveWhiteSpace = FALSE;
   $dom->formatOutput = TRUE;
@@ -95,20 +121,7 @@ function islandora_entities_build_scholar_object($scholar, $collection_pid) {
     $status = islandora_entities_attach_element($dom, 'note', $root, $scholar['STATUS']);
     $status->setAttribute('type', 'status');
   }
-
-  $tuque = new IslandoraTuque();
-  $repository = $tuque->repository;
-  $fedora_object = $repository->constructObject('islandora');
-  $fedora_object->label = isset($scholar['DISPLAY_NAME']) ? $scholar['DISPLAY_NAME'] : 'Member';
-  $fedora_object->owner = 'admin';
-  $datastream = $fedora_object->constructDatastream('MADS', 'M');
-  $datastream->label = 'MADS';
-  $datastream->mimetype = 'text/xml';
-  $datastream->content = $dom->savexml();
-  $fedora_object->ingestDatastream($datastream);
-  $fedora_object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:personCModel');
-  $fedora_object->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOfCollection', $collection_pid);
-  $new_fedora_object = islandora_add_object($fedora_object);
+  return $dom->saveXML();
 }
 
 /**
