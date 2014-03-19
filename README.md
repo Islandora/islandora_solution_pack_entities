@@ -1,6 +1,6 @@
 CONTENTS OF THIS FILE
 ---------------------
-
+ * adding a test change
  * summary
  * configuration
 
