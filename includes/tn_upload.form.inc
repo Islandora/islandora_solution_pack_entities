@@ -61,22 +61,24 @@ function islandora_entities_get_tn_upload_form($form_state = NULL) {
 function islandora_entities_tn_upload_form_submit(array $form, array &$form_state) {
   $object = $form_state['islandora']['objects'][0];
   $tn_file = file_load($form_state['values']['file']);
-  $tn_path = drupal_realpath($tn_file->uri);
-  $imagick = new Imagick($tn_path);
-  $imagick->thumbnailimage(150, NULL);
-  $imagick->setimagefilename($tn_path);
-  $imagick->writeimage();
+  if (isset($tn_file->uri)) {
+    $tn_path = drupal_realpath($tn_file->uri);
+    $imagick = new Imagick($tn_path);
+    $imagick->thumbnailimage(150, NULL);
+    $imagick->setimagefilename($tn_path);
+    $imagick->writeimage();
 
-  if (empty($object['TN'])) {
-    $ds = $object->constructDatastream('TN', 'M');
-    $object->ingestDatastream($ds);
+    if (empty($object['TN'])) {
+      $ds = $object->constructDatastream('TN', 'M');
+      $object->ingestDatastream($ds);
+    }
+    else {
+      $ds = $object['TN'];
+    }
+    $ds->setContentFromFile($tn_path, FALSE);
+    $ds->label = $tn_file->filename;
+    $ds->mimetype = $tn_file->filemime;
   }
-  else {
-    $ds = $object['TN'];
-  }
-  $ds->setContentFromFile($tn_path, FALSE);
-  $ds->label = $tn_file->filename;
-  $ds->mimetype = $tn_file->filemime;
 }
 
 /**

@@ -50,8 +50,11 @@ function islandora_entities_preprocess_islandora_person(array &$variables) {
     }
     if (isset($colleages)) {
       foreach ($colleages as $dept => $members) {
+        foreach ($members as $pid => $scholar) {
+          $links[] = l($scholar, "islandora/object/$pid/view");
+        }
         $list_variables = array(
-          'items' => $members,
+          'items' => $links,
           'title' => t('Other Scholars in @dept', array('@dept' => $dept)),
           'type' => 'ul',
           'attributes' => array('class' => 'fellow_scholars'),
@@ -88,7 +91,7 @@ function islandora_entities_preprocess_islandora_person(array &$variables) {
  */
 function islandora_entities_get_dept_members($dept, $pid) {
   $params = array(
-    'fl' => array('MADS_title_ms', 'PID'),
+    'fl' => array('MADS_title_ms PID'),
   );
   $query = "MADS_organization_ms:\"$dept\" AND -PID:\"$pid\"";
   $url = parse_url(variable_get('islandora_solr_url', 'localhost:8080/solr'));
@@ -105,7 +108,7 @@ function islandora_entities_get_dept_members($dept, $pid) {
   foreach ($json['response']['docs'] as $choice) {
     if (isset($choice['MADS_title_ms'])) {
       foreach ($choice['MADS_title_ms'] as $candidate) {
-        $colleages[] = $candidate;
+        $colleages[$choice['PID']] = $candidate;
       }
     }
   }

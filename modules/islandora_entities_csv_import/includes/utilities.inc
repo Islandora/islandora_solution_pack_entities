@@ -162,7 +162,6 @@ function islandora_entities_add_authority($dom, $scholar) {
   }
   $root = $dom->documentElement;
   $authority = islandora_entities_attach_element($dom, "authority", $root);
-  $authority->setAttribute('geographicSubdivision', "not applicable");
   $name_node = islandora_entities_attach_element($dom, 'name', $authority);
   $name_node->setAttribute('type', 'personal');
   if (isset($name['GIVEN_NAME'])) {
@@ -226,8 +225,7 @@ function islandora_entities_add_affiliation($dom, $scholar) {
   $root = $dom->documentElement;
   $affiliation = islandora_entities_attach_element($dom, "affiliation", $root);
   if (isset($affiliations['DEPARTMENT'])) {
-    $department = str_replace('||', ',', $affiliations['DEPARTMENT']);
-    islandora_entities_attach_element($dom, "organization", $affiliation, $department);
+    islandora_entities_attach_element($dom, "organization", $affiliation, $affiliations['DEPARTMENT']);
   }
   if (isset($affiliations['POSITION'])) {
     islandora_entities_attach_element($dom, "position", $affiliation, $affiliations['POSITION']);
@@ -294,8 +292,17 @@ function islandora_entities_add_building_address($dom, $scholar) {
  *   Created node
  */
 function islandora_entities_attach_element($dom, $element_name, $parent_node, $content = NULL) {
-  $node = $content ? $dom->createElement($element_name, $content) : $dom->createElement($element_name);
-  $parent_node->appendChild($node);
+  if ($content) {
+    $elements = explode('~', htmlspecialchars(str_replace('||', ',', $content)));
+    foreach ($elements as $element_content) {
+      $node = $dom->createElement($element_name, trim($element_content));
+      $parent_node->appendChild($node);
+    }
+  }
+  else {
+    $node = $dom->createElement($element_name);
+    $parent_node->appendChild($node);
+  }
   return $node;
 }
 
