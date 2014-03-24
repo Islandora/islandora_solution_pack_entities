@@ -45,10 +45,13 @@ function islandora_entities_preprocess_islandora_person(array &$variables) {
     $colleages = array();
     foreach ($depts as $dept) {
       if ((string) $dept) {
-        $colleages[(string) $dept] = islandora_entities_get_dept_members((string) $dept, $object->id);
+        $members = islandora_entities_get_dept_members((string) $dept, $object->id);
+        if ($members) {
+          $colleages[(string) $dept] = $members;
+        }
       }
     }
-    if (isset($colleages)) {
+    if (count($colleages) > 0) {
       foreach ($colleages as $dept => $members) {
         foreach ($members as $pid => $scholar) {
           $links[] = l($scholar, "islandora/object/$pid/view");
