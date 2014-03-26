@@ -13,7 +13,7 @@ function islandora_entities_preprocess_islandora_person(array &$variables) {
   module_load_include('inc', 'islandora', 'includes/metadata');
   $biography = "";
   $object = $variables['object'];
-  $pid = $object->id;
+  $object_pid = $object->id;
 
   if ($object['MADS']) {
     $mads = $object['MADS']->content;
@@ -76,7 +76,7 @@ function islandora_entities_preprocess_islandora_person(array &$variables) {
     }
   }
   if ($object["TN"]) {
-    $variables['tn'] = "/islandora/object/$pid/datastream/TN/view";
+    $variables['tn'] = "/islandora/object/$object_pid/datastream/TN/view";
   }
   $variables['metadata'] = islandora_retrieve_metadata_markup($object, TRUE);
 }
