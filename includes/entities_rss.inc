@@ -17,9 +17,8 @@ function islandora_entities_rss($pid) {
   // Change the content type to be application/rss+xml and not http.
   drupal_add_http_header('Content-Type', 'application/rss+xml; charset=utf-8');
   $object = islandora_object_load($pid);
-  $results = "";//array();
+  $results = "";
   if ($object['MADS']) {
-    dsm($object['MADS'], "mads");
     $mads = $object['MADS']->content;
     $simplexml = simplexml_load_string($mads);
     $identifiers = $simplexml->identifier;
@@ -44,7 +43,6 @@ function islandora_entities_rss($pid) {
   $output .= "<rss version=\"2.0\">\n";
   $output .= format_rss_channel($title, $link, $description, $results);
   $output .= "</rss>\n";
-  dsm($output, "output");
   // Print the xml.
   print $output;
   exit;
@@ -85,7 +83,7 @@ function islandora_entities_get_rss_related($identifier, $type) {
     if (isset($choice['dc.title'])) {
       $description = isset($choice['dc.description']) ? $choice['dc.description'][0] : "No Description";
       $link = l("View", 'islandora/object/' . $choice['PID']);
-      $return .= format_rss_item($choice['dc.title'][0], $link, $description);
+      $return .= format_rss_item($choice['dc.title'][0], "$base_url/islandora/object/" . $choice['PID'], $description);
     }
   }
   return $return;
