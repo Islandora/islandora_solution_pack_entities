@@ -73,18 +73,19 @@ function islandora_entities_preprocess_islandora_person(array &$variables) {
         $themed_links = islandora_entities_get_related((string) $identifier, $variables['title'], 'citations');
       }
     }
+    $name = $variables['title'];
     // Add the RSS image, with menu callback.
     $form = array();
     $form['bookmark_rss'] = array(
       '#weight' => -1,
       '#markup' => l(theme('image', array(
           'path' => drupal_get_path('module', 'islandora_entities') . '/images/rss.png',
-          'title' => t('Present Entity data as list in RSS form'),
+          'title' => t('Present Entity data as list in an RSS form'),
           'attributes' => array(),
           )
         ), "islandora/entities/$object_pid/rss", array('html' => TRUE)),
-      '#prefix' => '<div id="islandora-entities-rss-format">',
-      '#suffix' => '</div>',
+      '#prefix' => '<div><div id="islandora-entities-rss-format" style="float:left;">',
+      '#suffix' => '</div><div class="islandora-entities-rss-format-name" style="float:left;">Subscribe to ' . $name . ' RSS feed</div></div>',
     );
     $variables['rss_feed'] = drupal_render($form);
     if (count($themed_links)) {

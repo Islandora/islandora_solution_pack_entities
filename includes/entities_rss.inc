@@ -6,14 +6,12 @@
  */
 
 /**
- * Prints out citations as rss information for the given entity
+ * Prints out citations as rss information for the given entity.
  *
- * @param string $entity
+ * @param string $pid
  *   The PID of the object to create markup for.
  */
 function islandora_entities_rss($pid) {
-  module_load_include('inc', 'islandora_bookmark', 'includes/api');
-
   // Change the content type to be application/rss+xml and not http.
   drupal_add_http_header('Content-Type', 'application/rss+xml; charset=utf-8');
   $object = islandora_object_load($pid);
@@ -52,9 +50,12 @@ function islandora_entities_rss($pid) {
  * Find citations and create rss items out of them.
  *
  * @param string $identifier
+ *   Scholar's unique ID.
  * @param string $type
+ *   Specified content model ('citations' or 'theses').
  *
  * @return string
+ *   The string formatted RSS items.
  */
 function islandora_entities_get_rss_related($identifier, $type) {
   global $base_url;
@@ -64,7 +65,7 @@ function islandora_entities_get_rss_related($identifier, $type) {
   );
   $content_model = $mappings[$type];
   $params = array(
-    'fl' => 'dc.title, PID',
+    'fl' => 'dc.title, PID, dc.description',
   );
   $query = "+RELS_EXT_hasModel_uri_mt:\"$content_model\" +mods_name_personal_displayForm_mt:\"($identifier)\"";
 
@@ -76,13 +77,13 @@ function islandora_entities_get_rss_related($identifier, $type) {
     $json = json_decode($results->getRawResponse(), TRUE);
   }
   catch (Exception $e) {
-    watchdog_exception('Islandora Entities', $e, 'Got an exception while searching entities for callback.', array(), WATCHDOG_ERROR);
+    watchdog_exception('Islandora Entities', $e, 'Got an exception while searching an entities citations.', array(), WATCHDOG_ERROR);
   }
   $return = "";
   foreach ($json['response']['docs'] as $choice) {
     if (isset($choice['dc.title'])) {
-      $description = isset($choice['dc.description']) ? $choice['dc.description'][0] : "No Description";
-      $link = l("View", 'islandora/object/' . $choice['PID']);
+      $description = isset($choice['dc.description'][0]) ? $choice['dc.description'][0] : "No Description";
+      $link = l(t("View"), 'islandora/object/' . $choice['PID']);
       $return .= format_rss_item($choice['dc.title'][0], "$base_url/islandora/object/" . $choice['PID'], $description);
     }
   }
