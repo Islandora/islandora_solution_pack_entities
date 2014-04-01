@@ -53,6 +53,14 @@ function islandora_entities_menu() {
       'file' => 'includes/callbacks.inc',
       'access arguments' => array('search islandora solr'),
     ),
+    'islandora/entities/%/rss' => array(
+      'title' => 'RSS Callback',
+      'page callback' => 'islandora_entities_rss',
+      'page arguments' => array(2),
+      'type' => MENU_CALLBACK,
+      'file' => 'includes/entities_rss.inc',
+      'access arguments' => array('search islandora solr'),
+    ),
     'admin/islandora/entities' => array(
       'title' => 'Islandora Entities',
       'description' => 'Configure the Entities solution pack.',

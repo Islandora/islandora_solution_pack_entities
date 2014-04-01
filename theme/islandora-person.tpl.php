@@ -46,6 +46,9 @@
     <?php if (isset($variables['recent_citations'])): ?>
       <?php print $variables['recent_citations']; ?>
     <?php endif; ?>
+    <?php if (isset($variables['rss_feed'])): ?>
+      <?php print $variables['rss_feed']; ?>
+    <?php endif; ?>
   </div>
 
 </div>
