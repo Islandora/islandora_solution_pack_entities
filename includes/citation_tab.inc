@@ -39,24 +39,27 @@ function islandora_entities_citation_form($form, $form_state, $object, $type = '
     $simplexml = simplexml_load_string($mads);
     $identifiers = $simplexml->identifier;
     foreach ($identifiers as $identifier) {
-      if ($identifier['type'] == 'u1') {
+      if ($identifier['type'] == 'u1' && (string) $identifier) {
         $results = islandora_entities_get_related_pids((string) $identifier, (string) $simplexml->authority->titleInfo->title, $type);
       }
     }
+    $lines = array();
+    $has_entries = empty($results) ? FALSE : TRUE;
+    if ($has_entries) {
+      foreach ($results as $pid => $data) {
+        $object = islandora_object_load($pid);
+        $label = l($object->label, 'islandora/object/' . $object->id);
+        $output = array();
+        foreach ($data['authors'] as $author) {
+          $author = preg_replace('/\((.*?)\)/', '', $author);
 
-    foreach ($results as $pid => $data) {
-      $object = islandora_object_load($pid);
-      $label = l($object->label, 'islandora/object/' . $object->id);
-      $output = array();
-      foreach ($data['authors'] as $author) {
-        $author = preg_replace('/\((.*?)\)/', '', $author);
-
-        if (trim($author)) {
-          $output[] = $author;
+          if (trim($author)) {
+            $output[] = $author;
+          }
         }
+        $authors = implode('; ', $output);
+        $lines[$object->id] = array('title' => $label, 'authors' => $authors);
       }
-      $authors = implode('; ', $output);
-      $lines[$object->id] = array('title' => $label, 'authors' => $authors);
     }
   }
   $header = array(
@@ -70,15 +73,17 @@ function islandora_entities_citation_form($form, $form_state, $object, $type = '
     '#header' => $header,
     '#options' => $lines,
     '#attributes' => '',
-    '#empty' => t("There are no citations."),
+    '#empty' => t("There are no @type.", array('@type' => $type)),
   );
-  $form['exporter'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('Detailed List'),
-    '#prefix' => '<div id="islandora-bookmark-detailed-list">',
-    '#suffix' => '</div>',
-  );
-  add_export_features($form['exporter'], $form_state);
+  if ($has_entries) {
+    $form['exporter'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Detailed List'),
+      '#prefix' => '<div id="islandora-bookmark-detailed-list">',
+      '#suffix' => '</div>',
+    );
+    add_export_features($form['exporter'], $form_state);
+  }
   return $form;
 }
 
