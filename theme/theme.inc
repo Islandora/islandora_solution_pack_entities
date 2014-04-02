@@ -69,7 +69,7 @@ function islandora_entities_preprocess_islandora_person(array &$variables) {
     }
     $identifiers = $simplexml->identifier;
     foreach ($identifiers as $identifier) {
-      if ($identifier['type'] == 'u1') {
+      if ($identifier['type'] == 'u1' && (string) $identifier) {
         $themed_links = islandora_entities_get_related((string) $identifier, $variables['title'], 'citations');
       }
     }
@@ -88,7 +88,7 @@ function islandora_entities_preprocess_islandora_person(array &$variables) {
       '#suffix' => '</div><div class="islandora-entities-rss-format-name" style="float:left;">Subscribe to ' . $name . ' RSS feed</div></div>',
     );
     $variables['rss_feed'] = drupal_render($form);
-    if (count($themed_links)) {
+    if (!empty($themed_links)) {
       $variables['recent_citations'] = $themed_links;
     }
   }

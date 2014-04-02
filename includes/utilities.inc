@@ -89,6 +89,7 @@ function islandora_entities_ingest__entity_ds_composite_datastream(AbstractObjec
   $ds_composite_datastream->setContentFromFile("$module_path/xml/islandora_entity_ds_composite_model.xml", FALSE);
   $islandora_object->ingestDatastream($ds_composite_datastream);
 }
+
 /**
  * Creates themed list of scholar's citations.
  *
@@ -111,6 +112,7 @@ function islandora_entities_create_citation_tab(AbstractObject $object) {
     }
   }
 }
+
 /**
  * Gets all citations related to scholars's unique identifier.
  *
@@ -180,4 +182,44 @@ function islandora_entities_create_theses_tab(AbstractObject $object) {
       }
     }
   }
+}
+
+/**
+ * Gets all citations related to scholars's unique identifier.
+ *
+ * @param string $identifier
+ *   Scholar's unique ID
+ *
+ * @return array
+ *   Array of links pointing to citations
+ */
+function islandora_entities_get_related_pids($identifier, $title, $type) {
+  $mappings = array(
+    'citations' => 'ir:citationCModel',
+    'theses' => 'ir:thesisCModel',
+  );
+  $content_model = $mappings[$type];
+  $params = array(
+    'fl' => 'dc.title, mods_name_personal_displayForm_mt, PID',
+  );
+  $query = "+RELS_EXT_hasModel_uri_mt:\"$content_model\" +mods_name_personal_displayForm_mt:\"($identifier)\"";
+
+  $url = parse_url(variable_get('islandora_solr_url', 'localhost:8080/solr'));
+  $solr = new Apache_Solr_Service($url['host'], $url['port'], $url['path'] . '/');
+  $solr->setCreateDocuments(FALSE);
+  try {
+    $search_results = $solr->search($query, 0, 20, $params);
+    $json = json_decode($search_results->getRawResponse(), TRUE);
+  }
+  catch (Exception $e) {
+    watchdog_exception('Islandora Entities', $e, 'Got an exception while searching entities for callback.', array(), WATCHDOG_ERROR);
+  }
+  foreach ($json['response']['docs'] as $choice) {
+    $results[$choice['PID']] = array(
+      'PID' => $choice['PID'],
+      'title' => $choice['dc.title'],
+      'authors' => $choice['mods_name_personal_displayForm_mt'],
+    );
+  }
+  return $results;
 }
