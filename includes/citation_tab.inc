@@ -88,7 +88,7 @@ function islandora_entities_citation_form($form, $form_state, $object, $type = '
       '#prefix' => '<div id="islandora-bookmark-detailed-list">',
       '#suffix' => '</div>',
     );
-    add_export_features($form['exporter'], $form_state, $type);
+    islandora_entities_add_export_features($form['exporter'], $form_state);
   }
   return $form;
 }
@@ -101,7 +101,8 @@ function islandora_entities_citation_form($form, $form_state, $object, $type = '
  * @param array $form_state
  *   Drupal Form State
  */
-function add_export_features(&$container, &$form_state, $type) {
+function islandora_entities_add_export_features(&$container, &$form_state) {
+
   $groups = array();
   $export_styles = array();
   $export = islandora_bookmark_get_export_options();
