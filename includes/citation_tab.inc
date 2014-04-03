@@ -88,7 +88,7 @@ function islandora_entities_citation_form($form, $form_state, $object, $type = '
       '#prefix' => '<div id="islandora-bookmark-detailed-list">',
       '#suffix' => '</div>',
     );
-    islandora_entities_add_export_features($form['exporter'], $form_state);
+    islandora_entities_add_export_features($form['exporter'], $form_state, $type);
   }
   return $form;
 }
@@ -100,8 +100,10 @@ function islandora_entities_citation_form($form, $form_state, $object, $type = '
  *   Form element receiving new elements
  * @param array $form_state
  *   Drupal Form State
+ * @param string $type
+ *   citation or thesis
  */
-function islandora_entities_add_export_features(&$container, &$form_state) {
+function islandora_entities_add_export_features(&$container, &$form_state, $type) {
 
   $groups = array();
   $export_styles = array();
@@ -149,7 +151,7 @@ function islandora_entities_add_export_features(&$container, &$form_state) {
       'export_styles' => $style_elements,
       'export_selected' => array(
         '#type' => 'submit',
-        '#value' => t('Export selected @type', array('@type' => $type . '(s)')),
+        '#value' => t('Export selected @type', array('@type' => $type)),
         '#weight' => 5,
         '#action_validate' => array(
           'formHasExportTypeSelected',
