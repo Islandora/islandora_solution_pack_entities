@@ -14,6 +14,8 @@
  *   The Drupal form state.
  * @param AbstractObject $object
  *   The object with related citations.
+ * @param string $type
+ *   citation or thesis
  *
  * @return array
  *   The Drupal form.
@@ -67,6 +69,10 @@ function islandora_entities_citation_form($form, $form_state, $object, $type = '
     'authors' => t('Authors'),
   );
   $form['#tree'] = TRUE;
+  $form['type'] = array(
+    '#type' => 'hidden',
+    '#value' => $type,
+  );
   $form['citations'] = array(
     '#type' => 'tableselect',
     '#title' => t('Citations'),
@@ -82,7 +88,7 @@ function islandora_entities_citation_form($form, $form_state, $object, $type = '
       '#prefix' => '<div id="islandora-bookmark-detailed-list">',
       '#suffix' => '</div>',
     );
-    add_export_features($form['exporter'], $form_state);
+    add_export_features($form['exporter'], $form_state, $type);
   }
   return $form;
 }
@@ -95,7 +101,7 @@ function islandora_entities_citation_form($form, $form_state, $object, $type = '
  * @param array $form_state
  *   Drupal Form State
  */
-function add_export_features(&$container, &$form_state) {
+function add_export_features(&$container, &$form_state, $type) {
   $groups = array();
   $export_styles = array();
   $export = islandora_bookmark_get_export_options();
@@ -142,9 +148,7 @@ function add_export_features(&$container, &$form_state) {
       'export_styles' => $style_elements,
       'export_selected' => array(
         '#type' => 'submit',
-        '#value' => t('Export selected @type', array(
-          '@type' => variable_get('islandora_bookmark_type', 'bookmark') . 's',
-        )),
+        '#value' => t('Export selected @type', array('@type' => $type . '(s)')),
         '#weight' => 5,
         '#action_validate' => array(
           'formHasExportTypeSelected',
@@ -158,6 +162,19 @@ function add_export_features(&$container, &$form_state) {
   }
 }
 
+/**
+ * Form validator.
+ *
+ * @param array $form_state
+ *   The Drupal form state.
+ */
+function islandora_entities_citation_form_validate($form, $form_state) {
+  $pids = array_filter(array_values($form_state['values']['citations']));
+  if (empty($pids)) {
+    form_set_error('citations', t("Please select one or more objects for export."));
+  }
+
+}
 /**
  * Submit handler.
  *
