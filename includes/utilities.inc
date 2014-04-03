@@ -214,6 +214,7 @@ function islandora_entities_get_related_pids($identifier, $title, $type) {
   catch (Exception $e) {
     watchdog_exception('Islandora Entities', $e, 'Got an exception while searching entities for callback.', array(), WATCHDOG_ERROR);
   }
+  $results = array();
   foreach ($json['response']['docs'] as $choice) {
     $results[$choice['PID']] = array(
       'PID' => $choice['PID'],
