@@ -14,7 +14,7 @@ CONFIGURATION
 -------------
 
 The Solr field for searching entities and the entity collection are
-configurable at admin/islandora/entities.
+configurable at admin/islandora/solution_pack_config/entities.
 Islandora Solr Metadata must be chosen as the default metadata display.
 This can be set at admin/islandora/metadata.
 
@@ -23,7 +23,7 @@ Installation
 ------------
 
 The autocomplete for the MADS forms requires solr values.
-A standrad installation should include the transformations in
+A standard installation should include the transformations in
 basic-solr-config - git@github.com:discoverygarden/basic-solr-config.git
 The link to the MADS transformation in foxmlToSolr.xslt must be uncommented.
 This will be either

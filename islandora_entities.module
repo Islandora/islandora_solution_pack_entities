@@ -61,9 +61,9 @@ function islandora_entities_menu() {
       'file' => 'includes/entities_rss.inc',
       'access arguments' => array('search islandora solr'),
     ),
-    'admin/islandora/entities' => array(
+    'admin/islandora/solution_pack_config/entities' => array(
       'title' => 'Islandora Entities',
-      'description' => 'Configure the Entities solution pack.',
+      'description' => 'Select default collections for entity types.',
       'page callback' => 'drupal_get_form',
       'page arguments' => array('islandora_entities_settings'),
       'type' => MENU_NORMAL_ITEM,
