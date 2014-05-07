@@ -270,4 +270,3 @@ function islandora_entities_add_autocompletes_to_thesis_form(&$form) {
     }
   }
 }
-
