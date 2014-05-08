@@ -224,3 +224,49 @@ function islandora_entities_get_related_pids($identifier, $title, $type) {
   }
   return $results;
 }
+
+/**
+ * Adds entity autocomplete paths to a scholar citation form.
+ *
+ * @param array $form
+ *   Drupal Form API array.
+ */
+function islandora_entities_add_autocompletes_to_citation_form(&$form) {
+  // Skip the non-numeric keys.
+  // Hack in the autocomplete paths.
+  foreach ($form['authors'] as $key => $value) {
+    if (is_int($key)) {
+      $form['authors'][$key]['family']['#autocomplete_path'] = 'islandora/entities/autocomplete/last_name';
+      $form['authors'][$key]['qualified_name']['#autocomplete_path'] = 'islandora/entities/autocomplete/disambiguated';
+      $form['authors'][$key]['affiliation']['#autocomplete_path'] = 'islandora/entities/autocomplete/department';
+    }
+  }
+}
+
+/**
+ * Adds entity autocomplete paths to a scholar thesis form.
+ *
+ * @param array $form
+ *   Drupal Form API array.
+ */
+function islandora_entities_add_autocompletes_to_thesis_form(&$form) {
+  // Skip the non-numeric keys.
+  // Hack in the autocomplete paths.
+  foreach ($form['advisor'] as $key => $value) {
+    if (is_int($key)) {
+      $form['advisor'][$key]['advisor']['#autocomplete_path'] = 'islandora/entities/autocomplete/disambiguated';
+    }
+  }
+
+  foreach ($form['committee'] as $key => $value) {
+    if (is_int($key)) {
+      $form['committee'][$key]['commitee']['#autocomplete_path'] = 'islandora/entities/autocomplete/disambiguated';
+    }
+  }
+
+  foreach ($form['granter'] as $key => $value) {
+    if (is_int($key)) {
+      $form['granter'][$key]['department']['#autocomplete_path'] = 'islandora/entities/autocomplete/department';
+    }
+  }
+}
