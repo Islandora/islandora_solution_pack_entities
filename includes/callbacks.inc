@@ -80,9 +80,10 @@ function islandora_entities_autocomplete($type) {
     ),
   );
   $qualifier = $mappings[$type]['title'] . ':*';
-  if (isset($_GET['q'])) {
-    $query_params = drupal_get_query_parameters();
-    $stub = end($query_params);
+  $path = request_path();
+  if ($path) {
+    $path_array = explode('/', $path);
+    $stub = end($path_array);
     $qualifier = $mappings[$type]['title'] . ':' . $stub . '*';
   }
   $params = array(
