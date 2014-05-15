@@ -117,19 +117,5 @@ h3.bio {
 	.islandora-object-content h3 {
 	  margin-top: 0;
 	}
-/*	
-	.islandora-metadata dt {
-		font-weight: bold;
-	}
-	.islandora-object-metadata dd, .islandora-object-metadata dt {
-		display: block;
-		border: 0 none;
-		padding: 0;
-	}
-	.islandora-inline-metadata dd {
-		padding-left: 0;
-		margin-bottom: 1em;
-	}
-*/
 }
 
