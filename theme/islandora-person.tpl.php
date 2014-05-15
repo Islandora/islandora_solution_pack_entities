@@ -35,10 +35,7 @@
   </div>
 
   <div class="islandora-object-content">
-    <?php if (isset($variables['title'])): ?>
-      <?php print "<h1>" . $variables['title'] ."</h1>"; ?>
-    <?php endif; ?>  
-    <p>Biography</p>
+    <h3>Biography</h3>
     <?php if (isset($variables['biography'])): ?>
       <p><?php print $variables['biography']; ?></p>
     <?php endif; ?>

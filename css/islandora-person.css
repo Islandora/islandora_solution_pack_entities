@@ -76,6 +76,9 @@ body.islandora-entity #content, body.islandora-entity #content {
 .islandora-object-content h3 {
 	margin-top: 2em;
 }
+h3.bio {
+	margin-top: 0 !important;
+}
 
 /* Recent Citations */
 .islandora-object-content ul {
@@ -85,3 +88,48 @@ body.islandora-entity #content, body.islandora-entity #content {
 .islandora-entities-rss-format-name {
 	margin-left: 0.675em;
 }
+
+/* Responsiveness */
+
+@media all and (min-width: 680px) and (max-width: 959px) {
+	.islandora-metadata dt {
+		font-weight: bold;
+	}
+	.islandora-object-metadata dd, .islandora-object-metadata dt {
+		display: block;
+		border: 0 none;
+		padding: 0;
+	}
+	.islandora-inline-metadata dd {
+		padding-left: 0;
+		margin-bottom: 1em;
+	}
+}
+
+@media all and (min-width: 320px) and (max-width: 679px) {
+	.islandora-object-content {
+		margin-bottom: 3em;
+		width: 100%;
+	}
+	.col-left {
+		width: 100%;
+	}
+	.islandora-object-content h3 {
+	  margin-top: 0;
+	}
+/*	
+	.islandora-metadata dt {
+		font-weight: bold;
+	}
+	.islandora-object-metadata dd, .islandora-object-metadata dt {
+		display: block;
+		border: 0 none;
+		padding: 0;
+	}
+	.islandora-inline-metadata dd {
+		padding-left: 0;
+		margin-bottom: 1em;
+	}
+*/
+}
+
