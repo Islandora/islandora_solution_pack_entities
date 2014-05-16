@@ -35,7 +35,7 @@
   </div>
 
   <div class="islandora-object-content">
-    <h3>Biography</h3>
+    <h3><?php print t('Biography'); ?></h3>
     <?php if (isset($variables['biography'])): ?>
       <p><?php print $variables['biography']; ?></p>
     <?php endif; ?>
