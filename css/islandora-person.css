@@ -2,16 +2,6 @@
  * This is the styling for the person objects pages.
  */
 
-/* Important! Over-rides to hide sidebar's on entity pages. */
-
-body.islandora-entity .sidebar {
-	display: none !important;
-}
-
-body.islandora-entity #content, body.islandora-entity #content {
-	width: 100% !important;
-}
-
 /* Shared */
 
 .col-left, .col-right {
