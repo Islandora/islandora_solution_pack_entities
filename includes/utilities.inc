@@ -89,6 +89,7 @@ function islandora_entities_ingest__entity_ds_composite_datastream(AbstractObjec
   $ds_composite_datastream->setContentFromFile("$module_path/xml/islandora_entity_ds_composite_model.xml", FALSE);
   $islandora_object->ingestDatastream($ds_composite_datastream);
 }
+
 /**
  * Creates themed list of scholar's citations.
  *
@@ -111,6 +112,7 @@ function islandora_entities_create_citation_tab(AbstractObject $object) {
     }
   }
 }
+
 /**
  * Gets all citations related to scholars's unique identifier.
  *
@@ -178,6 +180,93 @@ function islandora_entities_create_theses_tab(AbstractObject $object) {
       if ($identifier['type'] == 'u1') {
         return islandora_entities_get_related((string) $identifier, (string) $simplexml->authority->titleInfo->title, 'theses');
       }
+    }
+  }
+}
+
+/**
+ * Gets all citations related to scholars's unique identifier.
+ *
+ * @param string $identifier
+ *   Scholar's unique ID
+ *
+ * @return array
+ *   Array of links pointing to citations
+ */
+function islandora_entities_get_related_pids($identifier, $title, $type) {
+  $mappings = array(
+    'citations' => 'ir:citationCModel',
+    'theses' => 'ir:thesisCModel',
+  );
+  $content_model = $mappings[$type];
+  $params = array(
+    'fl' => 'dc.title, mods_name_personal_displayForm_mt, PID',
+  );
+  $query = "+RELS_EXT_hasModel_uri_mt:\"$content_model\" +mods_name_personal_displayForm_mt:\"($identifier)\"";
+
+  $url = parse_url(variable_get('islandora_solr_url', 'localhost:8080/solr'));
+  $solr = new Apache_Solr_Service($url['host'], $url['port'], $url['path'] . '/');
+  $solr->setCreateDocuments(FALSE);
+  try {
+    $search_results = $solr->search($query, 0, 20, $params);
+    $json = json_decode($search_results->getRawResponse(), TRUE);
+  }
+  catch (Exception $e) {
+    watchdog_exception('Islandora Entities', $e, 'Got an exception while searching entities for callback.', array(), WATCHDOG_ERROR);
+  }
+  $results = array();
+  foreach ($json['response']['docs'] as $choice) {
+    $results[$choice['PID']] = array(
+      'PID' => $choice['PID'],
+      'title' => $choice['dc.title'],
+      'authors' => $choice['mods_name_personal_displayForm_mt'],
+    );
+  }
+  return $results;
+}
+
+/**
+ * Adds entity autocomplete paths to a scholar citation form.
+ *
+ * @param array $form
+ *   Drupal Form API array.
+ */
+function islandora_entities_add_autocompletes_to_citation_form(&$form) {
+  // Skip the non-numeric keys.
+  // Hack in the autocomplete paths.
+  foreach ($form['authors'] as $key => $value) {
+    if (is_int($key)) {
+      $form['authors'][$key]['family']['#autocomplete_path'] = 'islandora/entities/autocomplete/last_name';
+      $form['authors'][$key]['qualified_name']['#autocomplete_path'] = 'islandora/entities/autocomplete/disambiguated';
+      $form['authors'][$key]['affiliation']['#autocomplete_path'] = 'islandora/entities/autocomplete/department';
+    }
+  }
+}
+
+/**
+ * Adds entity autocomplete paths to a scholar thesis form.
+ *
+ * @param array $form
+ *   Drupal Form API array.
+ */
+function islandora_entities_add_autocompletes_to_thesis_form(&$form) {
+  // Skip the non-numeric keys.
+  // Hack in the autocomplete paths.
+  foreach ($form['advisor'] as $key => $value) {
+    if (is_int($key)) {
+      $form['advisor'][$key]['advisor']['#autocomplete_path'] = 'islandora/entities/autocomplete/disambiguated';
+    }
+  }
+
+  foreach ($form['committee'] as $key => $value) {
+    if (is_int($key)) {
+      $form['committee'][$key]['commitee']['#autocomplete_path'] = 'islandora/entities/autocomplete/disambiguated';
+    }
+  }
+
+  foreach ($form['granter'] as $key => $value) {
+    if (is_int($key)) {
+      $form['granter'][$key]['department']['#autocomplete_path'] = 'islandora/entities/autocomplete/department';
     }
   }
 }

@@ -34,6 +34,7 @@ function islandora_entities_import_form(array $form, array &$form_state) {
     '#size' => 40,
     '#description' => t('Enter collection name or PID'),
     '#autocomplete_path' => 'import_entity_csv/autocomplete',
+    '#required' => TRUE,
   );
   $form['submit'] = array(
     '#type' => 'submit',
