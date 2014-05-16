@@ -5,5 +5,4 @@ dependencies[] = islandora_basic_collection
 dependencies[] = islandora_solr
 dependencies[] = islandora_solr_metadata
 package = Islandora Solution Packs
-stylesheets[all][] = css/islandora-person.css
 core = 7.x

@@ -12,6 +12,7 @@ function islandora_entities_preprocess_islandora_person(array &$variables) {
   module_load_include('inc', 'islandora_entities', 'includes/utilities');
   module_load_include('inc', 'islandora', 'includes/metadata');
   module_load_include('inc', 'islandora_entities', 'includes/entities_rss');
+  drupal_add_css(drupal_get_path('module', 'islandora_entities') . '/css/islandora-person.css');
 
   $biography = "";
   $object = $variables['object'];
