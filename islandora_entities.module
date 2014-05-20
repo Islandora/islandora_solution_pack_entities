@@ -175,7 +175,7 @@ function islandora_entities_islandora_personCModel_islandora_ingest_steps(array 
  *   TRUE if access is granted, FALSE otherwise.
  */
 function islandora_entities_access(AbstractObject $object) {
-  return isset($object['EAC-CPF']) && islandora_datastream_access(FEDORA_VIEW_OBJECTS, $object['EAC-CPF']) &&
+  return isset($object['EAC-CPF']) && islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $object['EAC-CPF']) &&
       islandora_entities_get_cmodel_form_name($object);
 }
 
