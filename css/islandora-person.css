@@ -29,7 +29,7 @@
 /* Right column */
 .col-right {
  	float: right;
- 	width: 18%;	
+ 	width: 18%;
 }
 
 /* Metadata */
@@ -57,8 +57,15 @@
 
 .islandora-object-content {
 	float: left;
-	width: 49%;	
+	width: 49%;
 	margin: 0 1% 0 2%;
+}
+.islandora-object:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
 }
 .islandora-object-content h1 {
 	margin-top: 0;
@@ -108,4 +115,3 @@ h3.bio {
 	  margin-top: 0;
 	}
 }
-
