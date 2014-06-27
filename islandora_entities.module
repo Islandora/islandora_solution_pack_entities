@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Handles entity support for Islandora.
@@ -9,9 +10,11 @@ define('ISLANDORA_ENTITIES_PERSON_CONTENT_MODEL', 'islandora:personCModel');
 define('ISLANDORA_ENTITIES_EVENT_CONTENT_MODEL', 'islandora:eventCModel');
 define('ISLANDORA_ENTITIES_PLACE_CONTENT_MODEL', 'islandora:placeCModel');
 define('ISLANDORA_ENTITIES_ORGANIZATION_CONTENT_MODEL', 'islandora:organizationCModel');
+define('ISLANDORA_ENTITIES_ENTITY_CONTENT_MODEL', 'islandora:entityCModel');
 
 // Permissions.
 define('ISLANDORA_ENTITIES_ADMINISTER_PERMISSION', 'administer islandora entities');
+define('ISLANDORA_ENTITIES_EDIT_SCHOLAR_METADATA', 'edit scholar metadata');
 
 /**
  * Implements hook_permission().
@@ -20,6 +23,10 @@ function islandora_entities_permission() {
   return array(
     ISLANDORA_ENTITIES_ADMINISTER_PERMISSION => array(
       'title' => t('Administer Islandora Entities'),
+      'description' => t('Access Islandora Entities administration page.'),
+    ),
+    ISLANDORA_ENTITIES_EDIT_SCHOLAR_METADATA => array(
+      'title' => t('Edit Scholar Metadata'),
       'description' => t('Access Islandora Entities administration page.'),
     ),
   );
@@ -38,9 +45,25 @@ function islandora_entities_menu() {
       'file' => 'includes/callbacks.inc',
       'access arguments' => array('search islandora solr'),
     ),
-    'admin/islandora/entities' => array(
+    'islandora/entities/autocomplete/%' => array(
+      'title' => 'Form Callbacks',
+      'page callback' => 'islandora_entities_autocomplete',
+      'page arguments' => array(3),
+      'type' => MENU_CALLBACK,
+      'file' => 'includes/callbacks.inc',
+      'access arguments' => array('search islandora solr'),
+    ),
+    'islandora/entities/%/rss' => array(
+      'title' => 'RSS Callback',
+      'page callback' => 'islandora_entities_rss',
+      'page arguments' => array(2),
+      'type' => MENU_CALLBACK,
+      'file' => 'includes/entities_rss.inc',
+      'access arguments' => array('search islandora solr'),
+    ),
+    'admin/islandora/solution_pack_config/entities' => array(
       'title' => 'Islandora Entities',
-      'description' => 'Configure the Entities solution pack.',
+      'description' => 'Select default collections for entity types.',
       'page callback' => 'drupal_get_form',
       'page arguments' => array('islandora_entities_settings'),
       'type' => MENU_NORMAL_ITEM,
@@ -55,8 +78,91 @@ function islandora_entities_menu() {
       'access callback' => 'islandora_entities_access',
       'access arguments' => array(2),
     ),
+    'islandora/object/%islandora_object/manage/object/udpatetn' => array(
+      'title' => 'Update Thumbnail',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('islandora_entities_update_tn', 2),
+      'type' => MENU_LOCAL_ACTION,
+      'file' => 'includes/tn_upload.form.inc',
+      'access callback' => 'islandora_entity_update_tn_access',
+      'access arguments' => array(2),
+    ),
+    'islandora/object/%islandora_object/citations' => array(
+      'title' => 'Citations',
+      'type' => MENU_LOCAL_TASK,
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array(
+        'islandora_entities_citation_form',
+        2,
+        'citations',
+      ),
+      'access callback' => 'islandora_entities_citation_access',
+      'access arguments' => array(2, "citations"),
+      'file' => 'includes/citation_tab.inc',
+      'weight' => 1,
+    ),
+    'islandora/object/%islandora_object/theses' => array(
+      'title' => 'Theses',
+      'type' => MENU_LOCAL_TASK,
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('islandora_entities_citation_form', 2, 'theses'),
+      'access callback' => 'islandora_entities_citation_access',
+      'access arguments' => array(2, "citations"),
+      'file' => 'includes/citation_tab.inc',
+      'weight' => 2,
+    ),
   );
 }
+
+/**
+ * Access callback for updating entity thumbnail.
+ *
+ * @param AbstractObject $object
+ *   The object in which to update said thumbnail. Confirm
+ *   content model.
+ *
+ * @return bool
+ *   TRUE if $object represents a person entity, otherwise, FALSE.
+ */
+function islandora_entity_update_tn_access(AbstractObject $object) {
+  module_load_include('inc', 'islandora_basic_collection', 'includes/utilities');
+
+  $collection_models = islandora_basic_collection_get_collection_content_models();
+  $is_a_collection = (
+      (count(array_intersect($collection_models, $object->models)) > 0) &&
+      isset($object['COLLECTION_POLICY'])
+      );
+  if ($is_a_collection) {
+    return FALSE;
+  }
+  $policy_stack = array(
+    ISLANDORA_ENTITIES_ORGANIZATION_CONTENT_MODEL,
+    ISLANDORA_ENTITIES_EVENT_CONTENT_MODEL,
+    ISLANDORA_ENTITIES_PLACE_CONTENT_MODEL,
+    ISLANDORA_ENTITIES_PERSON_CONTENT_MODEL,
+    ISLANDORA_ENTITIES_ENTITY_CONTENT_MODEL,
+  );
+  if (count(array_intersect($policy_stack, $object->models)) == 0) {
+    return FALSE;
+  }
+  return islandora_object_access(ISLANDORA_MANAGE_PROPERTIES, $object);
+}
+
+/**
+ * Implements hook_CMODEL_PID_islandora_ingest_steps().
+ */
+function islandora_entities_islandora_personCModel_islandora_ingest_steps(array $form_state) {
+  return array(
+    'islandora_entities_tn_file_upload' => array(
+      'weight' => 10,
+      'type' => 'form',
+      'form_id' => 'islandora_entities_tn_upload_form',
+      'module' => 'islandora_entities',
+      'file' => 'includes/tn_upload.form.inc',
+    ),
+  );
+}
+
 /**
  * Determine visibility of the EAC-CPF data.
  *
@@ -70,7 +176,7 @@ function islandora_entities_menu() {
  */
 function islandora_entities_access(AbstractObject $object) {
   return isset($object['EAC-CPF']) && islandora_datastream_access(FEDORA_VIEW_OBJECTS, $object['EAC-CPF']) &&
-    islandora_entities_get_cmodel_form_name($object);
+      islandora_entities_get_cmodel_form_name($object);
 }
 
 /**
@@ -205,6 +311,29 @@ function islandora_entities_islandora_xml_form_builder_form_associations() {
       'transform' => 'eaccpf_to_dc.xsl',
       'template' => FALSE,
     ),
+    'islandora_mads_person_form' => array(
+      'content_model' => ISLANDORA_ENTITIES_PERSON_CONTENT_MODEL,
+      'form_name' => 'Scholar MADS form',
+      'dsid' => 'MADS',
+      'title_field' => array(
+        'authority',
+        'display_name',
+      ),
+      'transform' => 'mads_to_dc.xsl',
+      'template' => FALSE,
+    ),
+    'islandora_mads_organization_form' => array(
+      'content_model' => ISLANDORA_ENTITIES_ORGANIZATION_CONTENT_MODEL,
+      'form_name' => 'Department MADS form',
+      'dsid' => 'MADS',
+      'title_field' => array(
+        'authority',
+        'name',
+        'auth_dept',
+      ),
+      'transform' => 'mads_to_dc.xsl',
+      'template' => FALSE,
+    ),
   );
 }
 
@@ -238,6 +367,12 @@ function islandora_entities_islandora_xml_form_builder_forms() {
     ),
     'Place EAC-CPF form' => array(
       'form_file' => "$module_path/xml/place_eaccpf_form.xml",
+    ),
+    'Scholar MADS form' => array(
+      'form_file' => "$module_path/xml/scholar_mads_form.xml",
+    ),
+    'Department MADS form' => array(
+      'form_file' => "$module_path/xml/dept_mads_form.xml",
     ),
   );
 }
@@ -338,6 +473,7 @@ function islandora_entities_islandora_placeCModel_islandora_object_ingested(Abst
   module_load_include('inc', 'islandora_entities', 'includes/utilities');
   islandora_entities_add_entity_content_model($fedora_object);
 }
+
 /**
  * Implements hook_CMODEL_PID_islandora_object_ingested().
  */
@@ -360,6 +496,90 @@ function islandora_entities_islandora_organizationCModel_islandora_object_ingest
 function islandora_entities_islandora_xml_form_builder_get_transforms() {
   $module_path = drupal_get_path('module', 'islandora_entities');
   return array(
-    'eaccpf_to_dc.xslt' => "$module_path/xml/eaccpf_to_dc.xslt",
+    'eaccpf_to_dc.xsl' => "$module_path/xml/eaccpf_to_dc.xsl",
+    'mads_to_dc.xsl' => "$module_path/xml/mads_to_dc.xsl",
   );
+}
+
+/**
+ * Implements hook_CMODEL_PID_islandora_datastream_access().
+ */
+function islandora_entities_islandora_personCModel_islandora_datastream_access($op, $object, $user) {
+  if ($op == 'edit fedora metadata') {
+    if ($object->id == 'MADS') {
+      $owner = $object->parent->owner;
+      return ($user->name == $owner || user_access(ISLANDORA_ENTITIES_EDIT_SCHOLAR_METADATA));
+    }
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function islandora_entities_theme($existing, $type, $theme, $path) {
+  return array(
+    'islandora_person' => array(
+      'file' => 'theme/theme.inc',
+      'template' => 'theme/islandora-person',
+      'pattern' => 'islandora_person__',
+      'variables' => array('islandora_object' => NULL),
+    ),
+    'islandora_dept' => array(
+      'file' => 'theme/theme.inc',
+      'template' => 'theme/islandora-dept',
+      'pattern' => 'islandora_dept__',
+      'variables' => array('islandora_object' => NULL),
+    ),
+  );
+}
+
+/**
+ * Implements hook_CMODEL_PID_islandora_view_object().
+ */
+function islandora_entities_islandora_personCModel_islandora_view_object($object, $page_number, $page_size) {
+  $output = theme('islandora_person', array('object' => $object));
+  return array('' => $output);
+}
+
+/**
+ * Implements hook_CMODEL_PID_islandora_view_object().
+ */
+function islandora_entities_islandora_organizationCModel_islandora_view_object($object, $page_number, $page_size) {
+  $output = theme('islandora_dept', array('object' => $object));
+  return array('' => $output);
+}
+
+/**
+ * Access callback for citations tab.
+ */
+function islandora_entities_citation_access($object, $type) {
+  module_load_include('inc', 'islandora_entities', 'includes/utilities');
+  if (in_array('islandora:personCModel', $object->models)) {
+    if ($object['MADS']) {
+      $mads = $object['MADS']->content;
+      $simplexml = simplexml_load_string($mads);
+      $identifiers = $simplexml->identifier;
+      foreach ($identifiers as $identifier) {
+        if ($identifier['type'] == 'u1') {
+          $results = islandora_entities_get_related((string) $identifier, (string) $simplexml->authority->titleInfo->title, $type);
+        }
+      }
+    }
+  }
+  return is_object($object) && isset($results);
+}
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function islandora_entities_preprocess_html(&$variables) {
+  if (isset($_GET['q'])) {
+    $q_parts = explode('/', $_GET['q']);
+    if ($q_parts[0] == 'islandora' && $q_parts[1] == 'object') {
+      $object = islandora_object_load($q_parts[2]);
+      if ($object && in_array('islandora:entityCModel', $object->models)) {
+        $variables['classes_array'][] = "islandora-entity";
+      }
+    }
+  }
 }
