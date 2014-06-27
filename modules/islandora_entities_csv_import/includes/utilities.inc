@@ -99,11 +99,27 @@ function islandora_entities_build_mads($scholar) {
   $dom->formatOutput = TRUE;
   $mads_uri = "http://www.loc.gov/mads/v2";
   $root = $dom->createElement('mads');
-  $ns_mads = $dom->createAttribute('xmlns:mads');
+  $dom->appendChild($root);
+
+  $ns_mads = $dom->createAttribute('xmlns');
   $root->appendChild($ns_mads);
   $value = $dom->createTextNode($mads_uri);
   $ns_mads->appendChild($value);
-  $dom->appendChild($root);
+
+  $ns_mads_qualified = $dom->createAttribute('xmlns:mads');
+  $root->appendChild($ns_mads_qualified);
+  $value = $dom->createTextNode($mads_uri);
+  $ns_mads_qualified->appendChild($value);
+
+  $xsi = $dom->createAttribute('xmlns:xsi');
+  $root->appendChild($xsi);
+  $value = $dom->createTextNode("http://www.w3.org/2001/XMLSchema-instance");
+  $xsi->appendChild($value);
+
+  $xlink = $dom->createAttribute('xmlns:xlink');
+  $root->appendChild($xlink);
+  $value = $dom->createTextNode("http://www.w3.org/1999/xlink");
+  $xlink->appendChild($value);
 
   if (isset($scholar['DISPLAY_NAME'])) {
     $title_info = islandora_entities_attach_element($dom, "titleInfo", $root);
