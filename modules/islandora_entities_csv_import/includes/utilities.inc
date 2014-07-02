@@ -121,11 +121,6 @@ function islandora_entities_build_mads($scholar) {
   $value = $dom->createTextNode("http://www.w3.org/1999/xlink");
   $xlink->appendChild($value);
 
-  if (isset($scholar['DISPLAY_NAME'])) {
-    $title_info = islandora_entities_attach_element($dom, "titleInfo", $root);
-    islandora_entities_attach_element($dom, "title", $title_info, $scholar['DISPLAY_NAME']);
-  }
-
   islandora_entities_add_authority($dom, $scholar);
   islandora_entities_add_affiliation($dom, $scholar);
   islandora_entities_add_building_address($dom, $scholar);
@@ -140,17 +135,6 @@ function islandora_entities_build_mads($scholar) {
   }
   return $dom->saveXML();
 }
-
-/**
- * Builds authority nodes.
- *
- * @param DomDocument $dom
- *   Document representing MADS xml
- * @param string $type
- *   MADS type attribute
- * @param string $name
- *   XML name
- */
 
 /**
  * Adds authority.
@@ -195,6 +179,10 @@ function islandora_entities_add_authority($dom, $scholar) {
   if (isset($name['NAME_DATE'])) {
     $name_part = islandora_entities_attach_element($dom, 'namePart', $name_node, $name['NAME_DATE']);
     $name_part->setAttribute('type', 'date');
+  }
+  if (isset($scholar['DISPLAY_NAME'])) {
+    $title_info = islandora_entities_attach_element($dom, "titleInfo", $authority);
+    islandora_entities_attach_element($dom, "title", $title_info, $scholar['DISPLAY_NAME']);
   }
 }
 
