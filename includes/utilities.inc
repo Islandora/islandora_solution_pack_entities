@@ -123,15 +123,20 @@ function islandora_entities_create_citation_tab(AbstractObject $object) {
  *   Array of links pointing to citations
  */
 function islandora_entities_get_related($identifier, $title, $type) {
-  $mappings = array(
-    'citations' => 'ir:citationCModel',
-    'theses' => 'ir:thesisCModel',
+  $base_query = array(
+    'citations' => variable_get(
+      'islandora_entities_citation_base_query',
+      '+RELS_EXT_hasModel_uri_mt:"ir:citationCModel"'),
+    '#description' => t('Solr query for citation searching. Use %identifier% as a token for the identifier'),
+    'theses' => variable_get(
+      'islandora_entities_thesis_base_query',
+      '+RELS_EXT_hasModel_uri_mt:"ir:thesisCModel"'),
   );
-  $content_model = $mappings[$type];
+  $query = "+mods_name_personal_displayForm_mt:\"($identifier)\"  {$base_query[$type]}";
+
   $params = array(
     'fl' => 'dc.title, PID',
   );
-  $query = "+RELS_EXT_hasModel_uri_mt:\"$content_model\" +mods_name_personal_displayForm_mt:\"($identifier)\"";
 
   $url = parse_url(variable_get('islandora_solr_url', 'localhost:8080/solr'));
   $solr = new Apache_Solr_Service($url['host'], $url['port'], $url['path'] . '/');
@@ -194,15 +199,20 @@ function islandora_entities_create_theses_tab(AbstractObject $object) {
  *   Array of links pointing to citations
  */
 function islandora_entities_get_related_pids($identifier, $title, $type) {
-  $mappings = array(
-    'citations' => 'ir:citationCModel',
-    'theses' => 'ir:thesisCModel',
+  $base_query = array(
+    'citations' => variable_get(
+      'islandora_entities_citation_base_query',
+      '+RELS_EXT_hasModel_uri_mt:"ir:citationCModel"'),
+    '#description' => t('Solr query for citation searching. Use %identifier% as a token for the identifier'),
+    'theses' => variable_get(
+      'islandora_entities_thesis_base_query',
+      '+RELS_EXT_hasModel_uri_mt:"ir:thesisCModel"'),
   );
-  $content_model = $mappings[$type];
+  $query = "+mods_name_personal_displayForm_mt:\"($identifier)\"  {$base_query[$type]}";
+
   $params = array(
     'fl' => 'dc.title, mods_name_personal_displayForm_mt, PID',
   );
-  $query = "+RELS_EXT_hasModel_uri_mt:\"$content_model\" +mods_name_personal_displayForm_mt:\"($identifier)\"";
 
   $url = parse_url(variable_get('islandora_solr_url', 'localhost:8080/solr'));
   $solr = new Apache_Solr_Service($url['host'], $url['port'], $url['path'] . '/');
