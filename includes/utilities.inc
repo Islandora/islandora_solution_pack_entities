@@ -127,13 +127,11 @@ function islandora_entities_get_related($identifier, $title, $type) {
     'citations' => variable_get(
       'islandora_entities_citation_base_query',
       '+RELS_EXT_hasModel_uri_mt:"ir:citationCModel"'),
-    '#description' => t('Solr query for citation searching. Use %identifier% as a token for the identifier'),
     'theses' => variable_get(
       'islandora_entities_thesis_base_query',
       '+RELS_EXT_hasModel_uri_mt:"ir:thesisCModel"'),
   );
   $query = "+mods_name_personal_displayForm_mt:\"($identifier)\"  {$base_query[$type]}";
-
   $params = array(
     'fl' => 'dc.title, PID',
   );
@@ -203,7 +201,6 @@ function islandora_entities_get_related_pids($identifier, $title, $type) {
     'citations' => variable_get(
       'islandora_entities_citation_base_query',
       '+RELS_EXT_hasModel_uri_mt:"ir:citationCModel"'),
-    '#description' => t('Solr query for citation searching. Use %identifier% as a token for the identifier'),
     'theses' => variable_get(
       'islandora_entities_thesis_base_query',
       '+RELS_EXT_hasModel_uri_mt:"ir:thesisCModel"'),
