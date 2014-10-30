@@ -46,11 +46,13 @@ function islandora_entities_preprocess_islandora_person(array &$variables) {
     }
     $depts = $simplexml->affiliation->organization;
     $colleages = array();
-    foreach ($depts as $dept) {
-      if ((string) $dept) {
-        $members = islandora_entities_get_dept_members((string) $dept, $object->id);
-        if ($members) {
-          $colleages[(string) $dept] = $members;
+    if ($depts) {
+      foreach ($depts as $dept) {
+        if ((string)$dept) {
+          $members = islandora_entities_get_dept_members((string)$dept, $object->id);
+          if ($members) {
+            $colleages[(string)$dept] = $members;
+          }
         }
       }
     }
