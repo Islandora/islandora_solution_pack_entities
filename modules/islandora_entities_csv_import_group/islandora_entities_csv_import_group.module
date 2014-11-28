@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @file
+ * Creates Islandora Entities from CSV.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function islandora_entities_csv_import_group_menu() {
+  return array(
+    'import_entity_csv_group' => array(
+      'title' => 'Import Group Entities from CSV',
+      'type' => MENU_NORMAL_ITEM,
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('islandora_entities_import_group_form'),
+      'file' => 'includes/islandora_entities_csv_import_group.form.inc',
+      'access arguments' => array(ISLANDORA_ENTITIES_CSV_IMPORT_ISLANDORA_ENTITIES_IMPORT_CSV),
+    ),
+  );
+}
+
