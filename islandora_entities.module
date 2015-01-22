@@ -383,7 +383,7 @@ function islandora_entities_islandora_xml_form_builder_forms() {
  *
  * Hacks an autocomplete path from this solution pack into the scholar forms.
  */
-function islandora_entities_form_xml_form_builder_edit_datastream_form_alter(&$form, &$form_state, $form_id) {
+function islandora_entities_form_xml_form_builder_datastream_form_alter(&$form, &$form_state, $form_id) {
   if (module_exists('islandora_scholar')) {
     module_load_include('inc', 'islandora_entities', 'includes/utilities');
     if (isset($form_state['association']['id'])) {
