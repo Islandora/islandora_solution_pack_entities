@@ -59,15 +59,7 @@ function islandora_entities_get_tn_upload_form($form_state = NULL) {
  *   The drupal form state.
  */
 function islandora_entities_tn_upload_form_submit(array $form, array &$form_state) {
-  // Is this a thumbnail update?
-  $factory_object = islandora_object_load($form_state['islandora']['objects'][0]->id);
-  if (is_object(islandora_object_load($factory_object))) {
-    $object = $factory_object;
-  }
-  else {
-    $object = $form_state['islandora']['objects'][0];
-  }
-
+  $object = $form_state['islandora']['objects'][0];
   $tn_file = file_load($form_state['values']['file']);
   if (isset($tn_file->uri)) {
     $tn_path = drupal_realpath($tn_file->uri);
