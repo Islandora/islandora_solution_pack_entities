@@ -78,7 +78,7 @@ function islandora_entities_menu() {
       'access callback' => 'islandora_entities_access',
       'access arguments' => array(2),
     ),
-    'islandora/object/%islandora_object/manage/object/udpatetn' => array(
+    'islandora/object/%islandora_object/manage/object/updatetn' => array(
       'title' => 'Update Thumbnail',
       'page callback' => 'drupal_get_form',
       'page arguments' => array('islandora_entities_update_tn', 2),
