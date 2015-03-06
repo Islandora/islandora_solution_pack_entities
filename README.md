@@ -1,4 +1,4 @@
-# Islandora Entities Solution Pack
+# Islandora Entities Solution Pack [![Build Status](https://travis-ci.org/Islandora/islandora_solution_pack_entities.png?branch=7.x)](https://travis-ci.org/Islandora/islandora_solution_pack_entities)
 
 ## Introduction
 
