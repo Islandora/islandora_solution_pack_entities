@@ -76,16 +76,11 @@ function islandora_entities_tn_upload_form_submit(array $form, array &$form_stat
     $imagick->setimagefilename($tn_path);
     $imagick->writeimage();
 
-    if (empty($object['TN'])) {
-      $ds = $object->constructDatastream('TN', 'M');
-      $object->ingestDatastream($ds);
-    }
-    else {
-      $ds = $object['TN'];
-    }
+    $ds = (isset($object['TN']) ? $object['TN'] : $object->constructDatastream('TN', 'M'));
     $ds->setContentFromFile($tn_path, FALSE);
     $ds->label = $tn_file->filename;
     $ds->mimetype = $tn_file->filemime;
+    $object->ingestDatastream($ds);
   }
 }
 
