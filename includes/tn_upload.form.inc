@@ -59,6 +59,7 @@ function islandora_entities_get_tn_upload_form($form_state = NULL) {
  *   The drupal form state.
  */
 function islandora_entities_tn_upload_form_submit(array $form, array &$form_state) {
+  module_load_include('inc', 'islandora', 'includes/utilities');
   // Is this a thumbnail update?
   $factory_object = islandora_object_load($form_state['islandora']['objects'][0]->id);
   if (is_object(islandora_object_load($factory_object))) {
