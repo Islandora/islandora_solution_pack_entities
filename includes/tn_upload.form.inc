@@ -71,19 +71,19 @@ function islandora_entities_tn_upload_form_submit(array $form, array &$form_stat
   $tn_file = file_load($form_state['values']['file']);
   if (isset($tn_file->uri)) {
     $tn_path = drupal_realpath($tn_file->uri);
-    $imagick = new Imagick($tn_path);
-    $imagick->thumbnailimage(150, NULL);
-    $imagick->setimagefilename($tn_path);
-    $imagick->writeimage();
+    $image = image_load($tn_path);
+    image_scale($image, 150, NULL);
+    if (empty($object['TN'])) {
+      $ds = $object->constructDatastream('TN', 'M');
+      $object->ingestDatastream($ds);
+    }
+    else {
+      $ds = $object['TN'];
+    }
 
-    $ds = (isset($object['TN']) ? $object['TN'] : $object->constructDatastream('TN', 'M'));
     $ds->setContentFromFile($tn_path, FALSE);
     $ds->label = $tn_file->filename;
     $ds->mimetype = $tn_file->filemime;
-    if (!isset($object['TN'])) {
-      $object->ingestDatastream($ds);
-    }
-
   }
 }
 
