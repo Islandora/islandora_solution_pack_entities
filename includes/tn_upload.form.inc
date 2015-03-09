@@ -80,7 +80,10 @@ function islandora_entities_tn_upload_form_submit(array $form, array &$form_stat
     $ds->setContentFromFile($tn_path, FALSE);
     $ds->label = $tn_file->filename;
     $ds->mimetype = $tn_file->filemime;
-    $object->ingestDatastream($ds);
+    if (!isset($object['TN'])) {
+      $object->ingestDatastream($ds);
+    }
+
   }
 }
 
