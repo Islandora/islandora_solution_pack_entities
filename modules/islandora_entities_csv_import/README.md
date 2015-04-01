@@ -1,37 +1,22 @@
+# Islandora Entities CSV Import [![Build Status](https://travis-ci.org/Islandora/islandora_solution_pack_entities.png?branch=7.x)](https://travis-ci.org/Islandora/islandora_solution_pack_entities)
 
-ISLANDORA ENTITIES CSV IMPORT
-==================
+## Introduction
 
-CONTENTS OF THIS FILE
----------------------
+This module is for adding person entities to Islandora using a .csv file. 
 
- * summary
- * requirements
- * installation
- * configuration
+## Requirements
 
+This module requires the following modules/libraries:
+* [Islandora](https://github.com/islandora/islandora)
+* [Islandora Basic Collection](https://github.com/Islandora/islandora_solution_pack_collection)
+* [islandora_entities](https://github.com/Islandora/islandora_solution_pack_entities)
 
-SUMMARY
--------
+## Installation
 
-Islandora Entities CSV Importer
+Install as usual, see [this](https://drupal.org/documentation/install/modules-themes/modules-7) for further information.
 
-Made for ingesting objects described by CSV
+## Configuration
 
-REQUIREMENTS
-------------
-
-The following Drupal modules are required:
- * islandora
- * islandora_entities
-
-INSTALLATION
-------------
-
-Enable the module.
-
-CONFIGURATION
--------------
 CSV's must be properly prepared.  Any comma within a field must be replaced with
 a double pipe ie - 'Nursing, Department of' must be replaced with
 'Nursing|| Department of'
@@ -67,3 +52,24 @@ END_DATE
 ROOM_NUMBER
 BUILDING
 CAMPUS
+
+## Troubleshooting/Issues
+
+Having problems or solved a problem? Check out the Islandora google groups for a solution.
+
+* [Islandora Group](https://groups.google.com/forum/?hl=en&fromgroups#!forum/islandora)
+* [Islandora Dev Group](https://groups.google.com/forum/?hl=en&fromgroups#!forum/islandora-dev)
+
+## Maintainers/Sponsors
+
+Current maintainers:
+
+* [Alan Stanley](https://github.com/ajstanley)
+
+## Development
+
+If you would like to contribute to this module, please check out our helpful [Documentation for Developers](https://github.com/Islandora/islandora/wiki#wiki-documentation-for-developers) info, as well as our [Developers](http://islandora.ca/developers) section on the Islandora.ca site.
+
+## License
+
+[GPLv3](http://www.gnu.org/licenses/gpl-3.0.txt)
