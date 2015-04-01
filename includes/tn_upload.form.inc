@@ -38,7 +38,7 @@ function islandora_entities_get_tn_upload_form($form_state = NULL) {
     '#title' => t('Add Optional Thumbnail'),
     '#type' => 'managed_file',
     '#required' => FALSE,
-    '#description' => t('Select file to upload.<br/>Files must be less than <b>@size MB.</b><br/>Allowed file types: <b>@ext.</b>', array('@size' => $upload_size, '@ext' => $extensions[0])),
+    '#description' => t('Select file to upload.<br/>Files must be less than <strong>@size MB.</strong><br/>Allowed file types: <strong>@ext.</strong>', array('@size' => $upload_size, '@ext' => $extensions[0])),
     '#default_value' => isset($form_state['values']['files']) ? $form_state['values']['files'] : NULL,
     '#upload_location' => 'temporary://',
     '#upload_validators' => array(
@@ -59,7 +59,6 @@ function islandora_entities_get_tn_upload_form($form_state = NULL) {
  *   The drupal form state.
  */
 function islandora_entities_tn_upload_form_submit(array $form, array &$form_state) {
-  module_load_include('inc', 'islandora', 'includes/utilities');
   // Is this a thumbnail update?
   $factory_object = islandora_object_load($form_state['islandora']['objects'][0]->id);
   if (is_object(islandora_object_load($factory_object))) {
@@ -71,11 +70,12 @@ function islandora_entities_tn_upload_form_submit(array $form, array &$form_stat
 
   $tn_file = file_load($form_state['values']['file']);
   if (isset($tn_file->uri)) {
-    islandora_temp_file_entry($tn_file->uri);
     $tn_path = drupal_realpath($tn_file->uri);
-    $image = image_load($tn_path);
-    image_scale($image, 150, NULL);
-    image_save($image);
+    $imagick = new Imagick($tn_path);
+    $imagick->thumbnailimage(150, NULL);
+    $imagick->setimagefilename($tn_path);
+    $imagick->writeimage();
+
     if (empty($object['TN'])) {
       $ds = $object->constructDatastream('TN', 'M');
       $object->ingestDatastream($ds);
