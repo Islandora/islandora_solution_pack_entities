@@ -59,6 +59,7 @@ function islandora_entities_get_tn_upload_form($form_state = NULL) {
  *   The drupal form state.
  */
 function islandora_entities_tn_upload_form_submit(array $form, array &$form_state) {
+  module_load_include('inc', 'islandora', 'includes/utilities');
   // Is this a thumbnail update?
   $factory_object = islandora_object_load($form_state['islandora']['objects'][0]->id);
   if (is_object(islandora_object_load($factory_object))) {
@@ -70,11 +71,11 @@ function islandora_entities_tn_upload_form_submit(array $form, array &$form_stat
 
   $tn_file = file_load($form_state['values']['file']);
   if (isset($tn_file->uri)) {
+    islandora_temp_file_entry($tn_file->uri);
     $tn_path = drupal_realpath($tn_file->uri);
-    $imagick = new Imagick($tn_path);
-    $imagick->thumbnailimage(150, NULL);
-    $imagick->setimagefilename($tn_path);
-    $imagick->writeimage();
+    $image = image_load($tn_path);
+    image_scale($image, 150, NULL);
+    image_save($image);
 
     if (empty($object['TN'])) {
       $ds = $object->constructDatastream('TN', 'M');
