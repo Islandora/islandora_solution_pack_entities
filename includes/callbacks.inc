@@ -64,19 +64,19 @@ function islandora_entities_autocomplete($type) {
   $mappings = array(
     'scholar' => array(
       'cmodel' => 'islandora:personCModel',
-      'title' => 'MADS_title_mt',
+      'title' => 'islandora_entities_title_collection',
     ),
     'department' => array(
       'cmodel' => 'islandora:organizationCModel',
-      'title' => 'MADS_department_mt',
+      'title' => 'islandora_entities_department_collection',
     ),
     'disambiguated' => array(
       'cmodel' => 'islandora:personCModel',
-      'title' => 'MADS_disambiguated_fullname_mt',
+      'title' => 'islandora_entities_disambiguated_fullname_collection',
     ),
     'last_name' => array(
       'cmodel' => 'islandora:personCModel',
-      'title' => 'MADS_family_mt',
+      'title' => 'islandora_entities_family_collection',
     ),
   );
   $qualifier = $mappings[$type]['title'] . ':*';
