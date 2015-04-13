@@ -76,7 +76,6 @@ function islandora_entities_tn_upload_form_submit(array $form, array &$form_stat
     $image = image_load($tn_path);
     image_scale($image, 150, NULL);
     image_save($image);
-
     if (empty($object['TN'])) {
       $ds = $object->constructDatastream('TN', 'M');
       $object->ingestDatastream($ds);

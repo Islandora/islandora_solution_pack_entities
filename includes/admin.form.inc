@@ -92,47 +92,47 @@ function islandora_entities_settings($form, &$form_state) {
     '#required' => TRUE,
   );
 
-  $form['islandora_entities_title_collection'] = array(
+  $form['islandora_entities_scholar_title_solr_field'] = array(
     '#type' => 'textfield',
     '#title' => t('Collection to ingest title entities in.'),
     '#default_value' => variable_get(
-      'islandora_entities_title_collection',
+      'islandora_entities_scholar_title_solr_field',
       'islandora:entity_collection'
     ),
-    '#description' => t('Used by dependent modules provide links to the collection.'),
+    '#description' => t('Used by dependent modules for autocompletion.'),
     '#required' => TRUE,
   );
 
-  $form['islandora_entities_department_collection'] = array(
+  $form['islandora_entities_department_solr_field'] = array(
     '#type' => 'textfield',
     '#title' => t('Collection to ingest department entities in.'),
     '#default_value' => variable_get(
-      'islandora_entities_department_collection',
+      'islandora_entities_department_solr_field',
       'islandora:entity_collection'
     ),
-    '#description' => t('Used by dependent modules provide links to the collection.'),
+    '#description' => t('Used by dependent modules for autocompletion.'),
     '#required' => TRUE,
   );
 
-  $form['islandora_entities_disambiguated_fullname_collection'] = array(
+  $form['islandora_entities_disambiguated_solr_field'] = array(
     '#type' => 'textfield',
     '#title' => t('Collection to ingest disambiguated full name entities in.'),
     '#default_value' => variable_get(
-      'islandora_entities_disambiguated_fullname_collection',
+      'islandora_entities_disambiguated_solr_field',
       'islandora:entity_collection'
     ),
-    '#description' => t('Used by dependent modules provide links to the collection.'),
+    '#description' => t('Used by dependent modules for autocompletion.'),
     '#required' => TRUE,
   );
 
-  $form['islandora_entities_family_collection'] = array(
+  $form['islandora_entities_last_name_solr_field'] = array(
     '#type' => 'textfield',
     '#title' => t('Collection to ingest family name entities in.'),
     '#default_value' => variable_get(
-      'islandora_entities_family_collection',
+      'islandora_entities_last_name_solr_field',
       'islandora:entity_collection'
     ),
-    '#description' => t('Used by dependent modules provide links to the collection.'),
+    '#description' => t('Used by dependent modules for autocompletion.'),
     '#required' => TRUE,
   );
 

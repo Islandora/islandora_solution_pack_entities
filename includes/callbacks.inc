@@ -64,19 +64,19 @@ function islandora_entities_autocomplete($type) {
   $mappings = array(
     'scholar' => array(
       'cmodel' => 'islandora:personCModel',
-      'title' => 'islandora_entities_title_collection',
+      'title' => variable_get('islandora_entities_scholar_title_solr_field', 'MADS_title_mt'),
     ),
     'department' => array(
       'cmodel' => 'islandora:organizationCModel',
-      'title' => 'islandora_entities_department_collection',
+      'title' => variable_get('islandora_entities_department_solr_field', 'MADS_department_mt'),
     ),
     'disambiguated' => array(
       'cmodel' => 'islandora:personCModel',
-      'title' => 'islandora_entities_disambiguated_fullname_collection',
+      'title' => variable_get('islandora_entities_disambiguated_solr_field', 'MADS_disambiguated_fullname_mt'),
     ),
     'last_name' => array(
       'cmodel' => 'islandora:personCModel',
-      'title' => 'islandora_entities_family_collection',
+      'title' => variable_get('islandora_entities_last_name_solr_field', 'MADS_family_mt'),
     ),
   );
   $qualifier = $mappings[$type]['title'] . ':*';
