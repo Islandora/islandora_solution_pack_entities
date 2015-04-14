@@ -94,45 +94,45 @@ function islandora_entities_settings($form, &$form_state) {
 
   $form['islandora_entities_scholar_title_solr_field'] = array(
     '#type' => 'textfield',
-    '#title' => t('Collection to ingest title entities in.'),
+    '#title' => t('Solr field for scholar title.'),
     '#default_value' => variable_get(
       'islandora_entities_scholar_title_solr_field',
-      'islandora:entity_collection'
+      'MADS_title_mt'
     ),
-    '#description' => t('Used by dependent modules for autocompletion.'),
+    '#description' => t('Solr field for autocompletion.'),
     '#required' => TRUE,
   );
 
   $form['islandora_entities_department_solr_field'] = array(
     '#type' => 'textfield',
-    '#title' => t('Collection to ingest department entities in.'),
+    '#title' => t('Solr field for department.'),
     '#default_value' => variable_get(
       'islandora_entities_department_solr_field',
-      'islandora:entity_collection'
+      'MADS_department_mt'
     ),
-    '#description' => t('Used by dependent modules for autocompletion.'),
+    '#description' => t('Solr field for autocompletion.'),
     '#required' => TRUE,
   );
 
   $form['islandora_entities_disambiguated_solr_field'] = array(
     '#type' => 'textfield',
-    '#title' => t('Collection to ingest disambiguated full name entities in.'),
+    '#title' => t('Solr field for disambiguated full name.'),
     '#default_value' => variable_get(
       'islandora_entities_disambiguated_solr_field',
-      'islandora:entity_collection'
+      'MADS_disambiguated_fullname_mt'
     ),
-    '#description' => t('Used by dependent modules for autocompletion.'),
+    '#description' => t('Solr field for autocompletion.'),
     '#required' => TRUE,
   );
 
   $form['islandora_entities_last_name_solr_field'] = array(
     '#type' => 'textfield',
-    '#title' => t('Collection to ingest family name entities in.'),
+    '#title' => t('Solr field for last name.'),
     '#default_value' => variable_get(
       'islandora_entities_last_name_solr_field',
-      'islandora:entity_collection'
+      'MADS_family_mt'
     ),
-    '#description' => t('Used by dependent modules for autocompletion.'),
+    '#description' => t('Solr field for autocompletion.'),
     '#required' => TRUE,
   );
 
