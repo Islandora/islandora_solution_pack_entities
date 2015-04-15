@@ -20,7 +20,7 @@ function islandora_entities_import_form(array $form, array &$form_state) {
   $form['file'] = array(
     '#title' => t('Upload csv'),
     '#type' => 'managed_file',
-    '#description' => t('Select a file to upload.<br/>Files must be less than <b>@size MB.</b><br/>Allowed file types: <b>@ext.</b>', array('@size' => $upload_size, '@ext' => $extensions[0])),
+    '#description' => t('Select a file to upload.<br/>Files must be less than <strong>@size MB.</strong><br/>Allowed file types: <strong>@ext.</strong>', array('@size' => $upload_size, '@ext' => $extensions[0])),
     '#upload_location' => 'temporary://',
     '#required' => TRUE,
     '#upload_validators' => array(
