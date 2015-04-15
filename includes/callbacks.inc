@@ -77,7 +77,6 @@ function islandora_entities_autocomplete($type) {
     'last_name' => array(
       'cmodel' => 'islandora:personCModel',
       'title' => variable_get('islandora_entities_last_name_solr_field', 'MADS_family_mt'),
-      'title' => 'islandora_entities_title_collection',
     ),
   );
   $qualifier = $mappings[$type]['title'] . ':*';
