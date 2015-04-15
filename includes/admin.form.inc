@@ -133,6 +133,7 @@ function islandora_entities_settings($form, &$form_state) {
       'MADS_family_mt'
     ),
     '#description' => t('Solr field for autocompletion.'),
+    '#required' => TRUE,
   );
 
   return system_settings_form($form);
