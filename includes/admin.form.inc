@@ -92,5 +92,91 @@ function islandora_entities_settings($form, &$form_state) {
     '#required' => TRUE,
   );
 
+  $form['islandora_entities_scholar_title_solr_field'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Solr field for scholar title.'),
+    '#default_value' => variable_get(
+      'islandora_entities_scholar_title_solr_field',
+      'MADS_title_mt'
+    ),
+    '#description' => t('Solr field for autocompletion.'),
+    '#required' => TRUE,
+  );
+
+  $form['islandora_entities_department_solr_field'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Solr field for department.'),
+    '#default_value' => variable_get(
+      'islandora_entities_department_solr_field',
+      'MADS_department_mt'
+    ),
+    '#description' => t('Solr field for autocompletion.'),
+    '#required' => TRUE,
+  );
+
+  $form['islandora_entities_disambiguated_solr_field'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Solr field for disambiguated full name.'),
+    '#default_value' => variable_get(
+      'islandora_entities_disambiguated_solr_field',
+      'MADS_disambiguated_fullname_mt'
+    ),
+    '#description' => t('Solr field for autocompletion.'),
+    '#required' => TRUE,
+  );
+
+  $form['islandora_entities_last_name_solr_field'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Solr field for last name.'),
+    '#default_value' => variable_get(
+      'islandora_entities_last_name_solr_field',
+      'MADS_family_mt'
+    ),
+    '#description' => t('Solr field for autocompletion.'),
+  );
+  $form['islandora_entities_title_collection'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Collection to ingest title entities in.'),
+    '#default_value' => variable_get(
+      'islandora_entities_title_collection',
+      'islandora:entity_collection'
+    ),
+    '#description' => t('Used by dependent modules provide links to the collection.'),
+    '#required' => TRUE,
+  );
+
+  $form['islandora_entities_department_collection'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Collection to ingest department entities in.'),
+    '#default_value' => variable_get(
+      'islandora_entities_department_collection',
+      'islandora:entity_collection'
+    ),
+    '#description' => t('Used by dependent modules provide links to the collection.'),
+    '#required' => TRUE,
+  );
+
+  $form['islandora_entities_disambiguated_fullname_collection'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Collection to ingest disambiguated full name entities in.'),
+    '#default_value' => variable_get(
+      'islandora_entities_disambiguated_fullname_collection',
+      'islandora:entity_collection'
+    ),
+    '#description' => t('Used by dependent modules provide links to the collection.'),
+    '#required' => TRUE,
+  );
+
+  $form['islandora_entities_family_collection'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Collection to ingest family name entities in.'),
+    '#default_value' => variable_get(
+      'islandora_entities_family_collection',
+      'islandora:entity_collection'
+    ),
+    '#description' => t('Used by dependent modules provide links to the collection.'),
+    '#required' => TRUE,
+  );
+
   return system_settings_form($form);
 }
