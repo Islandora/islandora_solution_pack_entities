@@ -134,49 +134,6 @@ function islandora_entities_settings($form, &$form_state) {
     ),
     '#description' => t('Solr field for autocompletion.'),
   );
-  $form['islandora_entities_title_collection'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Collection to ingest title entities in.'),
-    '#default_value' => variable_get(
-      'islandora_entities_title_collection',
-      'islandora:entity_collection'
-    ),
-    '#description' => t('Used by dependent modules provide links to the collection.'),
-    '#required' => TRUE,
-  );
-
-  $form['islandora_entities_department_collection'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Collection to ingest department entities in.'),
-    '#default_value' => variable_get(
-      'islandora_entities_department_collection',
-      'islandora:entity_collection'
-    ),
-    '#description' => t('Used by dependent modules provide links to the collection.'),
-    '#required' => TRUE,
-  );
-
-  $form['islandora_entities_disambiguated_fullname_collection'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Collection to ingest disambiguated full name entities in.'),
-    '#default_value' => variable_get(
-      'islandora_entities_disambiguated_fullname_collection',
-      'islandora:entity_collection'
-    ),
-    '#description' => t('Used by dependent modules provide links to the collection.'),
-    '#required' => TRUE,
-  );
-
-  $form['islandora_entities_family_collection'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Collection to ingest family name entities in.'),
-    '#default_value' => variable_get(
-      'islandora_entities_family_collection',
-      'islandora:entity_collection'
-    ),
-    '#description' => t('Used by dependent modules provide links to the collection.'),
-    '#required' => TRUE,
-  );
 
   return system_settings_form($form);
 }
