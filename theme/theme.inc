@@ -100,7 +100,7 @@ function islandora_entities_preprocess_islandora_person(array &$variables) {
     }
   }
   if ($object["TN"]) {
-    $variables['tn'] = "/islandora/object/$object_pid/datastream/TN/view";
+    $variables['tn'] = url("islandora/object/{$object->id}/datastream/TN/view");
   }
   $variables['metadata'] = islandora_retrieve_metadata_markup($object, TRUE);
 }
