@@ -45,27 +45,33 @@ function islandora_entities_preprocess_islandora_person(array &$variables) {
       $variables['activities'] = theme_item_list($list_variables);
     }
     $depts = $simplexml->affiliation->organization;
-    $colleages = array();
-    foreach ($depts as $dept) {
-      if ((string) $dept) {
-        $members = islandora_entities_get_dept_members((string) $dept, $object->id);
-        if ($members) {
-          $colleages[(string) $dept] = $members;
+    // It is possible there is no affiliation.
+    if ($depts) {
+      $colleages = array();
+      foreach ($depts as $dept) {
+        if ((string) $dept) {
+          $members = islandora_entities_get_dept_members(
+            (string) $dept,
+            $object->id
+          );
+          if ($members) {
+            $colleages[(string) $dept] = $members;
+          }
         }
       }
-    }
-    if (count($colleages) > 0) {
-      foreach ($colleages as $dept => $members) {
-        foreach ($members as $pid => $scholar) {
-          $links[] = l($scholar, "islandora/object/$pid/view");
+      if (count($colleages) > 0) {
+        foreach ($colleages as $dept => $members) {
+          foreach ($members as $pid => $scholar) {
+            $links[] = l($scholar, "islandora/object/$pid/view");
+          }
+          $list_variables = array(
+            'items' => $links,
+            'title' => t('Other Scholars in @dept', array('@dept' => $dept)),
+            'type' => 'ul',
+            'attributes' => array('class' => 'fellow_scholars'),
+          );
+          $variables['fellow_scholars'][] = theme_item_list($list_variables);
         }
-        $list_variables = array(
-          'items' => $links,
-          'title' => t('Other Scholars in @dept', array('@dept' => $dept)),
-          'type' => 'ul',
-          'attributes' => array('class' => 'fellow_scholars'),
-        );
-        $variables['fellow_scholars'][] = theme_item_list($list_variables);
       }
     }
     $identifiers = $simplexml->identifier;
@@ -94,7 +100,7 @@ function islandora_entities_preprocess_islandora_person(array &$variables) {
     }
   }
   if ($object["TN"]) {
-    $variables['tn'] = "/islandora/object/$object_pid/datastream/TN/view";
+    $variables['tn'] = url("islandora/object/{$object->id}/datastream/TN/view");
   }
   $variables['metadata'] = islandora_retrieve_metadata_markup($object, TRUE);
 }
