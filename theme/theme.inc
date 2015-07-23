@@ -61,6 +61,7 @@ function islandora_entities_preprocess_islandora_person(array &$variables) {
       }
       if (count($colleages) > 0) {
         foreach ($colleages as $dept => $members) {
+          $links = array();
           foreach ($members as $pid => $scholar) {
             $links[] = l($scholar, "islandora/object/$pid/view");
           }
