@@ -383,7 +383,7 @@ function islandora_entities_islandora_xml_form_builder_forms() {
  *   An associative array mapping a shortened name to the full path of the
  *   transformation.
  */
-function hook_xml_form_builder_get_self_transforms() {
+function islandora_entities_xml_form_builder_get_self_transforms() {
   return array(
     'cleanup_and_order_mads.xsl' => 'sites/all/modules/islandora_solution_pack_entities/xml/cleanup_and_order_mads.xsl',
   );
