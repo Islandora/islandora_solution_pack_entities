@@ -385,7 +385,7 @@ function islandora_entities_islandora_xml_form_builder_forms() {
  */
 function islandora_entities_xml_form_builder_get_self_transforms() {
   return array(
-    'cleanup_and_order_mads.xsl' => drupal_get_path('module', 'islandora_entities') . '/xml/cleanup_and_order_mads.xsl',    
+    'cleanup_and_order_mads.xsl' => drupal_get_path('module', 'islandora_entities') . '/xml/cleanup_and_order_mads.xsl',
   );
 }
 
