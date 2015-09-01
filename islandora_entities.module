@@ -376,7 +376,18 @@ function islandora_entities_islandora_xml_form_builder_forms() {
     ),
   );
 }
-
+/**
+ * This hook allows modules to register XSLT self-transformations.
+ *
+ * @return array
+ *   An associative array mapping a shortened name to the full path of the
+ *   transformation.
+ */
+function islandora_entities_xml_form_builder_get_self_transforms() {
+  return array(
+    'cleanup_and_order_mads.xsl' => drupal_get_path('module', 'islandora_entities') . '/xml/cleanup_and_order_mads.xsl',
+  );
+}
 
 /**
  * Implements hook_form_FORM_ID_alter().
