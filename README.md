@@ -31,6 +31,8 @@ depending on your installation.
 
 The Solr field for searching entities and the entity collection are configurable at Administration » Islandora » Solution pack configuration » Entities (admin/islandora/solution_pack_config/entities).
 
+![Configuration](https://raw.githubusercontent.com/wiki/islandora/islandora_solution_pack_entities/images/entities_configuration.jpeg)
+
 Islandora Solr Metadata must be chosen as the default metadata display. This can be set at Administration » Islandora » Metadata Display (admin/islandora/metadata).
 
 ## Documentation
@@ -48,7 +50,7 @@ Having problems or solved a problem? Check out the Islandora google groups for a
 
 Current maintainers:
 
-* [Alan Stanley](https://github.com/ajstanley)
+* [Rosemary Le Faive](https://github.com/rosiel)
 
 ## Development
 
