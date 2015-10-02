@@ -66,7 +66,7 @@ function islandora_entities_tn_upload_form_submit(array $form, array &$form_stat
     $object = $factory_object;
   }
   else {
-    $object = $form_state['islandora']['objects'][0];
+    $object = islandora_ingest_form_get_object($form_state);
   }
 
   $tn_file = file_load($form_state['values']['file']);
