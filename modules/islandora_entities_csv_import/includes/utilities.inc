@@ -76,7 +76,7 @@ function islandora_entities_build_scholar_object($scholar, $collection_pid) {
   $fedora_object->owner = 'admin';
   $datastream = $fedora_object->constructDatastream('MADS', 'M');
   $datastream->label = 'MADS';
-  $datastream->mimetype = 'text/xml';
+  $datastream->mimetype = 'application/xml';
   $datastream->content = $mads;
   $fedora_object->ingestDatastream($datastream);
   $fedora_object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:personCModel');
