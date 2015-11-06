@@ -147,6 +147,7 @@ function islandora_entities_get_dept_members($dept, $pid) {
  * Implements hook_preprocess().
  */
 function islandora_entities_preprocess_islandora_dept(array &$variables) {
+  dd($variables);
   module_load_include('inc', 'islandora', 'includes/metadata');
   $object = $variables['object'];
   $variables['metadata'] = islandora_retrieve_metadata_markup($object, TRUE);

@@ -625,13 +625,10 @@ function islandora_entities_citation_access($object, $type) {
  * Implements hook_preprocess_html().
  */
 function islandora_entities_preprocess_html(&$variables) {
-  if (isset($_GET['q'])) {
-    $q_parts = explode('/', $_GET['q']);
-    if ($q_parts[0] == 'islandora' && $q_parts[1] == 'object') {
-      $object = islandora_object_load($q_parts[2]);
-      if ($object && in_array('islandora:entityCModel', $object->models)) {
-        $variables['classes_array'][] = "islandora-entity";
-      }
-    }
+  $object = menu_get_object('islandora_object', 2);
+  // Making sure the router position is there, and that an object gets loaded,
+  // and that it has the right content model, in that order.
+  if (!is_null($object) && $object !== FALSE && in_array('islandora:entityCModel', $object->models)) {
+    $variables['classes_array'][] = "islandora-entity";
   }
 }
