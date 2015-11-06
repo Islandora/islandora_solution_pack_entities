@@ -628,7 +628,7 @@ function islandora_entities_preprocess_html(&$variables) {
   $object = menu_get_object('islandora_object', 2);
   // Making sure the router position is there, and that an object gets loaded,
   // and that it has the right content model, in that order.
-  if (!is_null($object) && $object !== FALSE && in_array('islandora:entityCModel', $object->models)) {
+  if (is_object($object) && in_array('islandora:entityCModel', $object->models)) {
     $variables['classes_array'][] = "islandora-entity";
   }
 }
