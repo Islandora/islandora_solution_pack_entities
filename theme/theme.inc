@@ -150,4 +150,7 @@ function islandora_entities_preprocess_islandora_dept(array &$variables) {
   module_load_include('inc', 'islandora', 'includes/metadata');
   $object = $variables['object'];
   $variables['metadata'] = islandora_retrieve_metadata_markup($object, TRUE);
+  if ($object["TN"]) {
+    $variables['tn'] = url("islandora/object/{$object->id}/datastream/TN/view");
+  }
 }
