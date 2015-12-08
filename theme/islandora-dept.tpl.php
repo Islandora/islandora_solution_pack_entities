@@ -5,15 +5,18 @@
  */
 ?>
 
-<div class="islandora-object-image islandora-department-thumbnail">
-  <?php if (isset($variables['tn'])): ?>
-    <img src="<?php print $variables['tn']; ?>"/>
-  <?php endif; ?>
-</div>
+<div class="islandora-object islandora">
+<?php if (isset($variables['tn'])): ?>
+  <dl class="islandora-object-tn islandora-department">
+    <dt>
+      <img src="<?php print $variables['tn']; ?>"/>
+    </dt>
+  </dl>
+<?php endif; ?>
 
 <?php if (isset($variables['metadata'])): ?>
   <div class="departmental_metadata">
     <?php print $variables['metadata']; ?>
   </div>
 <?php endif; ?>
-
+</div>

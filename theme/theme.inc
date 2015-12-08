@@ -148,6 +148,8 @@ function islandora_entities_get_dept_members($dept, $pid) {
  */
 function islandora_entities_preprocess_islandora_dept(array &$variables) {
   module_load_include('inc', 'islandora', 'includes/metadata');
+  $module_path = drupal_get_path('module', 'islandora');
+  drupal_add_css("$module_path/css/islandora.objects.css");
   $object = $variables['object'];
   $variables['metadata'] = islandora_retrieve_metadata_markup($object, TRUE);
   if ($object["TN"]) {
