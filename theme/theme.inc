@@ -100,7 +100,7 @@ function islandora_entities_preprocess_islandora_person(array &$variables) {
       $variables['recent_citations'] = $themed_links;
     }
   }
-  if ($object["TN"]) {
+  if ($object['TN']) {
     $variables['tn'] = url("islandora/object/{$object->id}/datastream/TN/view");
   }
   $variables['metadata'] = islandora_retrieve_metadata_markup($object, TRUE);
@@ -152,7 +152,7 @@ function islandora_entities_preprocess_islandora_dept(array &$variables) {
   drupal_add_css("$module_path/css/islandora.objects.css");
   $object = $variables['object'];
   $variables['metadata'] = islandora_retrieve_metadata_markup($object, TRUE);
-  if ($object["TN"]) {
+  if ($object['TN']) {
     $variables['tn'] = url("islandora/object/{$object->id}/datastream/TN/view");
   }
 }
