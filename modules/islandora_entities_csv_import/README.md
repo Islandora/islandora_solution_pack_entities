@@ -58,7 +58,8 @@ CAMPUS
 This will be transformed into the following MADS record:
 
 ```xml
-<mads xmlns="http://www.loc.gov/mads/v2" xmlns:mads="http://www.loc.gov/mads/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink">
+<mads xmlns="http://www.loc.gov/mads/v2" xmlns:mads="http://www.loc.gov/mads/v2"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink">
     <authority>
         <name type="personal">
             <namePart type="given">[GIVEN_NAME]</namePart>
@@ -74,17 +75,17 @@ This will be transformed into the following MADS record:
         <organization>[DEPARTMENT]</organization>
         <position>[POSITION]</position>
         <address>
-<email>[EMAIL]</email>
-<phone>[PHONE]</phone>
-<fax>[FAX]</fax>
-<street>[STREET]</street>
-<city>[CITY]</city>
-<state>[STATE]</state>
-<country>[COUNTRY]</country>
-<postcode>[POSTCODE]</postcode>
-<start_date>[START_DATE]</start_date>
-<end_date>[END_DATE]</end_date>
-</address>
+		<email>[EMAIL]</email>
+		<phone>[PHONE]</phone>
+		<fax>[FAX]</fax>
+		<street>[STREET]</street>
+		<city>[CITY]</city>
+		<state>[STATE]</state>
+		<country>[COUNTRY]</country>
+		<postcode>[POSTCODE]</postcode>
+		<start_date>[START_DATE]</start_date>
+		<end_date>[END_DATE]</end_date>
+	</address>
     </affiliation>
     <note type="address">[ROOM_NUMBER] [BUILDING] [CAMPUS]</note>
     <identifier type="u1">[IDENTIFIER]</identifier>
