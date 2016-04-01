@@ -26,6 +26,7 @@ separated with a ~  ie meat~cheese~pickles
 If a column in a CSV is to be processed it must have a header from the following
 list.
 
+```
 STATUS
 POSITION
 EMAIL
@@ -52,6 +53,45 @@ END_DATE
 ROOM_NUMBER
 BUILDING
 CAMPUS
+```
+
+This will be transformed into the following MADS record:
+
+```xml
+<mads xmlns="http://www.loc.gov/mads/v2" xmlns:mads="http://www.loc.gov/mads/v2"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <authority>
+        <name type="personal">
+            <namePart type="given">[GIVEN_NAME]</namePart>
+            <namePart type="family">[FAMILY_NAME]</namePart>
+            <namePart type="termsOfAddress">[TERM_OF_ADDRESS]</namePart>
+            <namePart type="date">[NAME_DATE]</namePart>
+        </name>
+        <titleInfo>
+            <title>[DISPLAY_NAME]</title>
+        </titleInfo>
+    </authority>
+    <affiliation>
+        <organization>[DEPARTMENT]</organization>
+        <position>[POSITION]</position>
+        <address>
+		<email>[EMAIL]</email>
+		<phone>[PHONE]</phone>
+		<fax>[FAX]</fax>
+		<street>[STREET]</street>
+		<city>[CITY]</city>
+		<state>[STATE]</state>
+		<country>[COUNTRY]</country>
+		<postcode>[POSTCODE]</postcode>
+		<start_date>[START_DATE]</start_date>
+		<end_date>[END_DATE]</end_date>
+	</address>
+    </affiliation>
+    <note type="address">[ROOM_NUMBER] [BUILDING] [CAMPUS]</note>
+    <identifier type="u1">[IDENTIFIER]</identifier>
+    <note type="status">[STATUS]</note>
+</mads>
+```
 
 ## Troubleshooting/Issues
 
@@ -64,7 +104,7 @@ Having problems or solved a problem? Check out the Islandora google groups for a
 
 Current maintainers:
 
-* [Alan Stanley](https://github.com/ajstanley)
+* [Rosie Le Faive](https://github.com/rosiel)
 
 ## Development
 
