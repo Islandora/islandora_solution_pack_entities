@@ -21,7 +21,7 @@ Prepare a comma-delimited CSV file using the column names below. Only columns wi
 all others will be ignored. Any comma within a field must be replaced with a double pipe ie - 'Nursing, Department of' 
 must be replaced with 'Nursing|| Department of'.
 
-Multiple arguments within one column can be separated with a tilde (~). However, this may yeild unexpected results 
+Multiple arguments within one column can be separated with a tilde (~). However, this may yield unexpected results 
 (missing XML attributes, improper nesting) if used outside the following fields: FAX, PHONE, EMAIL, POSITION. 
 
 
