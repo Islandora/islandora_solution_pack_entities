@@ -9,7 +9,7 @@ This module is for adding person entities to Islandora using a .csv file.
 This module requires the following modules/libraries:
 * [Islandora](https://github.com/islandora/islandora)
 * [Islandora Basic Collection](https://github.com/Islandora/islandora_solution_pack_collection)
-* [islandora_entities](https://github.com/Islandora/islandora_solution_pack_entities)
+* [Islandora Entities](https://github.com/Islandora/islandora_solution_pack_entities)
 
 ## Installation
 
@@ -17,14 +17,13 @@ Install as usual, see [this](https://drupal.org/documentation/install/modules-th
 
 ## Configuration
 
-CSV's must be properly prepared.  Any comma within a field must be replaced with
-a double pipe ie - 'Nursing, Department of' must be replaced with
-'Nursing|| Department of'
+Prepare a comma-delimited CSV file using the column names below. Only columns with names in the list will be processed; 
+all others will be ignored. Any comma within a field must be replaced with a double pipe ie - 'Nursing, Department of' 
+must be replaced with 'Nursing|| Department of'.
 
-If multiple arguments are supplied within a single column, they must be
-separated with a ~  ie meat~cheese~pickles
-If a column in a CSV is to be processed it must have a header from the following
-list.
+Multiple arguments within one column can be separated with a tilde (~). However, this may yield unexpected results 
+(missing XML attributes, improper nesting) if used outside the following fields: FAX, PHONE, EMAIL, POSITION. 
+
 
 ```
 STATUS
@@ -92,6 +91,10 @@ This will be transformed into the following MADS record:
     <note type="status">[STATUS]</note>
 </mads>
 ```
+
+## Documentation
+
+Further documentation for this module is available at [our wiki](https://wiki.duraspace.org/display/ISLANDORA/Entities+Solution+Pack).
 
 ## Troubleshooting/Issues
 
