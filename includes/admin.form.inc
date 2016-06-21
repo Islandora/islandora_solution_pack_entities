@@ -135,6 +135,17 @@ function islandora_entities_settings($form, &$form_state) {
     '#description' => t('Solr field for autocompletion.'),
     '#required' => TRUE,
   );
+  
+  $form['islandora_entities_citation_number'] = array{
+    '#type' => 'textfield',
+	'#title' => t('Number of Citations Display'),
+	'#default_value' => variable_get(
+	  'islandora_entities_citation_number',
+	  '20'
+	),
+	'#description' => t('Number of Citations to show under Recent Citations/Citations Tab'),
+	'#required' => TRUE,
+  );
 
   return system_settings_form($form);
 }
