@@ -136,7 +136,7 @@ function islandora_entities_settings($form, &$form_state) {
     '#required' => TRUE,
   );
   
-  $form['islandora_entities_citation_number'] = array{
+  $form['islandora_entities_citation_number'] = array(
     '#type' => 'textfield',
 	'#title' => t('Number of Citations Display'),
 	'#default_value' => variable_get(
