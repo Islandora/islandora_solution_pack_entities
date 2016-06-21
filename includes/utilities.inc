@@ -140,7 +140,7 @@ function islandora_entities_get_related($identifier, $title, $type) {
   $solr = new Apache_Solr_Service($url['host'], $url['port'], $url['path'] . '/');
   $solr->setCreateDocuments(FALSE);
   try {
-    $results = $solr->search($query, 0, variable_get('islandora_entities_citation_number','20'), $params);
+    $results = $solr->search($query, 0, variable_get('islandora_entities_citation_number', '20'), $params);
     $json = json_decode($results->getRawResponse(), TRUE);
   }
   catch (Exception $e) {
@@ -215,7 +215,7 @@ function islandora_entities_get_related_pids($identifier, $title, $type) {
   $solr = new Apache_Solr_Service($url['host'], $url['port'], $url['path'] . '/');
   $solr->setCreateDocuments(FALSE);
   try {
-    $search_results = $solr->search($query, 0, variable_get('islandora_entities_citation_number','20'), $params);
+    $search_results = $solr->search($query, 0, variable_get('islandora_entities_citation_number', '20'), $params);
     $json = json_decode($search_results->getRawResponse(), TRUE);
   }
   catch (Exception $e) {
