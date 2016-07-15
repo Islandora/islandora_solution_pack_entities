@@ -34,7 +34,7 @@ function islandora_entities_add_entity_content_model(AbstractObject $fedora_obje
  *   IslandoraSolrQueryProcessor->islandoraSolrResult
  */
 function islandora_entities_solr_search_entities($content_model, $entities_query) {
-  module_load_include('inc', 'islandora_solr_search', 'includes/utilities');
+  module_load_include('inc', 'islandora_solr', 'includes/utilities');
   $results = array();
 
   $content_model_field = variable_get(
