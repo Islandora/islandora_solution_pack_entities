@@ -12,6 +12,7 @@ function islandora_entities_preprocess_islandora_person(array &$variables) {
   module_load_include('inc', 'islandora_entities', 'includes/utilities');
   module_load_include('inc', 'islandora', 'includes/metadata');
   module_load_include('inc', 'islandora_entities', 'includes/entities_rss');
+  module_load_include('inc', 'islandora', 'includes/utilities');
   drupal_add_css(drupal_get_path('module', 'islandora_entities') . '/css/islandora-person.css');
 
   $biography = "";
@@ -63,7 +64,9 @@ function islandora_entities_preprocess_islandora_person(array &$variables) {
         foreach ($colleages as $dept => $members) {
           $links = array();
           foreach ($members as $pid => $scholar) {
-            $links[] = l($scholar, "islandora/object/$pid/view");
+            if (islandora_namespace_accessible($pid)) {
+              $links[] = l($scholar, "islandora/object/$pid/view");
+            }
           }
           $list_variables = array(
             'items' => $links,
