@@ -136,5 +136,16 @@ function islandora_entities_settings($form, &$form_state) {
     '#required' => TRUE,
   );
 
+  $form['islandora_entities_query_sort'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Solr field to sort citations and theses by.'),
+    '#default_value' => variable_get(
+      'islandora_entities_query_sort',
+      ''
+    ),
+    '#description' => t('Used to sort citations and theses on scholar profile pages. Should contain the solr field followed by a space and either "asc" or "desc". For example, "mods_originInfo_keyDate_yes_dateIssued_dt asc" will sort on the dateIssued field in ascending order.'),
+    '#required' => FALSE,
+  );
+
   return system_settings_form($form);
 }
