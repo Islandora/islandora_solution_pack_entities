@@ -543,9 +543,9 @@ function islandora_entities_islandora_organizationCModel_islandora_object_ingest
 }
 
 /**
- * Implements hook_islandora_xml_form_builder_get_transforms().
+ * Implements hook_xml_form_builder_get_transforms().
  */
-function islandora_entities_islandora_xml_form_builder_get_transforms() {
+function islandora_entities_xml_form_builder_get_transforms() {
   $module_path = drupal_get_path('module', 'islandora_entities');
   return array(
     'eaccpf_to_dc.xsl' => "$module_path/xml/eaccpf_to_dc.xsl",
