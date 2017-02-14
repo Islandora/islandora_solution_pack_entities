@@ -247,9 +247,9 @@ function islandora_entities_get_cmodel_form_name(AbstractObject $object) {
 }
 
 /**
- * Implements hook_islandora_xml_form_builder_form_associations().
+ * Implements hook_xml_form_builder_form_associations().
  */
-function islandora_entities_islandora_xml_form_builder_form_associations() {
+function islandora_entities_xml_form_builder_form_associations() {
   return array(
     'islandora_event_form' => array(
       'content_model' => ISLANDORA_ENTITIES_EVENT_CONTENT_MODEL,
@@ -338,9 +338,9 @@ function islandora_entities_islandora_xml_form_builder_form_associations() {
 }
 
 /**
- * Implements hook_islandora_xml_form_builder_forms().
+ * Implements hook_xml_form_builder_forms().
  */
-function islandora_entities_islandora_xml_form_builder_forms() {
+function islandora_entities_xml_form_builder_forms() {
   $module_path = drupal_get_path('module', 'islandora_entities');
   // Also load read only version's of the form.
   return array(
