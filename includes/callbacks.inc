@@ -94,15 +94,15 @@ function islandora_entities_autocomplete($type) {
   $qp = new IslandoraSolrQueryProcessor();
   $qp->buildAndExecuteQuery($query, $params);
   try {
-    $results = $qp->islandoraSolrResult['response']['docs'];
+    $results = $qp->islandoraSolrResult['response']['objects'];
   }
   catch (Exception $e) {
     watchdog_exception('Islandora Entities', $e, 'Got an exception while searching entities for callback.', array(), WATCHDOG_ERROR);
   }
   $list = array();
   foreach ($results as $choice) {
-    if (isset($choice[$mappings[$type]['title']])) {
-      $list[$choice[$mappings[$type]['title']][0]] = $choice[$mappings[$type]['title']][0];
+    if (isset($choice['solr_doc'][$mappings[$type]['title']])) {
+      $list[$choice['solr_doc'][$mappings[$type]['title']][0]] = $choice['solr_doc'][$mappings[$type]['title']][0];
     }
   }
 
