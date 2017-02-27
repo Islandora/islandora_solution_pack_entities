@@ -140,15 +140,15 @@ function islandora_entities_get_related($identifier, $title, $type) {
   $qp = new IslandoraSolrQueryProcessor();
   $qp->buildAndExecuteQuery($query, $params);
   try {
-    $results = $qp->islandoraSolrResult['response']['docs'];
+    $results = $qp->islandoraSolrResult['response']['objects'];
   }
   catch (Exception $e) {
     watchdog_exception('Islandora Entities', $e, 'Got an exception while searching entities for callback.', array(), WATCHDOG_ERROR);
   }
   $links = array();
   foreach ($results as $choice) {
-    if (isset($choice['dc.title'])) {
-      $links[] = l($choice['dc.title'][0], 'islandora/object/' . $choice['PID']);
+    if (isset($choice['solr_doc']['dc.title'])) {
+      $links[] = l($choice['solr_doc']['dc.title'][0], 'islandora/object/' . $choice['PID']);
     }
   }
   if (count($links) > 0) {
@@ -214,7 +214,7 @@ function islandora_entities_get_related_pids($identifier, $title, $type) {
   $qp = new IslandoraSolrQueryProcessor();
   $qp->buildAndExecuteQuery($query, $params);
   try {
-    $search_results = $qp->islandoraSolrResult['response']['docs'];
+    $search_results = $qp->islandoraSolrResult['response']['objects'];
   }
   catch (Exception $e) {
     watchdog_exception('Islandora Entities', $e, 'Got an exception while searching entities for callback.', array(), WATCHDOG_ERROR);
@@ -223,8 +223,8 @@ function islandora_entities_get_related_pids($identifier, $title, $type) {
   foreach ($search_results as $choice) {
     $results[$choice['PID']] = array(
       'PID' => $choice['PID'],
-      'title' => $choice['dc.title'],
-      'authors' => $choice['mods_name_personal_displayForm_mt'],
+      'title' => $choice['solr_doc']['dc.title'],
+      'authors' => $choice['solr_doc']['mods_name_personal_displayForm_mt'],
     );
   }
   return $results;

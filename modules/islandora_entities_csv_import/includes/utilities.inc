@@ -322,20 +322,20 @@ function islandora_entities_get_collection_autocomplete($string = '') {
   $params = array(
     'fl' => array('dc.title, PID'),
   );
-  $string = $string ? " +dc.title:$string*" : '';
-  $query = '(+RELS_EXT_hasModel_uri_ms:"info:fedora/islandora:collectionCModel"' . $string . ')';
-  $query .= '(+RELS_EXT_hasModel_uri_ms:"info:fedora/islandora:collectionCModel"' . str_replace('dc.title', 'PID', $string) . ')';
+  $string = $string ? " %2Bdc.title:$string*" : '';
+  $query = '(%2BRELS_EXT_hasModel_uri_ms:"info:fedora/islandora:collectionCModel"' . $string . ')';
+  $query .= '(%2BRELS_EXT_hasModel_uri_ms:"info:fedora/islandora:collectionCModel"' . str_replace('dc.title', 'PID', $string) . ')';
   $qp = new IslandoraSolrQueryProcessor();
   $qp->buildAndExecuteQuery($query, $params);
   try {
-    $results = $qp->islandoraSolrResult['response']['docs'];
+    $results = $qp->islandoraSolrResult['response']['objects'];
   }
   catch (Exception $e) {
     watchdog_exception('Islandora Entities', $e, 'Got an exception while searching entities for callback.', array(), WATCHDOG_ERROR);
   }
   $list = array();
   foreach ($results as $choice) {
-    $list[$choice['PID']] = $choice['dc.title'][0] . " ~ " . $choice['PID'];
+    $list[$choice['PID']] = $choice['solr_doc']['dc.title'][0] . " ~ " . $choice['PID'];
   }
 
   drupal_json_output($list);
