@@ -328,14 +328,14 @@ function islandora_entities_get_collection_autocomplete($string = '') {
   $qp = new IslandoraSolrQueryProcessor();
   $qp->buildAndExecuteQuery($query, $params);
   try {
-    $results = $qp->islandoraSolrResult['response']['docs'];
+    $results = $qp->islandoraSolrResult['response']['objects'];
   }
   catch (Exception $e) {
     watchdog_exception('Islandora Entities', $e, 'Got an exception while searching entities for callback.', array(), WATCHDOG_ERROR);
   }
   $list = array();
   foreach ($results as $choice) {
-    $list[$choice['PID']] = $choice['dc.title'][0] . " ~ " . $choice['PID'];
+    $list[$choice['PID']] = $choice['solr_doc']['dc.title'][0] . " ~ " . $choice['PID'];
   }
 
   drupal_json_output($list);

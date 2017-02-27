@@ -129,15 +129,15 @@ function islandora_entities_get_dept_members($dept, $pid) {
   $qp = new IslandoraSolrQueryProcessor();
   $qp->buildAndExecuteQuery($query, $params);
   try {
-    $results = $qp->islandoraSolrResult['response']['docs'];
+    $results = $qp->islandoraSolrResult['response']['objects'];
   }
   catch (Exception $e) {
     watchdog_exception('Islandora Entities', $e, 'Got an exception while searching entities for callback.', array(), WATCHDOG_ERROR);
   }
   $colleages = array();
   foreach ($results as $choice) {
-    if (isset($choice['MADS_title_ms'])) {
-      foreach ($choice['MADS_title_ms'] as $candidate) {
+    if (isset($choice['solr_doc']['MADS_title_ms'])) {
+      foreach ($choice['solr_doc']['MADS_title_ms'] as $candidate) {
         $colleages[$choice['PID']] = $candidate;
       }
     }
