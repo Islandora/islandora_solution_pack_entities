@@ -322,9 +322,9 @@ function islandora_entities_get_collection_autocomplete($string = '') {
   $params = array(
     'fl' => array('dc.title, PID'),
   );
-  $string = $string ? " +dc.title:$string*" : '';
-  $query = '(+RELS_EXT_hasModel_uri_ms:"info:fedora/islandora:collectionCModel"' . $string . ')';
-  $query .= '(+RELS_EXT_hasModel_uri_ms:"info:fedora/islandora:collectionCModel"' . str_replace('dc.title', 'PID', $string) . ')';
+  $string = $string ? " %2Bdc.title:$string*" : '';
+  $query = '(%2BRELS_EXT_hasModel_uri_ms:"info:fedora/islandora:collectionCModel"' . $string . ')';
+  $query .= '(%2BRELS_EXT_hasModel_uri_ms:"info:fedora/islandora:collectionCModel"' . str_replace('dc.title', 'PID', $string) . ')';
   $qp = new IslandoraSolrQueryProcessor();
   $qp->buildAndExecuteQuery($query, $params);
   try {
