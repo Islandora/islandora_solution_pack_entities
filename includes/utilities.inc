@@ -134,6 +134,7 @@ function islandora_entities_get_related($identifier, $title, $type) {
   $query = "+mods_name_personal_displayForm_mt:\"($identifier)\"  {$base_query[$type]}";
   $params = array(
     'fl' => 'dc.title, PID',
+    'sort' => variable_get('islandora_entities_query_sort', ''),
   );
 
   $url = parse_url(variable_get('islandora_solr_url', 'localhost:8080/solr'));
@@ -209,6 +210,7 @@ function islandora_entities_get_related_pids($identifier, $title, $type) {
 
   $params = array(
     'fl' => 'dc.title, mods_name_personal_displayForm_mt, PID',
+    'sort' => variable_get('islandora_entities_query_sort', ''),
   );
 
   $url = parse_url(variable_get('islandora_solr_url', 'localhost:8080/solr'));
