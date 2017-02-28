@@ -107,7 +107,7 @@ function islandora_entities_menu() {
       'page callback' => 'drupal_get_form',
       'page arguments' => array('islandora_entities_citation_form', 2, 'theses'),
       'access callback' => 'islandora_entities_citation_access',
-      'access arguments' => array(2, "citations"),
+      'access arguments' => array(2, "theses"),
       'file' => 'includes/citation_tab.inc',
       'weight' => 2,
     ),
