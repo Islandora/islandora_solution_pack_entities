@@ -100,9 +100,11 @@ function islandora_entities_autocomplete($type) {
     watchdog_exception('Islandora Entities', $e, 'Got an exception while searching entities for callback.', array(), WATCHDOG_ERROR);
   }
   $list = array();
-  foreach ($results as $choice) {
-    if (isset($choice['solr_doc'][$mappings[$type]['title']])) {
-      $list[$choice['solr_doc'][$mappings[$type]['title']][0]] = $choice['solr_doc'][$mappings[$type]['title']][0];
+  if ($results) {
+    foreach ($results as $choice) {
+      if (isset($choice['solr_doc'][$mappings[$type]['title']])) {
+        $list[$choice['solr_doc'][$mappings[$type]['title']][0]] = $choice['solr_doc'][$mappings[$type]['title']][0];
+      }
     }
   }
 

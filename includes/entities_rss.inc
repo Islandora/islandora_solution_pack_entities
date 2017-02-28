@@ -79,11 +79,12 @@ function islandora_entities_get_rss_related($identifier, $type) {
     watchdog_exception('Islandora Entities', $e, 'Got an exception while searching an entities citations.', array(), WATCHDOG_ERROR);
   }
   $return = "";
-  foreach ($results as $choice) {
-    if (isset($choice['solr_doc']['dc.title'])) {
-      $description = isset($choice['solr_doc']['dc.description'][0]) ? $choice['solr_doc']['dc.description'][0] : "No Description";
-      $link = l(t("View"), 'islandora/object/' . $choice['PID']);
-      $return .= format_rss_item($choice['solr_doc']['dc.title'][0], "$base_url/islandora/object/" . $choice['PID'], $description);
+  if ($results) {
+    foreach ($results as $choice) {
+      if (isset($choice['solr_doc']['dc.title'])) {
+        $description = isset($choice['solr_doc']['dc.description'][0]) ? $choice['solr_doc']['dc.description'][0] : "No Description";
+        $return .= format_rss_item($choice['solr_doc']['dc.title'][0], "$base_url/islandora/object/" . $choice['PID'], $description);
+      }
     }
   }
   return $return;
