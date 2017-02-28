@@ -58,6 +58,7 @@ function islandora_entities_rss($pid) {
  *   The string formatted RSS items.
  */
 function islandora_entities_get_rss_related($identifier, $type) {
+  module_load_include('inc', 'islandora_solr', 'includes/query_processor');
   global $base_url;
   $mappings = array(
     'citations' => 'ir:citationCModel',
@@ -69,22 +70,20 @@ function islandora_entities_get_rss_related($identifier, $type) {
   );
   $query = "+RELS_EXT_hasModel_uri_mt:\"$content_model\" +mods_name_personal_displayForm_mt:\"($identifier)\"";
 
-  $url = parse_url(variable_get('islandora_solr_url', 'localhost:8080/solr'));
-  $solr = new Apache_Solr_Service($url['host'], $url['port'], $url['path'] . '/');
-  $solr->setCreateDocuments(FALSE);
+  $qp = new IslandoraSolrQueryProcessor();
+  $qp->buildAndExecuteQuery($query, $params);
   try {
-    $results = $solr->search($query, 0, 20, $params);
-    $json = json_decode($results->getRawResponse(), TRUE);
+    $results = $qp->islandoraSolrResult['response']['objects'];
   }
   catch (Exception $e) {
     watchdog_exception('Islandora Entities', $e, 'Got an exception while searching an entities citations.', array(), WATCHDOG_ERROR);
   }
   $return = "";
-  foreach ($json['response']['docs'] as $choice) {
-    if (isset($choice['dc.title'])) {
-      $description = isset($choice['dc.description'][0]) ? $choice['dc.description'][0] : "No Description";
+  foreach ($results as $choice) {
+    if (isset($choice['solr_doc']['dc.title'])) {
+      $description = isset($choice['solr_doc']['dc.description'][0]) ? $choice['solr_doc']['dc.description'][0] : "No Description";
       $link = l(t("View"), 'islandora/object/' . $choice['PID']);
-      $return .= format_rss_item($choice['dc.title'][0], "$base_url/islandora/object/" . $choice['PID'], $description);
+      $return .= format_rss_item($choice['solr_doc']['dc.title'][0], "$base_url/islandora/object/" . $choice['PID'], $description);
     }
   }
   return $return;
