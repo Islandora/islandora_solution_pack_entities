@@ -145,7 +145,7 @@ function islandora_entities_settings($form, &$form_state) {
     ),
     '#description' => t('Used to sort citations and theses on scholar profile pages. Should contain the solr field followed by a space and either "asc" or "desc". For example, "mods_originInfo_keyDate_yes_dateIssued_dt asc" will sort on the dateIssued field in ascending order.'),
     '#required' => FALSE,
-   );
+  );
 
   $form['islandora_entities_citation_number'] = array(
     '#type' => 'textfield',
@@ -156,7 +156,7 @@ function islandora_entities_settings($form, &$form_state) {
     ),
     '#description' => t('Number of Citations to show under Recent Citations/Citations Tab'),
     '#required' => TRUE,
-   );
+  );
 
   return system_settings_form($form);
 }
