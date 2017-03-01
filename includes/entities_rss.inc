@@ -68,7 +68,7 @@ function islandora_entities_get_rss_related($identifier, $type) {
   $params = array(
     'fl' => 'dc.title, PID, dc.description',
   );
-  $query = "+RELS_EXT_hasModel_uri_mt:\"$content_model\" +mods_name_personal_displayForm_mt:\"($identifier)\"";
+  $query = "RELS_EXT_hasModel_uri_mt:\"$content_model\" AND mods_name_personal_displayForm_mt:\"($identifier)\"";
 
   $qp = new IslandoraSolrQueryProcessor();
   $qp->buildAndExecuteQuery($query, $params);
