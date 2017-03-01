@@ -34,7 +34,7 @@ function islandora_entities_add_entity_content_model(AbstractObject $fedora_obje
  *   IslandoraSolrQueryProcessor->islandoraSolrResult
  */
 function islandora_entities_solr_search_entities($content_model, $entities_query) {
-  module_load_include('inc', 'islandora_solr_search', 'includes/utilities');
+  module_load_include('inc', 'islandora_solr', 'includes/utilities');
   $results = array();
 
   $content_model_field = variable_get(
@@ -134,6 +134,7 @@ function islandora_entities_get_related($identifier, $title, $type) {
   $query = "+mods_name_personal_displayForm_mt:\"($identifier)\"  {$base_query[$type]}";
   $params = array(
     'fl' => 'dc.title, PID',
+    'sort' => variable_get('islandora_entities_query_sort', ''),
   );
 
   $url = parse_url(variable_get('islandora_solr_url', 'localhost:8080/solr'));
@@ -209,6 +210,7 @@ function islandora_entities_get_related_pids($identifier, $title, $type) {
 
   $params = array(
     'fl' => 'dc.title, mods_name_personal_displayForm_mt, PID',
+    'sort' => variable_get('islandora_entities_query_sort', ''),
   );
 
   $url = parse_url(variable_get('islandora_solr_url', 'localhost:8080/solr'));
