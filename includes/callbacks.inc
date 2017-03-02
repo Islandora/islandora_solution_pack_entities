@@ -60,8 +60,6 @@ function islandora_entities_query_entities_callback($type) {
  *   array of all candidates
  */
 function islandora_entities_autocomplete($type) {
-  module_load_include('inc', 'islandora_solr', 'includes/query_processor');
-
   $mappings = array(
     'scholar' => array(
       'cmodel' => 'islandora:personCModel',
