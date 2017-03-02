@@ -317,8 +317,6 @@ function islandora_entities_attach_element($dom, $element_name, $parent_node, $c
  *   Contents of textfield being completed
  */
 function islandora_entities_get_collection_autocomplete($string = '') {
-  module_load_include('inc', 'islandora_solr', 'includes/query_processor');
-
   $params = array(
     'fl' => array('dc.title, PID'),
   );

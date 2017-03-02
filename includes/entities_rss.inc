@@ -77,6 +77,7 @@ function islandora_entities_get_rss_related($identifier, $type) {
   }
   catch (Exception $e) {
     watchdog_exception('Islandora Entities', $e, 'Got an exception while searching an entities citations.', array(), WATCHDOG_ERROR);
+    $results = array();
   }
   $return = "";
   if ($results) {

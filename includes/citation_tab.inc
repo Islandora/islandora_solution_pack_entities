@@ -41,7 +41,7 @@ function islandora_entities_citation_form($form, $form_state, $object, $type = '
     $simplexml = simplexml_load_string($mads);
     $identifiers = $simplexml->identifier;
     foreach ($identifiers as $identifier) {
-      if ($identifier['type'] == 'u1' && (string) $identifier) {
+      if ($identifier['type'] == 'u1' && !empty((string) $identifier)) {
         $results = islandora_entities_get_related_pids((string) $identifier, (string) $simplexml->authority->titleInfo->title, $type);
       }
     }

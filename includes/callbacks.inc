@@ -98,6 +98,7 @@ function islandora_entities_autocomplete($type) {
   }
   catch (Exception $e) {
     watchdog_exception('Islandora Entities', $e, 'Got an exception while searching entities for callback.', array(), WATCHDOG_ERROR);
+    $results = array();
   }
   $list = array();
   if ($results) {

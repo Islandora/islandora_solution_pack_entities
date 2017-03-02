@@ -34,9 +34,6 @@ function islandora_entities_add_entity_content_model(AbstractObject $fedora_obje
  *   IslandoraSolrQueryProcessor->islandoraSolrResult
  */
 function islandora_entities_solr_search_entities($content_model, $entities_query) {
-  module_load_include('inc', 'islandora_solr', 'includes/utilities');
-  $results = array();
-
   $content_model_field = variable_get(
       'islandora_solr_content_model_field', 'RELS_EXT_hasModel_uri_ms'
   );
@@ -106,7 +103,7 @@ function islandora_entities_create_citation_tab(AbstractObject $object) {
     $simplexml = simplexml_load_string($mads);
     $identifiers = $simplexml->identifier;
     foreach ($identifiers as $identifier) {
-      if ($identifier['type'] == 'u1' && (string) $identifier) {
+      if ($identifier['type'] == 'u1' && !empty((string) $identifier)) {
         return islandora_entities_get_related((string) $identifier, (string) $simplexml->authority->titleInfo->title, 'citations');
       }
     }
@@ -123,7 +120,6 @@ function islandora_entities_create_citation_tab(AbstractObject $object) {
  *   Array of links pointing to citations
  */
 function islandora_entities_get_related($identifier, $title, $type) {
-  module_load_include('inc', 'islandora_solr', 'includes/query_processor');
   $base_query = array(
     'citations' => variable_get(
       'islandora_entities_citation_base_query',
@@ -150,18 +146,19 @@ function islandora_entities_get_related($identifier, $title, $type) {
     watchdog_exception('Islandora Entities', $e, 'Got an exception while searching entities for callback.', array(), WATCHDOG_ERROR);
     $results = array();
   }
-  $links = array();
   if ($results) {
+    $links = array();
     foreach ($results as $choice) {
       if (isset($choice['solr_doc']['dc.title'])) {
         $links[] = l($choice['solr_doc']['dc.title'][0], 'islandora/object/' . $choice['PID']);
       }
     }
-  }
-  if (count($links) > 0) {
     $list_variables = array(
       'items' => $links,
-      'title' => t('Recent @type for @scholar', array('@type' => drupal_ucfirst($type), '@scholar' => $title)),
+      'title' => t('Recent @type for @scholar', array(
+        '@type' => drupal_ucfirst($type),
+        '@scholar' => $title
+      )),
       'type' => 'ul',
       'attributes' => array('class' => 'recent_citations'),
     );
@@ -186,7 +183,7 @@ function islandora_entities_create_theses_tab(AbstractObject $object) {
     $simplexml = simplexml_load_string($mads);
     $identifiers = $simplexml->identifier;
     foreach ($identifiers as $identifier) {
-      if ($identifier['type'] == 'u1') {
+      if ($identifier['type'] == 'u1' && !empty((string) $identifier)) {
         return islandora_entities_get_related((string) $identifier, (string) $simplexml->authority->titleInfo->title, 'theses');
       }
     }
@@ -203,7 +200,6 @@ function islandora_entities_create_theses_tab(AbstractObject $object) {
  *   Array of links pointing to citations
  */
 function islandora_entities_get_related_pids($identifier, $title, $type) {
-  module_load_include('inc', 'islandora_solr', 'includes/query_processor');
   $base_query = array(
     'citations' => variable_get(
       'islandora_entities_citation_base_query',
@@ -229,6 +225,7 @@ function islandora_entities_get_related_pids($identifier, $title, $type) {
   }
   catch (Exception $e) {
     watchdog_exception('Islandora Entities', $e, 'Got an exception while searching entities for callback.', array(), WATCHDOG_ERROR);
+    $search_results = array();
   }
   $results = array();
   if ($search_results) {
