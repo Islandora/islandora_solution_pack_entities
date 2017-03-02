@@ -135,6 +135,7 @@ function islandora_entities_get_related($identifier, $title, $type) {
   $query = "+mods_name_personal_displayForm_mt:\"($identifier)\" AND {$base_query[$type]}";
   $params = array(
     'fl' => 'dc.title, PID',
+    'limit' => variable_get('islandora_entities_citation_number', '20'),
   );
   if (strlen(variable_get('islandora_entities_query_sort', '')) > 0) {
     $params['sort'] = variable_get('islandora_entities_query_sort', '');
@@ -215,6 +216,7 @@ function islandora_entities_get_related_pids($identifier, $title, $type) {
 
   $params = array(
     'fl' => 'dc.title, mods_name_personal_displayForm_mt, PID',
+    'limit' => variable_get('islandora_entities_citation_number', '20'),
   );
   if (strlen(variable_get('islandora_entities_query_sort', '')) > 0) {
     $params['sort'] = variable_get('islandora_entities_query_sort', '');
