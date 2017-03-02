@@ -32,6 +32,7 @@ function islandora_entities_uninstall() {
     'islandora_entities_disambiguated_solr_field',
     'islandora_entities_last_name_solr_field',
     'islandora_entities_query_sort',
+    'islandora_entities_citation_number',
   );
   foreach ($drupal_variables as $drupal_variable) {
     variable_del($drupal_variable);
