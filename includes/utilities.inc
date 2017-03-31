@@ -157,7 +157,7 @@ function islandora_entities_get_related($identifier, $title, $type) {
       'items' => $links,
       'title' => t('Recent @type for @scholar', array(
         '@type' => drupal_ucfirst($type),
-        '@scholar' => $title
+        '@scholar' => $title,
       )),
       'type' => 'ul',
       'attributes' => array('class' => 'recent_citations'),

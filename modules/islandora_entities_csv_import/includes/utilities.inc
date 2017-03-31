@@ -328,7 +328,8 @@ function islandora_entities_get_collection_autocomplete($string = '') {
     $qp->buildAndExecuteQuery($query, $params);
     try {
       $results = $qp->islandoraSolrResult['response']['objects'];
-    } catch (Exception $e) {
+    }
+    catch (Exception $e) {
       watchdog_exception('Islandora Entities', $e, 'Got an exception while searching entities for callback.', array(), WATCHDOG_ERROR);
     }
     if ($results) {
