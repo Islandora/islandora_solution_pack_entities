@@ -5,7 +5,7 @@
  */
 ?>
 <div class="islandora-object islandora">
-
+  <?php print theme('islandora_solr_search_return_link'); ?>
   <div class="col-left">
     <div class="islandora-object-image">
       <?php if (isset($variables['tn'])): ?>
