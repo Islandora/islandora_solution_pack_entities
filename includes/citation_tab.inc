@@ -66,7 +66,7 @@ function islandora_entities_citation_form($form, $form_state, $object, $type = '
   }
   $header = array(
     'title' => t('Title'),
-    'authors' => t('Authors'),
+    'authors' => '',
   );
   $form['#tree'] = TRUE;
   $form['type'] = array(
