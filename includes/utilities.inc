@@ -34,9 +34,6 @@ function islandora_entities_add_entity_content_model(AbstractObject $fedora_obje
  *   IslandoraSolrQueryProcessor->islandoraSolrResult
  */
 function islandora_entities_solr_search_entities($content_model, $entities_query) {
-  module_load_include('inc', 'islandora_solr', 'includes/utilities');
-  $results = array();
-
   $content_model_field = variable_get(
       'islandora_solr_content_model_field', 'RELS_EXT_hasModel_uri_ms'
   );
@@ -106,8 +103,10 @@ function islandora_entities_create_citation_tab(AbstractObject $object) {
     $simplexml = simplexml_load_string($mads);
     $identifiers = $simplexml->identifier;
     foreach ($identifiers as $identifier) {
-      if ($identifier['type'] == 'u1') {
-        return islandora_entities_get_related((string) $identifier, (string) $simplexml->authority->titleInfo->title, 'citations');
+      // PHP 5.3 and 5.4 can't handle empty((string) $identifier).
+      $string_id = (string) $identifier;
+      if ($identifier['type'] == 'u1' && !empty($string_id)) {
+        return islandora_entities_get_related($string_id, (string) $simplexml->authority->titleInfo->title, 'citations');
       }
     }
   }
@@ -131,32 +130,37 @@ function islandora_entities_get_related($identifier, $title, $type) {
       'islandora_entities_thesis_base_query',
       '+RELS_EXT_hasModel_uri_mt:"ir:thesisCModel"'),
   );
-  $query = "+mods_name_personal_displayForm_mt:\"($identifier)\"  {$base_query[$type]}";
+  $query = "+mods_name_personal_displayForm_mt:\"($identifier)\" AND {$base_query[$type]}";
   $params = array(
     'fl' => 'dc.title, PID',
-    'sort' => variable_get('islandora_entities_query_sort', ''),
+    'limit' => variable_get('islandora_entities_citation_number', '20'),
   );
+  if (strlen(variable_get('islandora_entities_query_sort', '')) > 0) {
+    $params['sort'] = variable_get('islandora_entities_query_sort', '');
+  }
 
-  $url = parse_url(variable_get('islandora_solr_url', 'localhost:8080/solr'));
-  $solr = new Apache_Solr_Service($url['host'], $url['port'], $url['path'] . '/');
-  $solr->setCreateDocuments(FALSE);
+  $qp = new IslandoraSolrQueryProcessor();
+  $qp->buildAndExecuteQuery($query, $params);
   try {
-    $results = $solr->search($query, 0, variable_get('islandora_entities_citation_number', '20'), $params);
-    $json = json_decode($results->getRawResponse(), TRUE);
+    $results = $qp->islandoraSolrResult['response']['objects'];
   }
   catch (Exception $e) {
     watchdog_exception('Islandora Entities', $e, 'Got an exception while searching entities for callback.', array(), WATCHDOG_ERROR);
+    $results = array();
   }
-  $links = array();
-  foreach ($json['response']['docs'] as $choice) {
-    if (isset($choice['dc.title'])) {
-      $links[] = l($choice['dc.title'][0], 'islandora/object/' . $choice['PID']);
+  if ($results) {
+    $links = array();
+    foreach ($results as $choice) {
+      if (isset($choice['solr_doc']['dc.title'])) {
+        $links[] = l($choice['solr_doc']['dc.title'][0], 'islandora/object/' . $choice['PID']);
+      }
     }
-  }
-  if (count($links) > 0) {
     $list_variables = array(
       'items' => $links,
-      'title' => t('Recent @type for @scholar', array('@type' => drupal_ucfirst($type), '@scholar' => $title)),
+      'title' => t('Recent @type for @scholar', array(
+        '@type' => drupal_ucfirst($type),
+        '@scholar' => $title,
+      )),
       'type' => 'ul',
       'attributes' => array('class' => 'recent_citations'),
     );
@@ -181,8 +185,10 @@ function islandora_entities_create_theses_tab(AbstractObject $object) {
     $simplexml = simplexml_load_string($mads);
     $identifiers = $simplexml->identifier;
     foreach ($identifiers as $identifier) {
-      if ($identifier['type'] == 'u1') {
-        return islandora_entities_get_related((string) $identifier, (string) $simplexml->authority->titleInfo->title, 'theses');
+      // PHP 5.3 and 5.4 can't handle empty((string) $identifier).
+      $string_id = (string) $identifier;
+      if ($identifier['type'] == 'u1' && !empty($string_id)) {
+        return islandora_entities_get_related($string_id, (string) $simplexml->authority->titleInfo->title, 'theses');
       }
     }
   }
@@ -206,30 +212,34 @@ function islandora_entities_get_related_pids($identifier, $title, $type) {
       'islandora_entities_thesis_base_query',
       '+RELS_EXT_hasModel_uri_mt:"ir:thesisCModel"'),
   );
-  $query = "+mods_name_personal_displayForm_mt:\"($identifier)\"  {$base_query[$type]}";
+  $query = "+mods_name_personal_displayForm_mt:\"($identifier)\" AND {$base_query[$type]}";
 
   $params = array(
     'fl' => 'dc.title, mods_name_personal_displayForm_mt, PID',
-    'sort' => variable_get('islandora_entities_query_sort', ''),
+    'limit' => variable_get('islandora_entities_citation_number', '20'),
   );
+  if (strlen(variable_get('islandora_entities_query_sort', '')) > 0) {
+    $params['sort'] = variable_get('islandora_entities_query_sort', '');
+  }
 
-  $url = parse_url(variable_get('islandora_solr_url', 'localhost:8080/solr'));
-  $solr = new Apache_Solr_Service($url['host'], $url['port'], $url['path'] . '/');
-  $solr->setCreateDocuments(FALSE);
+  $qp = new IslandoraSolrQueryProcessor();
+  $qp->buildAndExecuteQuery($query, $params);
   try {
-    $search_results = $solr->search($query, 0, variable_get('islandora_entities_citation_number', '20'), $params);
-    $json = json_decode($search_results->getRawResponse(), TRUE);
+    $search_results = $qp->islandoraSolrResult['response']['objects'];
   }
   catch (Exception $e) {
     watchdog_exception('Islandora Entities', $e, 'Got an exception while searching entities for callback.', array(), WATCHDOG_ERROR);
+    $search_results = array();
   }
   $results = array();
-  foreach ($json['response']['docs'] as $choice) {
-    $results[$choice['PID']] = array(
-      'PID' => $choice['PID'],
-      'title' => $choice['dc.title'],
-      'authors' => $choice['mods_name_personal_displayForm_mt'],
-    );
+  if ($search_results) {
+    foreach ($search_results as $choice) {
+      $results[$choice['PID']] = array(
+        'PID' => $choice['PID'],
+        'title' => $choice['solr_doc']['dc.title'],
+        'authors' => $choice['solr_doc']['mods_name_personal_displayForm_mt'],
+      );
+    }
   }
   return $results;
 }
