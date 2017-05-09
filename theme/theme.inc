@@ -6,9 +6,9 @@
  */
 
 /**
- * Implements hook_preprocess().
+ * Implements template_preprocess_HOOK().
  */
-function islandora_entities_preprocess_islandora_person(array &$variables) {
+function template_preprocess_islandora_person(array &$variables) {
   module_load_include('inc', 'islandora_entities', 'includes/utilities');
   module_load_include('inc', 'islandora', 'includes/metadata');
   module_load_include('inc', 'islandora_entities', 'includes/entities_rss');
