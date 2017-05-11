@@ -122,8 +122,6 @@ function islandora_entities_create_citation_tab(AbstractObject $object) {
  *   Array of links pointing to citations
  */
 function islandora_entities_get_related($identifier, $title, $type) {
-  $sort_directions = array('asc', 'desc');
-
   $base_query = array(
     'citations' => variable_get(
       'islandora_entities_citation_base_query',
@@ -139,7 +137,7 @@ function islandora_entities_get_related($identifier, $title, $type) {
   );
   if (strlen(variable_get('islandora_entities_query_sort', '')) > 0) {
     $params['sort'] = variable_get('islandora_entities_query_sort', '')
-      . ' ' . $sort_directions[variable_get('islandora_entities_query_sort_direction', 0)];
+      . ' ' . variable_get('islandora_entities_query_sort_direction', 'asc');
   }
 
   $qp = new IslandoraSolrQueryProcessor();
@@ -207,8 +205,6 @@ function islandora_entities_create_theses_tab(AbstractObject $object) {
  *   Array of links pointing to citations
  */
 function islandora_entities_get_related_pids($identifier, $title, $type) {
-  $sort_directions = array('asc', 'desc');
-
   $base_query = array(
     'citations' => variable_get(
       'islandora_entities_citation_base_query',
@@ -225,7 +221,7 @@ function islandora_entities_get_related_pids($identifier, $title, $type) {
   );
   if (strlen(variable_get('islandora_entities_query_sort', '')) > 0) {
     $params['sort'] = variable_get('islandora_entities_query_sort', '')
-      . ' ' . $sort_directions[variable_get('islandora_entities_query_sort_direction', 0)];
+      . ' ' . variable_get('islandora_entities_query_sort_direction', 'asc');
   }
 
   $qp = new IslandoraSolrQueryProcessor();

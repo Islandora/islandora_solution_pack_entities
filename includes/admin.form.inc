@@ -152,9 +152,12 @@ function islandora_entities_settings($form, &$form_state) {
     '#type' => 'radios',
     '#title' => t('Sort direction'),
     '#description' => t('Sort direction for citations and theses on scholar profile pages.'),
-    '#default_value' => variable_get('islandora_entities_query_sort_direction', 0),
+    '#default_value' => variable_get('islandora_entities_query_sort_direction', 'asc'),
     '#required' => FALSE,
-    '#options' => array(t('Ascending'), t('Descending')),
+    '#options' => array(
+      'asc' => t('Ascending'),
+      'desc' => t('Descending'),
+    ),
   );
 
   $form['islandora_entities_citation_number'] = array(
