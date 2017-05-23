@@ -6,9 +6,9 @@
  */
 
 /**
- * Implements hook_preprocess().
+ * Implements template_preprocess_HOOK().
  */
-function islandora_entities_preprocess_islandora_person(array &$variables) {
+function template_preprocess_islandora_person(array &$variables) {
   module_load_include('inc', 'islandora_entities', 'includes/utilities');
   module_load_include('inc', 'islandora', 'includes/metadata');
   module_load_include('inc', 'islandora_entities', 'includes/entities_rss');
@@ -146,9 +146,9 @@ function islandora_entities_get_dept_members($dept, $pid) {
 }
 
 /**
- * Implements hook_preprocess().
+ * Implements template_preprocess_HOOK().
  */
-function islandora_entities_preprocess_islandora_dept(array &$variables) {
+function template_preprocess_islandora_dept(array &$variables) {
   module_load_include('inc', 'islandora', 'includes/metadata');
   $module_path = drupal_get_path('module', 'islandora');
   drupal_add_css("$module_path/css/islandora.objects.css");
