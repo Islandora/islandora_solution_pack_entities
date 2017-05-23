@@ -146,7 +146,7 @@ function islandora_entities_get_dept_members($dept, $pid) {
 }
 
 /**
- * Implements template_preprocess_theme().
+ * Implements template_preprocess_HOOK().
  */
 function template_preprocess_islandora_dept(array &$variables) {
   module_load_include('inc', 'islandora', 'includes/metadata');
