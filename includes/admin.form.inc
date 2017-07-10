@@ -158,5 +158,16 @@ function islandora_entities_settings($form, &$form_state) {
     '#required' => TRUE,
   );
 
+  $form['islandora_entities_linking_content_solr_field'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Solr field for linking content to person entities.'),
+    '#default_value' => variable_get(
+      'islandora_entities_linking_content_solr_field',
+      'mods_name_personal_displayForm_mt'
+    ),
+    '#description' => t('Solr field used to link citations and theses to person entities.'),
+    '#required' => TRUE,
+  );
+
   return system_settings_form($form);
 }
