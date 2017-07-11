@@ -221,7 +221,7 @@ function islandora_entities_get_related_pids($identifier, $title, $type) {
   $query = "+{$entities_linking_field}:\"($identifier)\" AND {$base_query[$type]}";
 
   $params = array(
-    'fl' => 'dc.title, {$entities_linking_field}, PID',
+    'fl' => 'dc.title, mods_name_personal_displayForm_mt, PID',
     'limit' => variable_get('islandora_entities_citation_number', '20'),
   );
   if (strlen(variable_get('islandora_entities_query_sort', '')) > 0) {
@@ -243,7 +243,7 @@ function islandora_entities_get_related_pids($identifier, $title, $type) {
       $results[$choice['PID']] = array(
         'PID' => $choice['PID'],
         'title' => $choice['solr_doc']['dc.title'],
-        'authors' => $choice['solr_doc'][$entities_linking_field],
+        'authors' => isset($choice['solr_doc']['mods_name_personal_displayForm_mt']) ? $choice['solr_doc']['mods_name_personal_displayForm_mt'] : array(),
       );
     }
   }

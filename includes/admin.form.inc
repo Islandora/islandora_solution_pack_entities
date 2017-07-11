@@ -25,6 +25,7 @@ function islandora_entities_settings($form, &$form_state) {
       'eaccpf_name_complete_et'
     ),
     '#description' => t('Solr Field for entity searching.'),
+    '#autocomplete_path' => 'islandora_solr/autocomplete_luke',
     '#required' => TRUE,
   );
 
@@ -100,6 +101,7 @@ function islandora_entities_settings($form, &$form_state) {
       'MADS_title_mt'
     ),
     '#description' => t('Solr field for autocompletion.'),
+    '#autocomplete_path' => 'islandora_solr/autocomplete_luke',
     '#required' => TRUE,
   );
 
@@ -111,6 +113,7 @@ function islandora_entities_settings($form, &$form_state) {
       'MADS_department_mt'
     ),
     '#description' => t('Solr field for autocompletion.'),
+    '#autocomplete_path' => 'islandora_solr/autocomplete_luke',
     '#required' => TRUE,
   );
 
@@ -122,6 +125,7 @@ function islandora_entities_settings($form, &$form_state) {
       'MADS_disambiguated_fullname_mt'
     ),
     '#description' => t('Solr field for autocompletion.'),
+    '#autocomplete_path' => 'islandora_solr/autocomplete_luke',
     '#required' => TRUE,
   );
 
@@ -133,6 +137,7 @@ function islandora_entities_settings($form, &$form_state) {
       'MADS_family_mt'
     ),
     '#description' => t('Solr field for autocompletion.'),
+    '#autocomplete_path' => 'islandora_solr/autocomplete_luke',
     '#required' => TRUE,
   );
 
@@ -144,6 +149,7 @@ function islandora_entities_settings($form, &$form_state) {
       ''
     ),
     '#description' => t('Used to sort citations and theses on scholar profile pages. Should contain the solr field followed by a space and either "asc" or "desc". For example, "mods_originInfo_keyDate_yes_dateIssued_dt asc" will sort on the dateIssued field in ascending order.'),
+    '#autocomplete_path' => 'islandora_solr/autocomplete_luke',
     '#required' => FALSE,
   );
 
@@ -166,6 +172,7 @@ function islandora_entities_settings($form, &$form_state) {
       'mods_name_personal_displayForm_mt'
     ),
     '#description' => t('Solr field used to link citations and theses to person entities.'),
+    '#autocomplete_path' => 'islandora_solr/autocomplete_luke',
     '#required' => TRUE,
   );
 
