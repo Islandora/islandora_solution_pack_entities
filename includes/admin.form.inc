@@ -164,6 +164,18 @@ function islandora_entities_settings($form, &$form_state) {
     '#required' => TRUE,
   );
 
+  $form['islandora_entities_citation_author_solr_field'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Solr field for author of citations and theses.'),
+    '#default_value' => variable_get(
+      'islandora_entities_citation_author_solr_field',
+      'mods_name_personal_displayForm_mt'
+    ),
+    '#description' => t('Solr field to display as author under the Citation and Theses tabs.'),
+    '#autocomplete_path' => 'islandora_solr/autocomplete_luke',
+    '#required' => TRUE,
+  );
+
   $form['islandora_entities_linking_content_solr_field'] = array(
     '#type' => 'textfield',
     '#title' => t('Solr field for linking content to person entities.'),
