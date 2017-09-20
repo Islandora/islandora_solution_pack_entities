@@ -4,4 +4,4 @@ dependencies[] = islandora
 dependencies[] = islandora_entities
 package = Islandora
 core = 7.x
-version = 7.x-dev
+version = 7.x-1.10RC1
