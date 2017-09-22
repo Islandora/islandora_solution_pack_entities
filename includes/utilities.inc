@@ -1,10 +1,8 @@
 <?php
-
 /**
  * @file
  * Holds helper functions for islandora_entities.
  */
-
 /**
  * This function will add the entity content model to an object.
  *
@@ -20,7 +18,6 @@ function islandora_entities_add_entity_content_model(AbstractObject $fedora_obje
       FEDORA_MODEL_URI, 'hasModel', 'islandora:entityCModel'
   );
 }
-
 /**
  * This function will run a query using Solr for the specified entity type.
  *
@@ -43,7 +40,6 @@ function islandora_entities_solr_search_entities($content_model, $entities_query
   $object_label_field = variable_get(
       'islandora_solr_object_label_field', 'fgs_label_s'
   );
-
   $query_processor = new IslandoraSolrQueryProcessor();
   $query_processor->solrQuery = format_string(
       '!entities_query_field:(!entities_query)', array(
@@ -62,12 +58,10 @@ function islandora_entities_solr_search_entities($content_model, $entities_query
         )
     ),
   );
-
   $query_processor->executeQuery(FALSE);
   $solr_results = $query_processor->islandoraSolrResult;
   return $solr_results;
 }
-
 /**
  * This function will add an entity DS composite datastream to an object.
  *
@@ -79,14 +73,12 @@ function islandora_entities_solr_search_entities($content_model, $entities_query
  */
 function islandora_entities_ingest__entity_ds_composite_datastream(AbstractObject $islandora_object) {
   $module_path = drupal_get_path('module', 'islandora_entities');
-
   $ds_composite_datastream = $islandora_object->constructDatastream('DS-COMPOSITE-MODEL', 'X');
   $ds_composite_datastream->label = 'DS-COMPOSITE-MODEL';
   $ds_composite_datastream->mimetype = 'text/xml';
   $ds_composite_datastream->setContentFromFile("$module_path/xml/islandora_entity_ds_composite_model.xml", FALSE);
   $islandora_object->ingestDatastream($ds_composite_datastream);
 }
-
 /**
  * Creates themed list of scholar's citations.
  *
@@ -111,7 +103,6 @@ function islandora_entities_create_citation_tab(AbstractObject $object) {
     }
   }
 }
-
 /**
  * Gets all citations related to scholars's unique identifier.
  *
@@ -130,7 +121,10 @@ function islandora_entities_get_related($identifier, $title, $type) {
       'islandora_entities_thesis_base_query',
       '+RELS_EXT_hasModel_uri_mt:"ir:thesisCModel"'),
   );
-  $query = "+mods_name_personal_displayForm_mt:\"($identifier)\" AND {$base_query[$type]}";
+  $entities_linking_field = variable_get(
+      'islandora_entities_linking_content_solr_field', 'mods_name_personal_displayForm_mt'
+  );
+  $query = "+{$entities_linking_field}:\"($identifier)\" AND {$base_query[$type]}";
   $params = array(
     'fl' => 'dc.title, PID',
     'limit' => variable_get('islandora_entities_citation_number', '20'),
@@ -138,7 +132,6 @@ function islandora_entities_get_related($identifier, $title, $type) {
   if (strlen(variable_get('islandora_entities_query_sort', '')) > 0) {
     $params['sort'] = variable_get('islandora_entities_query_sort', '');
   }
-
   $qp = new IslandoraSolrQueryProcessor();
   $qp->buildAndExecuteQuery($query, $params);
   try {
@@ -168,7 +161,6 @@ function islandora_entities_get_related($identifier, $title, $type) {
   }
   return NULL;
 }
-
 /**
  * Creates themed list of scholar's citations.
  *
@@ -193,7 +185,6 @@ function islandora_entities_create_theses_tab(AbstractObject $object) {
     }
   }
 }
-
 /**
  * Gets all citations related to scholars's unique identifier.
  *
@@ -212,16 +203,20 @@ function islandora_entities_get_related_pids($identifier, $title, $type) {
       'islandora_entities_thesis_base_query',
       '+RELS_EXT_hasModel_uri_mt:"ir:thesisCModel"'),
   );
-  $query = "+mods_name_personal_displayForm_mt:\"($identifier)\" AND {$base_query[$type]}";
-
+  $entities_linking_field = variable_get(
+      'islandora_entities_linking_content_solr_field', 'mods_name_personal_displayForm_mt'
+  );
+  $author_field = variable_get(
+      'islandora_entities_citation_author_solr_field', 'mods_name_personal_displayForm_mt'
+  );
+  $query = "+{$entities_linking_field}:\"($identifier)\" AND {$base_query[$type]}";
   $params = array(
-    'fl' => 'dc.title, mods_name_personal_displayForm_mt, PID',
+    'fl' => 'dc.title, {$author_field}, PID',
     'limit' => variable_get('islandora_entities_citation_number', '20'),
   );
   if (strlen(variable_get('islandora_entities_query_sort', '')) > 0) {
     $params['sort'] = variable_get('islandora_entities_query_sort', '');
   }
-
   $qp = new IslandoraSolrQueryProcessor();
   $qp->buildAndExecuteQuery($query, $params);
   try {
@@ -237,13 +232,12 @@ function islandora_entities_get_related_pids($identifier, $title, $type) {
       $results[$choice['PID']] = array(
         'PID' => $choice['PID'],
         'title' => $choice['solr_doc']['dc.title'],
-        'authors' => $choice['solr_doc']['mods_name_personal_displayForm_mt'],
+        'authors' => isset($choice['solr_doc'][$author_field]) ? $choice['solr_doc'][$author_field] : array(),
       );
     }
   }
   return $results;
 }
-
 /**
  * Adds entity autocomplete paths to a scholar citation form.
  *
@@ -261,7 +255,6 @@ function islandora_entities_add_autocompletes_to_citation_form(&$form) {
     }
   }
 }
-
 /**
  * Adds entity autocomplete paths to a scholar thesis form.
  *
@@ -276,13 +269,11 @@ function islandora_entities_add_autocompletes_to_thesis_form(&$form) {
       $form['advisor'][$key]['advisor']['#autocomplete_path'] = 'islandora/entities/autocomplete/disambiguated';
     }
   }
-
   foreach ($form['committee'] as $key => $value) {
     if (is_int($key)) {
       $form['committee'][$key]['commitee']['#autocomplete_path'] = 'islandora/entities/autocomplete/disambiguated';
     }
   }
-
   foreach ($form['granter'] as $key => $value) {
     if (is_int($key)) {
       $form['granter'][$key]['department']['#autocomplete_path'] = 'islandora/entities/autocomplete/department';
