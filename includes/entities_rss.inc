@@ -3,6 +3,7 @@
  * @file
  * Functions used in the islandora_entities module
  */
+
 /**
  * Prints out citations as rss information for the given entity.
  *
