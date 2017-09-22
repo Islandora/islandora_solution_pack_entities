@@ -3,6 +3,7 @@
  * @file
  * Holds helper functions for islandora_entities.
  */
+
 /**
  * This function will add the entity content model to an object.
  *
