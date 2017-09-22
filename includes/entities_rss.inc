@@ -1,10 +1,8 @@
 <?php
-
 /**
  * @file
  * Functions used in the islandora_entities module
  */
-
 /**
  * Prints out citations as rss information for the given entity.
  *
@@ -35,7 +33,6 @@ function islandora_entities_rss($pid) {
   $link = $base_url;
   // The description of the RSS channel.
   $description = t('Aggregated results of: @name', array('@name' => isset($object->label) ? $object->label : "Scholar"));
-
   // Build the xml string to be printed.
   $output = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
   $output .= "<rss version=\"2.0\">\n";
@@ -45,7 +42,6 @@ function islandora_entities_rss($pid) {
   print $output;
   exit;
 }
-
 /**
  * Find citations and create rss items out of them.
  *
@@ -68,8 +64,10 @@ function islandora_entities_get_rss_related($identifier, $type) {
   $params = array(
     'fl' => 'dc.title, PID, dc.description',
   );
-  $query = "RELS_EXT_hasModel_uri_mt:\"$content_model\" AND mods_name_personal_displayForm_mt:\"($identifier)\"";
-
+  $entities_linking_field = variable_get(
+      'islandora_entities_linking_content_solr_field', 'mods_name_personal_displayForm_mt'
+  );
+  $query = "RELS_EXT_hasModel_uri_mt:\"$content_model\" AND {$entities_linking_field}:\"($identifier)\"";
   $qp = new IslandoraSolrQueryProcessor();
   $qp->buildAndExecuteQuery($query, $params);
   try {
