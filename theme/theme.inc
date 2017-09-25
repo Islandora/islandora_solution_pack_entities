@@ -122,23 +122,25 @@ function template_preprocess_islandora_person(array &$variables) {
  */
 function islandora_entities_get_dept_members($dept, $pid) {
   module_load_include('inc', 'islandora_solr', 'includes/query_processor');
-  $params = array(
-    'fl' => array('MADS_title_ms PID'),
-  );
   $query = "MADS_organization_ms:\"$dept\" AND -PID:\"$pid\"";
   $qp = new IslandoraSolrQueryProcessor();
-  $qp->buildAndExecuteQuery($query, $params);
+  $qp->buildQuery($query);
+  $qp->solrParams['fl'] = "MADS_title_ms, PID";
+  $qp->executeQuery(FALSE);
   try {
     $results = $qp->islandoraSolrResult['response']['objects'];
   }
   catch (Exception $e) {
     watchdog_exception('Islandora Entities', $e, 'Got an exception while searching entities for callback.', array(), WATCHDOG_ERROR);
+    $results = array();
   }
   $colleages = array();
-  foreach ($results as $choice) {
-    if (isset($choice['solr_doc']['MADS_title_ms'])) {
-      foreach ($choice['solr_doc']['MADS_title_ms'] as $candidate) {
-        $colleages[$choice['PID']] = $candidate;
+  if ($results) {
+    foreach ($results as $choice) {
+      if (isset($choice['solr_doc']['MADS_title_ms'])) {
+        foreach ($choice['solr_doc']['MADS_title_ms'] as $candidate) {
+          $colleages[$choice['PID']] = $candidate;
+        }
       }
     }
   }

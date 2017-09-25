@@ -132,7 +132,6 @@ function islandora_entities_get_related($identifier, $title, $type) {
   );
   $query = "+mods_name_personal_displayForm_mt:\"($identifier)\" AND {$base_query[$type]}";
   $params = array(
-    'fl' => 'dc.title, PID',
     'limit' => variable_get('islandora_entities_citation_number', '20'),
   );
   if (strlen(variable_get('islandora_entities_query_sort', '')) > 0) {
@@ -140,7 +139,9 @@ function islandora_entities_get_related($identifier, $title, $type) {
   }
 
   $qp = new IslandoraSolrQueryProcessor();
-  $qp->buildAndExecuteQuery($query, $params);
+  $qp->buildQuery($query, $params);
+  $qp->solrParams['fl'] = "dc.title, PID";
+  $qp->executeQuery(FALSE);
   try {
     $results = $qp->islandoraSolrResult['response']['objects'];
   }
@@ -215,7 +216,6 @@ function islandora_entities_get_related_pids($identifier, $title, $type) {
   $query = "+mods_name_personal_displayForm_mt:\"($identifier)\" AND {$base_query[$type]}";
 
   $params = array(
-    'fl' => 'dc.title, mods_name_personal_displayForm_mt, PID',
     'limit' => variable_get('islandora_entities_citation_number', '20'),
   );
   if (strlen(variable_get('islandora_entities_query_sort', '')) > 0) {
@@ -223,7 +223,9 @@ function islandora_entities_get_related_pids($identifier, $title, $type) {
   }
 
   $qp = new IslandoraSolrQueryProcessor();
-  $qp->buildAndExecuteQuery($query, $params);
+  $qp->buildQuery($query, $params);
+  $qp->solrParams['fl'] = "dc.title, mods_name_personal_displayForm_mt, PID";
+  $qp->executeQuery(FALSE);
   try {
     $search_results = $qp->islandoraSolrResult['response']['objects'];
   }

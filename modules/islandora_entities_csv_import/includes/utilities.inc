@@ -317,20 +317,20 @@ function islandora_entities_attach_element($dom, $element_name, $parent_node, $c
  *   Contents of textfield being completed
  */
 function islandora_entities_get_collection_autocomplete($string = '') {
-  $params = array(
-    'fl' => array('dc.title, PID'),
-  );
   $list = array();
   if ($string) {
     $string = str_replace(':', '\:', $string);
     $query = "RELS_EXT_hasModel_uri_ms:\"info:fedora/islandora:collectionCModel\" AND (dc.title:{$string}* OR PID:{$string}*)";
     $qp = new IslandoraSolrQueryProcessor();
-    $qp->buildAndExecuteQuery($query, $params);
+    $qp->buildQuery($query);
+    $qp->solrParams['fl'] = 'dc.title, PID';
+    $qp->executeQuery(FALSE);
     try {
       $results = $qp->islandoraSolrResult['response']['objects'];
     }
     catch (Exception $e) {
       watchdog_exception('Islandora Entities', $e, 'Got an exception while searching entities for callback.', array(), WATCHDOG_ERROR);
+      $results = array();
     }
     if ($results) {
       foreach ($results as $choice) {
