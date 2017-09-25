@@ -105,6 +105,6 @@ function islandora_entities_autocomplete($type) {
       }
     }
   }
-j
+
   drupal_json_output($list);
 }
