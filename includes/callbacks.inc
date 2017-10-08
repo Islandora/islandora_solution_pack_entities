@@ -85,12 +85,11 @@ function islandora_entities_autocomplete($type) {
     $stub = end($path_array);
     $qualifier = $mappings[$type]['title'] . ':' . $stub . '*';
   }
-  $params = array(
-    'fl' => array($mappings[$type]['title'], 'PID'),
-  );
   $query = "$qualifier AND " . 'RELS_EXT_hasModel_uri_mt:"' . $mappings[$type]['cmodel'] . '"';
   $qp = new IslandoraSolrQueryProcessor();
-  $qp->buildAndExecuteQuery($query, $params);
+  $qp->buildQuery($query);
+  $qp->solrParams['fl'] = "{$mappings[$type]['title']},PID";
+  $qp->executeQuery(FALSE);
   try {
     $results = $qp->islandoraSolrResult['response']['objects'];
   }
