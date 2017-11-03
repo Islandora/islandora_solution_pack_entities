@@ -65,13 +65,15 @@ function islandora_entities_get_rss_related($identifier, $type) {
     'theses' => 'ir:thesisCModel',
   );
   $content_model = $mappings[$type];
-  $params = array(
-    'fl' => 'dc.title, PID, dc.description',
+  $entities_linking_field = variable_get(
+      'islandora_entities_linking_content_solr_field', 'mods_name_personal_displayForm_mt'
   );
-  $query = "RELS_EXT_hasModel_uri_mt:\"$content_model\" AND mods_name_personal_displayForm_mt:\"($identifier)\"";
+  $query = "RELS_EXT_hasModel_uri_mt:\"$content_model\" AND {$entities_linking_field}:\"($identifier)\"";
 
   $qp = new IslandoraSolrQueryProcessor();
-  $qp->buildAndExecuteQuery($query, $params);
+  $qp->buildQuery($query);
+  $qp->solrParams['fl'] = "dc.description, dc.title, PID";
+  $qp->executeQuery(FALSE);
   try {
     $results = $qp->islandoraSolrResult['response']['objects'];
   }
