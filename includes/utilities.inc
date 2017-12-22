@@ -138,7 +138,8 @@ function islandora_entities_get_related($identifier, $title, $type) {
     'limit' => variable_get('islandora_entities_citation_number', '20'),
   );
   if (strlen(variable_get('islandora_entities_query_sort', '')) > 0) {
-    $params['sort'] = variable_get('islandora_entities_query_sort', '');
+    $params['sort'] = variable_get('islandora_entities_query_sort', '')
+      . ' ' . variable_get('islandora_entities_query_sort_direction', 'asc');
   }
 
   $qp = new IslandoraSolrQueryProcessor();
@@ -228,7 +229,8 @@ function islandora_entities_get_related_pids($identifier, $title, $type) {
     'limit' => variable_get('islandora_entities_citation_number', '20'),
   );
   if (strlen(variable_get('islandora_entities_query_sort', '')) > 0) {
-    $params['sort'] = variable_get('islandora_entities_query_sort', '');
+    $params['sort'] = variable_get('islandora_entities_query_sort', '')
+      . ' ' . variable_get('islandora_entities_query_sort_direction', 'asc');
   }
 
   $qp = new IslandoraSolrQueryProcessor();

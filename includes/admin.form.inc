@@ -148,9 +148,21 @@ function islandora_entities_settings($form, &$form_state) {
       'islandora_entities_query_sort',
       ''
     ),
-    '#description' => t('Used to sort citations and theses on scholar profile pages. Should contain the solr field followed by a space and either "asc" or "desc". For example, "mods_originInfo_keyDate_yes_dateIssued_dt asc" will sort on the dateIssued field in ascending order.'),
-    '#autocomplete_path' => 'islandora_solr/autocomplete_luke',
+    '#description' => t('Used to sort citations and theses on scholar profile pages.'),
     '#required' => FALSE,
+    '#autocomplete_path' => 'islandora_solr/autocomplete_luke',
+  );
+
+  $form['islandora_entities_query_sort_direction'] = array(
+    '#type' => 'radios',
+    '#title' => t('Sort direction'),
+    '#description' => t('Sort direction for citations and theses on scholar profile pages.'),
+    '#default_value' => variable_get('islandora_entities_query_sort_direction', 'asc'),
+    '#required' => FALSE,
+    '#options' => array(
+      'asc' => t('Ascending'),
+      'desc' => t('Descending'),
+    ),
   );
 
   $form['islandora_entities_citation_number'] = array(
