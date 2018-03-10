@@ -68,10 +68,31 @@ function islandora_entities_read_csv($path) {
  */
 function islandora_entities_build_scholar_object($scholar, $collection_pid) {
 
+  module_load_include('inc', 'islandora', 'includes/utilities');
   $mads = islandora_entities_build_mads($scholar);
+  $namespace = 'islandora';
+  // Load the collection object and, upon success, get the appropriate
+  // namespace.
+  $collection_object = islandora_object_load($collection_pid);
+  if ($collection_object && isset($collection_object['COLLECTION_POLICY'])) {
+    $collection_policy = new CollectionPolicy($collection_object['COLLECTION_POLICY']->content);
+    $collection_cmodels = $collection_policy->getContentModels();
+    // CSV importer is limited to Islandora Person Content Model.
+    $cmodel = 'islandora:personCModel';
+    if (isset($collection_cmodels[$cmodel])) {
+      // Get the whole array ($pid, $name, $namespace).
+      $cmodel = $collection_cmodels[$cmodel];
+      $namespace = $cmodel['namespace'];
+    }
+  }
+  elseif (!$collection_object) {
+    // If the user-provided $collection_pid is invalid, we ingest into
+    // islandora:root (otherwise the object might be out of sight).
+    $collection_pid = 'islandora:root';
+  }
   $tuque = new IslandoraTuque();
   $repository = $tuque->repository;
-  $fedora_object = $repository->constructObject('islandora');
+  $fedora_object = $repository->constructObject($namespace);
   $fedora_object->label = isset($scholar['DISPLAY_NAME']) ? $scholar['DISPLAY_NAME'] : 'Member';
   $fedora_object->owner = 'admin';
   $datastream = $fedora_object->constructDatastream('MADS', 'M');
