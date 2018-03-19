@@ -35,9 +35,8 @@
   </div>
 
   <div class="islandora-object-content">
-    <h3 class="bio"><?php print t('Biography'); ?></h3>
-    <?php if (isset($variables['biography'])): ?>
-      <p><?php print $variables['biography']; ?></p>
+    <?php if (isset($variables['description'])): ?>
+      <p><?php print $variables['description']; ?></p>
     <?php endif; ?>
 
     <?php if (isset($variables['recent_citations'])): ?>
