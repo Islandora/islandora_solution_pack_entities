@@ -85,11 +85,6 @@ function islandora_entities_build_scholar_object($scholar, $collection_pid) {
       $namespace = $cmodel['namespace'];
     }
   }
-  elseif (!$collection_object) {
-    // If the user-provided $collection_pid is invalid, we ingest into
-    // islandora:root (otherwise the object might be out of sight).
-    $collection_pid = 'islandora:root';
-  }
   $tuque = new IslandoraTuque();
   $repository = $tuque->repository;
   $fedora_object = $repository->constructObject($namespace);
@@ -103,6 +98,13 @@ function islandora_entities_build_scholar_object($scholar, $collection_pid) {
   $fedora_object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:personCModel');
   $fedora_object->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOfCollection', $collection_pid);
   $new_fedora_object = islandora_add_object($fedora_object);
+  if ($new_fedora_object && !$collection_object) {
+    // If the user-provided $collection_pid is invalid, we issue a warning.
+    watchdog('Islandora Entities', 'Ingested "@pid" into non-existent collection "@collection".', array(
+      '@pid' => $new_fedora_object->id,
+      '@collection' => $collection_pid,
+      ));
+  }
 }
 
 /**

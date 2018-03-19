@@ -35,6 +35,7 @@ function islandora_entities_import_form(array $form, array &$form_state) {
     '#description' => t('Enter collection name or PID'),
     '#autocomplete_path' => 'import_entity_csv/autocomplete',
     '#required' => TRUE,
+    '#element_validate' => array('islandora_entities_csv_import_validate_collection'),
   );
   $form['submit'] = array(
     '#type' => 'submit',
@@ -56,4 +57,43 @@ function islandora_entities_import_form_submit(array $form, array &$form_state) 
   $file = file_load($form_state['values']['file']);
   $collection_pid = $form_state['values']['collection'];
   islandora_entities_import_csv_batch(drupal_realpath($file->uri), $collection_pid);
+}
+
+/**
+ * Validates the collection Drupal Form Element.
+ *
+ * Ensures that the object exists, is a collection and has the correct policy.
+ *
+ * @param array $element
+ *   The collection Drupal Form Element.
+ * @param array $form_state
+ *   The Drupal Form State.
+ */
+function islandora_entities_csv_import_validate_collection(array $element, array &$form_state) {
+  $collection_pid = &$form_state['values']['collection'];
+  $collection_object = islandora_object_load($collection_pid);
+  if ($collection_object) {
+    if (!in_array('islandora:collectionCModel', $collection_object->models)) {
+      form_set_error('collection', t('"@collection" is not a collection object.', array('@collection' => $collection_pid)));
+    }
+    elseif (isset($collection_object['COLLECTION_POLICY'])) {
+      $collection_policy = new CollectionPolicy($collection_object['COLLECTION_POLICY']->content);
+      $collection_cmodels = $collection_policy->getContentModels();
+      // CSV importer is limited to Islandora Person Content Model.
+      $cmodel = 'islandora:personCModel';
+      if (!isset($collection_cmodels[$cmodel])) {
+        form_set_error('collection', t('"@collection" is not set up to hold "@cmodel" objects.', array(
+          '@collection' => $collection_pid,
+          '@cmodel' => $cmodel,
+        )));
+      }
+    }
+    else {
+      // This should never happen.
+      form_set_error('collection', t('"@collection" does not have a COLLECTION_POLICY.', array('@collection' => $collection_pid)));
+    }
+  }
+  else {
+    form_set_error('collection', t('The collection "@collection" does not exist.', array('@collection' => $collection_pid)));
+  }
 }
