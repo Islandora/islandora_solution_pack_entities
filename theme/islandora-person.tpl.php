@@ -36,7 +36,7 @@
 
   <div class="islandora-object-content">
     <?php if (isset($variables['description'])): ?>
-      <p><?php print $variables['description']; ?></p>
+      <?php print $variables['description']; ?>
     <?php endif; ?>
 
     <?php if (isset($variables['recent_citations'])): ?>
