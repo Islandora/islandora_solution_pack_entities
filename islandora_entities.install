@@ -192,13 +192,15 @@ function islandora_entities_get_dept_config_fields() {
   return $configs;
 }
 
-/* Add the default description field to the Scholar solr metadata profile. */
+/**
+ * Add the default description field to the Scholar solr metadata profile.
+ */
 function islandora_entities_update_7100() {
   $config_id = islandora_solr_metadata_retrieve_configuration_from_machine_name('Scholar');
   if ($config_id) {
     $description = islandora_solr_metadata_retrieve_description($config_id);
     if (!$description['description_field']) {
-      islandora_solr_metadata_update_description($config_id, 'MADS_history_ms','Biography', $description['data']);
+      islandora_solr_metadata_update_description($config_id, 'MADS_history_ms', 'Biography', $description['data']);
     }
   }
 }
