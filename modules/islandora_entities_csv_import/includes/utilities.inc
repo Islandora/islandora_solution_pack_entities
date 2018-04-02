@@ -12,8 +12,11 @@
  *   Path to file
  * @param string $collection_pid
  *   PID of collection where created objects are to be stored.
+ * @param string $namespace
+ *   The namespace the newly created objects should obtain. Defaults to
+ *   'islandora'.
  */
-function islandora_entities_import_csv_batch($path, $collection_pid) {
+function islandora_entities_import_csv_batch($path, $collection_pid, $namespace = 'islandora') {
   $scholars = islandora_entities_read_csv($path);
   $batch = array(
     'title' => t("Creating Scholar Objects"),
@@ -24,7 +27,7 @@ function islandora_entities_import_csv_batch($path, $collection_pid) {
   foreach ($scholars as $scholar) {
     $batch['operations'][] = array(
       'islandora_entities_build_scholar_object',
-      array($scholar, $collection_pid),
+      array($scholar, $collection_pid, $namespace),
     );
   }
   batch_set($batch);
@@ -65,31 +68,19 @@ function islandora_entities_read_csv($path) {
  *   Header => value pairs representing date to be converted to MADS record
  * @param string $collection_pid
  *   PID of collection to hold new objects.
+ * @param string $namespace
+ *   The namespace the object to be created should obtain. Defaults to
+ *   'islandora'.
  */
-function islandora_entities_build_scholar_object($scholar, $collection_pid) {
-
-  module_load_include('inc', 'islandora', 'includes/utilities');
+function islandora_entities_build_scholar_object($scholar, $collection_pid, $namespace = 'islandora') {
+  global $user;
   $mads = islandora_entities_build_mads($scholar);
-  $namespace = 'islandora';
-  // Load the collection object and, upon success, get the appropriate
-  // namespace.
-  $collection_object = islandora_object_load($collection_pid);
-  if ($collection_object && isset($collection_object['COLLECTION_POLICY'])) {
-    $collection_policy = new CollectionPolicy($collection_object['COLLECTION_POLICY']->content);
-    $collection_cmodels = $collection_policy->getContentModels();
-    // CSV importer is limited to Islandora Person Content Model.
-    $cmodel = 'islandora:personCModel';
-    if (isset($collection_cmodels[$cmodel])) {
-      // Get the whole array ($pid, $name, $namespace).
-      $cmodel = $collection_cmodels[$cmodel];
-      $namespace = $cmodel['namespace'];
-    }
-  }
   $tuque = new IslandoraTuque();
   $repository = $tuque->repository;
   $fedora_object = $repository->constructObject($namespace);
-  $fedora_object->label = isset($scholar['DISPLAY_NAME']) ? $scholar['DISPLAY_NAME'] : 'Member';
-  $fedora_object->owner = 'admin';
+  $label = isset($scholar['DISPLAY_NAME']) ? trim($scholar['DISPLAY_NAME']) : '';
+  $fedora_object->label = !empty($label) ? $label : 'Member';
+  $fedora_object->owner = isset($user->name) ? $user->name : $fedora_object->owner;
   $datastream = $fedora_object->constructDatastream('MADS', 'M');
   $datastream->label = 'MADS';
   $datastream->mimetype = 'application/xml';
@@ -98,13 +89,6 @@ function islandora_entities_build_scholar_object($scholar, $collection_pid) {
   $fedora_object->relationships->add(FEDORA_MODEL_URI, 'hasModel', 'islandora:personCModel');
   $fedora_object->relationships->add(FEDORA_RELS_EXT_URI, 'isMemberOfCollection', $collection_pid);
   $new_fedora_object = islandora_add_object($fedora_object);
-  if ($new_fedora_object && !$collection_object) {
-    // If the user-provided $collection_pid is invalid, we issue a warning.
-    watchdog('Islandora Entities', 'Ingested "@pid" into non-existent collection "@collection".', array(
-      '@pid' => $new_fedora_object->id,
-      '@collection' => $collection_pid,
-      ));
-  }
 }
 
 /**
