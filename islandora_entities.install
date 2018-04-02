@@ -196,6 +196,7 @@ function islandora_entities_get_dept_config_fields() {
  * Add the default description field to the Scholar solr metadata profile.
  */
 function islandora_entities_update_7100() {
+  module_load_include('inc', 'islandora_solr_metadata', 'includes/db');
   $config_id = islandora_solr_metadata_retrieve_configuration_from_machine_name('Scholar');
   if ($config_id) {
     $description = islandora_solr_metadata_retrieve_description($config_id);
