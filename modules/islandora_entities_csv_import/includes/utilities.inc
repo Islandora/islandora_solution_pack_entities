@@ -6,6 +6,48 @@
  */
 
 /**
+ * Retrieves collection info.
+ *
+ * @param string $collection_pid
+ *   A PID.
+ *
+ * @return array|bool
+ *   An associative array containing the following info:
+ *   - pid: The collection PID, or FALSE if not a collection object.
+ *   - cmodels: The content models as returned by
+ *     `CollectionPolicy::getContentModels()`, or FALSE if no
+ *     `COLLECTION_POLICY` datastream is present.
+ *   or FALSE if the object with given PID does not exist.
+ */
+function islandora_entities_import_get_collection_info($collection_pid) {
+  $ret = array('pid' => $collection_pid, 'cmodels' => FALSE);
+  $collection_object = islandora_object_load($collection_pid);
+  if ($collection_object) {
+    if (!in_array('islandora:collectionCModel', $collection_object->models)) {
+      // Not a collection object.
+      $ret['pid'] = FALSE;
+      return $ret;
+    }
+    elseif (isset($collection_object['COLLECTION_POLICY'])) {
+      $collection_policy = new CollectionPolicy($collection_object['COLLECTION_POLICY']->content);
+      // Get the associative array of content models, mapping each CModel PID
+      // to an associative array containing:
+      // - pid: The CModel PID.
+      // - name: The CModel name.
+      // - namespace: The namespace to use for this CModel in this collection.
+      $ret['cmodels'] = $collection_policy->getContentModels();
+      return $ret;
+    }
+    else {
+      // No `COLLECTION_POLICY`; this should never happen.
+      return $ret;
+    }
+  }
+  // Object does not exist.
+  return FALSE;
+}
+
+/**
  * Created Entities from supplied csv file.
  *
  * @param url $path
