@@ -106,6 +106,8 @@ function template_preprocess_islandora_person(array &$variables) {
   if ($object['TN']) {
     $variables['tn'] = url("islandora/object/{$object->id}/datastream/TN/view");
   }
+
+  $variables['img_alt'] = isset($object->label) ? $object->label : $object->id;
   $variables['metadata'] = islandora_retrieve_metadata_markup($object, TRUE);
 }
 
@@ -156,7 +158,12 @@ function template_preprocess_islandora_dept(array &$variables) {
   drupal_add_css("$module_path/css/islandora.objects.css");
   $object = $variables['object'];
   $variables['metadata'] = islandora_retrieve_metadata_markup($object, TRUE);
+
   if ($object['TN']) {
-    $variables['tn'] = url("islandora/object/{$object->id}/datastream/TN/view");
+    $variables['tn']
+      = url("islandora/object/{$object->id}/datastream/TN/view");
+    $variables['tn_alt'] = t("Thumbnail Image");
+    $variables['tn_id']
+      = drupal_html_id("islandora_solution_pack_entity_dept_thumbnail");
   }
 }

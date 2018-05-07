@@ -5,11 +5,10 @@
  */
 ?>
 <div class="islandora-object islandora">
-
   <div class="col-left">
     <div class="islandora-object-image">
       <?php if (isset($variables['tn'])): ?>
-        <img src="<?php print $variables['tn']; ?>"/>
+        <img alt="<?php print $variables['img_alt']; ?>" src="<?php print $variables['tn']; ?>"/>
       <?php endif; ?>
     </div>
     <div class="islandora-object-metadata">
@@ -35,7 +34,7 @@
   </div>
 
   <div class="islandora-object-content">
-    <h3 class="bio"><?php print t('Biography'); ?></h3>
+    <h2 class="bio"><?php print t('Biography'); ?></h2>
     <?php if (isset($variables['biography'])): ?>
       <p><?php print $variables['biography']; ?></p>
     <?php endif; ?>
