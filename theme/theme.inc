@@ -22,6 +22,10 @@ function template_preprocess_islandora_person(array &$variables) {
   if ($object['MADS']) {
     $mads = $object['MADS']->content;
     $simplexml = simplexml_load_string($mads);
+    // $variables['biography'] is a legacy feature using hard-coded
+    // xml paths. The default template now uses $variables['description'].
+    // This is kept for backwards compatibility with existing custom
+    // templates that may use it.
     $notes = $simplexml->note;
     foreach ($notes as $note) {
       if ($note['type'] == 'history') {
@@ -106,8 +110,9 @@ function template_preprocess_islandora_person(array &$variables) {
   if ($object['TN']) {
     $variables['tn'] = url("islandora/object/{$object->id}/datastream/TN/view");
   }
-
   $variables['img_alt'] = isset($object->label) ? $object->label : $object->id;
+  $description = islandora_retrieve_description_markup($object);
+  $variables['description'] = $description;
   $variables['metadata'] = islandora_retrieve_metadata_markup($object, TRUE);
 }
 
