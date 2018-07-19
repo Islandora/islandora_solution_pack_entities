@@ -4,6 +4,7 @@
  * This is the template file for the object page for person objects.
  */
 ?>
+
 <div class="islandora-object islandora">
   <div class="col-left">
     <div class="islandora-object-image">
@@ -34,7 +35,6 @@
   </div>
 
   <div class="islandora-object-content">
-    <h2 class="bio"><?php print t('Biography'); ?></h2>
     <?php if (isset($variables['biography'])): ?>
       <p><?php print $variables['biography']; ?></p>
     <?php endif; ?>
