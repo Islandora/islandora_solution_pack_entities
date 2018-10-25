@@ -554,15 +554,15 @@
               <multiple>FALSE</multiple>
               <options>
                 <index key="">Select a role...</index>
-                <index key="Emeritus Faculty">Emeritus Faculty</index>
-                <index key="Emeritus Librarian">Emeritus Librarian</index>
-                <index key="Emeritus Professor">Emeritus Professor</index>
-                <index key="Faculty Member">Faculty Member</index>
+                <EmeritusFaculty>Emeritus Faculty</EmeritusFaculty>
+                <EmeritusLibrarian>Emeritus Librarian</EmeritusLibrarian>
+                <EmeritusProfessor>Emeritus Professor</EmeritusProfessor>
+                <FacultyMember>Faculty Member</FacultyMember>
                 <Librarian>Librarian</Librarian>
-                <index key="Non-Academic">Non-Academic</index>
+                <NonAcademic>Non-Academic</NonAcademic>
                 <Postdoc>Postdoc</Postdoc>
-                <index key="Graduate Student">Graduate Student</index>
-                <index key="Undergraduate Student">Undergraduate Student</index>
+                <GraduateStudent>Graduate Student</GraduateStudent>
+                <UndergraduateStudent>Undergraduate Student</UndergraduateStudent>
               </options>
               <required>FALSE</required>
               <resizable>FALSE</resizable>
