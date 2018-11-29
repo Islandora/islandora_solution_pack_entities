@@ -23,7 +23,7 @@
 /* Left column */
 .col-left {
 	float: left;
-	width: 29%;
+	width: auto;
 }
 
 /* Right column */
