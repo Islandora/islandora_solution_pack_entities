@@ -212,8 +212,8 @@ function islandora_entities_update_7100() {
  */
 function islandora_entities_update_7200(&$sandbox) {
   $t = get_t();
-  watchdog('islandora_entities', 'The original default form used two-word labels in the Position element, but removed spaces in the MADS XML.  This has been fixed in 7.x-1.12. When editing existing objects with the new form, older values under Position will not be read and will be discarded.', array(), WATCHDOG_NOTICE, l(t('ISLANDORA-2137'), 'https://jira.duraspace.org/browse/ISLANDORA-2317', array('external' => TRUE)));
-  return $t('The original default form used two-word labels in the Position element, but removed spaces in the MADS XML.  This has been fixed in 7.x-1.12. When editing existing objects with the new form, older values under Position will not be read and will be discarded.  Please consult the !url for further information.',
+  watchdog('islandora_entities', 'The original default form used two-word labels in the Position element, but removed spaces in the MADS XML.  This has been fixed as of 7.x-1.13. When editing existing objects with the new form, older values under Position will not be read and will be discarded.', array(), WATCHDOG_NOTICE, l(t('ISLANDORA-2137'), 'https://jira.duraspace.org/browse/ISLANDORA-2317', array('external' => TRUE)));
+  return $t('The original default form used two-word labels in the Position element, but removed spaces in the MADS XML.  This has been fixed as of 7.x-1.13. When editing existing objects with the new form, older values under Position will not be read and will be discarded.  Please consult the !url for further information.',
     array(
       '!url' => l(t('ticket'), 'https://jira.duraspace.org/browse/ISLANDORA-2137', array('absolute' => TRUE)),
     )
