@@ -9,8 +9,11 @@
 <?php if (isset($variables['tn'])): ?>
   <dl class="islandora-object-tn islandora-department">
     <dt>
-      <img src="<?php print $variables['tn']; ?>"/>
+      <img alt="<?php print $variables['tn_alt'];?>" id="<?php print $variables['tn_id'];?>" src="<?php print $variables['tn']; ?>"/>
     </dt>
+    <dd>
+      <label class="element-invisible" for="<?php print $variables['tn_id'];?>"><?php print $tn_alt;?></label>
+    </dd>
   </dl>
 <?php endif; ?>
 

@@ -4,12 +4,12 @@
  * This is the template file for the object page for person objects.
  */
 ?>
-<div class="islandora-object islandora">
 
+<div class="islandora-object islandora">
   <div class="col-left">
     <div class="islandora-object-image">
       <?php if (isset($variables['tn'])): ?>
-        <img src="<?php print $variables['tn']; ?>"/>
+        <img alt="<?php print $variables['img_alt']; ?>" src="<?php print $variables['tn']; ?>"/>
       <?php endif; ?>
     </div>
     <div class="islandora-object-metadata">
@@ -35,6 +35,9 @@
   </div>
 
   <div class="islandora-object-content">
+    <?php if (isset($variables['biography'])): ?>
+      <p><?php print $variables['biography']; ?></p>
+    <?php endif; ?>
     <?php if (isset($variables['description'])): ?>
       <?php print $variables['description']; ?>
     <?php endif; ?>
