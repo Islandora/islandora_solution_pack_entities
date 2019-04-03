@@ -320,6 +320,7 @@ function islandora_entities_xml_form_builder_form_associations() {
         'display_name',
       ),
       'transform' => 'mads_to_dc.xsl',
+      'self_transform' => 'cleanup_and_order_mads.xsl',
       'template' => FALSE,
     ),
     'islandora_mads_organization_form' => array(
@@ -332,6 +333,7 @@ function islandora_entities_xml_form_builder_form_associations() {
         'auth_dept',
       ),
       'transform' => 'mads_to_dc.xsl',
+      'self_transform' => 'cleanup_and_order_mads.xsl',
       'template' => FALSE,
     ),
   );
