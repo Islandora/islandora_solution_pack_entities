@@ -50,7 +50,7 @@ Having problems or solved a problem? Check out the Islandora google groups for a
 
 Current maintainers:
 
-* [Rosemary Le Faive](https://github.com/rosiel)
+* [Danny Lamb](https://github.com/dannylamb
 
 ## Development
 
