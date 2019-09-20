@@ -20,7 +20,7 @@
  * @return array
  *   The Drupal form.
  */
-function islandora_entities_citation_form($form, $form_state, $object, $type = 'theses') {
+function islandora_entities_citation_form($form, $form_state, $object, $type = NULL) {
   module_load_include('inc', 'islandora_entities', 'includes/utilities');
   if (module_exists('citation_exporter')) {
     if (CitationExporter::ReadyToExport()) {
@@ -44,7 +44,12 @@ function islandora_entities_citation_form($form, $form_state, $object, $type = '
       // PHP 5.3 and 5.4 can't handle empty((string) $identifier).
       $string_id = (string) $identifier;
       if ($identifier['type'] == 'u1' && !empty($string_id)) {
-        $results = islandora_entities_get_related_pids($string_id, (string) $simplexml->authority->titleInfo->title, $type);
+        if (isset($type)) {
+          $results = islandora_entities_get_related_pids($string_id, (string) $simplexml->authority->titleInfo->title, $type);
+        }
+        else {
+          $results = islandora_entities_get_related_pids($string_id, (string) $simplexml->authority->titleInfo->title);
+        }
       }
     }
     $lines = array();
