@@ -16,13 +16,19 @@ function islandora_entities_rss($pid) {
   drupal_add_http_header('Content-Type', 'application/rss+xml; charset=utf-8');
   $object = islandora_object_load($pid);
   $results = "";
+  $scholar_only = variable_get('islandora_entities_scholar_only', TRUE);
   if ($object['MADS']) {
     $mads = $object['MADS']->content;
     $simplexml = simplexml_load_string($mads);
     $identifiers = $simplexml->identifier;
     foreach ($identifiers as $identifier) {
       if ($identifier['type'] == 'u1') {
-        $results = islandora_entities_get_rss_related((string) $identifier, 'citations');
+        if ($scholar_only == TRUE) {
+          $results = islandora_entities_get_rss_related((string) $identifier, 'citations');
+        }
+        else {
+          $results = islandora_entities_get_rss_related((string) $identifier);
+        }
       }
     }
   }
@@ -60,16 +66,23 @@ function islandora_entities_rss($pid) {
 function islandora_entities_get_rss_related($identifier, $type) {
   module_load_include('inc', 'islandora_solr', 'includes/query_processor');
   global $base_url;
-  $mappings = array(
-    'citations' => 'ir:citationCModel',
-    'theses' => 'ir:thesisCModel',
-  );
-  $content_model = $mappings[$type];
+  $scholar_only = variable_get('islandora_entities_scholar_only', TRUE);
+  if ($scholar_only == TRUE) {
+    $mappings = array(
+      'citations' => 'ir:citationCModel',
+      'theses' => 'ir:thesisCModel',
+    );
+    $content_model = $mappings[$type];
+  }
   $entities_linking_field = variable_get(
       'islandora_entities_linking_content_solr_field', 'mods_name_personal_displayForm_mt'
   );
-  $query = "RELS_EXT_hasModel_uri_mt:\"$content_model\" AND {$entities_linking_field}:\"($identifier)\"";
-
+  if (isset($content_model)) {
+    $query = "RELS_EXT_hasModel_uri_mt:\"$content_model\" AND {$entities_linking_field}:\"($identifier)\"";
+  }
+  else {
+    $query = "{$entities_linking_field}:\"($identifier)\"";
+  }
   $qp = new IslandoraSolrQueryProcessor();
   $qp->buildQuery($query);
   $qp->solrParams['fl'] = "dc.description, dc.title, PID";

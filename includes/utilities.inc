@@ -112,6 +112,22 @@ function islandora_entities_create_citation_tab(AbstractObject $object) {
   }
 }
 
+function islandora_entities_create_works_tab(AbstractObject $object) {
+  module_load_include('inc', 'islandora_entities', 'includes/utilities');
+  if ($object['MADS']) {
+    $mads = $object['MADS']->content;
+    $simplexml = simplexml_load_string($mads);
+    $identifiers = $simplexml->identifier;
+    foreach ($identifiers as $identifier) {
+      // PHP 5.3 and 5.4 can't handle empty((string) $identifier).
+      $string_id = (string) $identifier;
+      if ($identifier['type'] == 'u1' && !empty($string_id)) {
+        return islandora_entities_get_related($string_id, (string) $simplexml->authority->titleInfo->title, 'works');
+      }
+    }
+  }
+}
+
 /**
  * Gets all citations related to scholars's unique identifier.
  *
@@ -121,19 +137,27 @@ function islandora_entities_create_citation_tab(AbstractObject $object) {
  * @return array
  *   Array of links pointing to citations
  */
-function islandora_entities_get_related($identifier, $title, $type) {
-  $base_query = array(
-    'citations' => variable_get(
-      'islandora_entities_citation_base_query',
-      '+RELS_EXT_hasModel_uri_mt:"ir:citationCModel"'),
-    'theses' => variable_get(
-      'islandora_entities_thesis_base_query',
-      '+RELS_EXT_hasModel_uri_mt:"ir:thesisCModel"'),
-  );
+function islandora_entities_get_related($identifier, $title, $type = NULL) {
+  $scholar_only = variable_get('islandora_entities_scholar_only', TRUE);
+  if ($scholar_only == TRUE) {
+    $base_query = array(
+      'citations' => variable_get(
+        'islandora_entities_citation_base_query',
+        '+RELS_EXT_hasModel_uri_mt:"ir:citationCModel"'),
+      'theses' => variable_get(
+        'islandora_entities_thesis_base_query',
+        '+RELS_EXT_hasModel_uri_mt:"ir:thesisCModel"'),
+    );
+  }
   $entities_linking_field = variable_get(
       'islandora_entities_linking_content_solr_field', 'mods_name_personal_displayForm_mt'
   );
-  $query = "+{$entities_linking_field}:\"($identifier)\" AND {$base_query[$type]}";
+  if (isset($base_query)) {
+    $query = "+{$entities_linking_field}:\"($identifier)\" AND {$base_query[$type]}";
+  }
+  else {
+    $query = "+{$entities_linking_field}:\"($identifier)\"";
+  }
   $params = array(
     'limit' => variable_get('islandora_entities_citation_number', '20'),
   );
