@@ -111,23 +111,7 @@ function islandora_entities_create_citation_tab(AbstractObject $object) {
     }
   }
 }
-/*
-function islandora_entities_create_works_tab(AbstractObject $object) {
-  module_load_include('inc', 'islandora_entities', 'includes/utilities');
-  if ($object['MADS']) {
-    $mads = $object['MADS']->content;
-    $simplexml = simplexml_load_string($mads);
-    $identifiers = $simplexml->identifier;
-    foreach ($identifiers as $identifier) {
-      // PHP 5.3 and 5.4 can't handle empty((string) $identifier).
-      $string_id = (string) $identifier;
-      if ($identifier['type'] == 'u1' && !empty($string_id)) {
-        return islandora_entities_get_related($string_id, (string) $simplexml->authority->titleInfo->title, 'works');
-      }
-    }
-  }
-}
-*/
+
 /**
  * Gets all citations related to scholars's unique identifier.
  *
