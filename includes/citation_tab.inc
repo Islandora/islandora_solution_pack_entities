@@ -80,7 +80,7 @@ function islandora_entities_citation_form($form, $form_state, $object, $type = '
     '#title' => t('Citations'),
     '#header' => $header,
     '#options' => $lines,
-    '#attributes' => '',
+    '#attributes' => array(),
     '#empty' => t("There are no @type.", array('@type' => $type)),
   );
   if ($has_entries) {
