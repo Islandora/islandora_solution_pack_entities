@@ -121,19 +121,27 @@ function islandora_entities_create_citation_tab(AbstractObject $object) {
  * @return array
  *   Array of links pointing to citations
  */
-function islandora_entities_get_related($identifier, $title, $type) {
-  $base_query = array(
-    'citations' => variable_get(
-      'islandora_entities_citation_base_query',
-      '+RELS_EXT_hasModel_uri_mt:"ir:citationCModel"'),
-    'theses' => variable_get(
-      'islandora_entities_thesis_base_query',
-      '+RELS_EXT_hasModel_uri_mt:"ir:thesisCModel"'),
-  );
+function islandora_entities_get_related($identifier, $title, $type = NULL) {
+  $scholar_only = variable_get('islandora_entities_scholar_only', TRUE);
+  if ($scholar_only == TRUE) {
+    $base_query = array(
+      'citations' => variable_get(
+        'islandora_entities_citation_base_query',
+        '+RELS_EXT_hasModel_uri_mt:"ir:citationCModel"'),
+      'theses' => variable_get(
+        'islandora_entities_thesis_base_query',
+        '+RELS_EXT_hasModel_uri_mt:"ir:thesisCModel"'),
+    );
+  }
   $entities_linking_field = variable_get(
       'islandora_entities_linking_content_solr_field', 'mods_name_personal_displayForm_mt'
   );
-  $query = "+{$entities_linking_field}:\"($identifier)\" AND {$base_query[$type]}";
+  if (isset($base_query)) {
+    $query = "+{$entities_linking_field}:\"($identifier)\" AND {$base_query[$type]}";
+  }
+  else {
+    $query = "+{$entities_linking_field}:\"($identifier)\"";
+  }
   $params = array(
     'limit' => variable_get('islandora_entities_citation_number', '20'),
   );
@@ -208,23 +216,30 @@ function islandora_entities_create_theses_tab(AbstractObject $object) {
  * @return array
  *   Array of links pointing to citations
  */
-function islandora_entities_get_related_pids($identifier, $title, $type) {
-  $base_query = array(
-    'citations' => variable_get(
-      'islandora_entities_citation_base_query',
-      '+RELS_EXT_hasModel_uri_mt:"ir:citationCModel"'),
-    'theses' => variable_get(
-      'islandora_entities_thesis_base_query',
-      '+RELS_EXT_hasModel_uri_mt:"ir:thesisCModel"'),
-  );
+function islandora_entities_get_related_pids($identifier, $title, $type = NULL) {
+  $scholar_only = variable_get('islandora_entities_scholar_only', TRUE);
+  if ($scholar_only == TRUE) {
+    $base_query = array(
+      'citations' => variable_get(
+        'islandora_entities_citation_base_query',
+        '+RELS_EXT_hasModel_uri_mt:"ir:citationCModel"'),
+      'theses' => variable_get(
+        'islandora_entities_thesis_base_query',
+        '+RELS_EXT_hasModel_uri_mt:"ir:thesisCModel"'),
+    );
+  }
   $entities_linking_field = variable_get(
       'islandora_entities_linking_content_solr_field', 'mods_name_personal_displayForm_mt'
   );
   $author_field = variable_get(
       'islandora_entities_citation_author_solr_field', 'mods_name_personal_displayForm_mt'
   );
-  $query = "+{$entities_linking_field}:\"($identifier)\" AND {$base_query[$type]}";
-
+  if (isset($base_query)) {
+    $query = "+{$entities_linking_field}:\"($identifier)\" AND {$base_query[$type]}";
+  }
+  else {
+    $query = "+{$entities_linking_field}:\"($identifier)\"";
+  }
   $params = array(
     'limit' => variable_get('islandora_entities_citation_number', '20'),
   );

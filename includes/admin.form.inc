@@ -29,6 +29,14 @@ function islandora_entities_settings($form, &$form_state) {
     '#required' => TRUE,
   );
 
+  $form['islandora_entities_scholar_only'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('List only Citation and Thesis objects on Person pages.'),
+    '#default_value' => variable_get('islandora_entities_scholar_only', TRUE),
+    '#description' => t('If checked, only Citation and Thesis objects from the Person will be listed.
+      If unchecked, objects of all content models will be available.'),
+  );
+
   $form['islandora_entities_citation_base_query'] = array(
     '#type' => 'textarea',
     '#title' => t('Solr base query for citations.'),
@@ -172,18 +180,18 @@ function islandora_entities_settings($form, &$form_state) {
       'islandora_entities_citation_number',
       '20'
     ),
-    '#description' => t('Number of Citations to show under Recent Citations/Citations Tab'),
+    '#description' => t('Number of authored objects to display.'),
     '#required' => TRUE,
   );
 
   $form['islandora_entities_citation_author_solr_field'] = array(
     '#type' => 'textfield',
-    '#title' => t('Solr field for author of citations and theses.'),
+    '#title' => t('Solr field for the author.'),
     '#default_value' => variable_get(
       'islandora_entities_citation_author_solr_field',
       'mods_name_personal_displayForm_mt'
     ),
-    '#description' => t('Solr field to display as author under the Citation and Theses tabs.'),
+    '#description' => t('Solr field to display as author under the Citation and Theses  or Works tabs.'),
     '#autocomplete_path' => 'islandora_solr/autocomplete_luke',
     '#required' => TRUE,
   );
